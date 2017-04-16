@@ -70,4 +70,4 @@ catch
         "Error starting process. Error Message: {0}" -f $_.Exception.Message)
 }
 ```
-I like to add this function to my profile. I also add this alias: ```New-Alias -Name sudo -Value Start-ElevatedProcess```. 
+I like to add this function to my profile. I also add this alias: ```New-Alias -Name sudo -Value Start-ElevatedProcess```. The full code can be downloaded [here.](https://github.com/dchristian3188/dchristian3188.github.io/blob/master/scripts/Start-ElevatedProcess.ps1) Hope this helps!
