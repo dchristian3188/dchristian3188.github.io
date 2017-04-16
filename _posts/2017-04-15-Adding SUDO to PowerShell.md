@@ -47,7 +47,7 @@ First we start with defining our parameters. Notice the ParameterSetName  in the
     )
 ```
 
-We are going to use splatting to run Start-Process later in our code. Splatting is useful if you need to build up a list of parameters. Instead of having to code multiple if blocks to properly pass all the paramters to a function, you can create a hashtable to store the parameters. The key is the parameter name, and the value is the value to pass to that parameter. Below are all the parameters that are common to all of our use cases.
+We are going to use splatting to run Start-Process later in our code. Splatting is useful if you need to build up a list of parameters. Instead of having to code multiple if blocks to properly pass all the parameters to a function, you can create a hashtable to store the parameters. The key is the parameter name, and the value is the value to pass to that parameter. Below are all the parameters that are common to all of our use cases.
 
 ```powershell
 #Base parameters for the start-process cmdlet
@@ -57,7 +57,7 @@ $startArgs = @{
     ErrorAction = 'Stop'
 }
 ```
-From here I can go thru my paramaters and add any keys to my ```$StartArgs``` HashTable. Here's what the splat looks like in action. the ```@``` sign replaces the normal ```$```. Its also important to note that even though I'm not doing it, you can mix a splat and regular parameters together. 
+From here I can go thru my parameters and add any keys to my ```$StartArgs``` HashTable. Here's what the splat looks like in action. the ```@``` sign replaces the normal ```$```. Its also important to note that even though I'm not doing it, you can mix a splat and regular parameters together. 
 
 ```powershell
 try

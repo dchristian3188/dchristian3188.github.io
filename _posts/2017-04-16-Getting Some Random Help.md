@@ -2,7 +2,7 @@
 layout: post
 title: Getting Some Random Help?
 --- 
-**The Good Stuff**: A script to get a random help file. [Open-PSCommandHelp.ps1](https://github.com/dchristian3188/dchristian3188.github.io/blob/master/scripts/Open-PSCommandHelp.ps1)
+**The Good Stuff**: A script to get a random help file. [Open-PSCommandHelp.ps1](https://github.com/dchristian3188/dchristian3188.github.io/blob/master/scripts/Open-PSCommandHelp.ps1).
 
 I think one of the biggest hurdles learning PowerShell is trying to find what command to run. What i use to do is read a different help file every morning. Now i don't expect anyone to be able to look at a help file once and instantly know the ins and outs of a command. But forcing yourself to read a random help file can get the mental juices flowing. The goal of this script is to just start learning what PowerShell CAN do.
 

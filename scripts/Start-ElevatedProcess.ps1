@@ -31,7 +31,7 @@ Function Start-ElevatedProcess
     .EXAMPLE
     ps c:\> Start-ElevatedProcess -Last -NoExit
 
-    Runs the alst powershell command with adminsitrative privileges.
+    Runs the last powershell command with adminsitrative privileges.
 
     .EXAMPLE
     ps c:\> Start-ElevatedProcess {ps iexplore | kill}
