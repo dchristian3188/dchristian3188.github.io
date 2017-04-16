@@ -2,8 +2,7 @@
 layout: post
 title: Adding Sudo to PowerShell
 ---
-The Good Stuff: A script that implements sudo in Powershell.
-[Start-ElevatedProcess.ps1]({{ site.baseurl }}/scripts/Start-ElevatedProcess.ps1)
+**The Good Stuff**: A script that implements sudo in Powershell. [Start-ElevatedProcess.ps1](https://github.com/dchristian3188/dchristian3188.github.io/blob/master/scripts/Start-ElevatedProcess.ps1)
 
 Lets be honest, before PowerShell the windows command line was a joke and the Linux guys were running circles around us. One of the best functions from Linux is sudo. Sudo is used when you need to run a command with elevated privileges, similar to running a program as administrator in windows. Here's my implementation of sudo for PowerShell.
 
