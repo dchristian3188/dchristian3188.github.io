@@ -45,4 +45,12 @@ Invoke-Plaster -TemplatePath $defaultTemplate.TemplatePath -DestinationPath $pla
 ```
 
 Walking through the wizard. Prompted for module name, version, if you want to include pester tests (you know you should) and if you want a code folder created. 
-![_config.yml]({{ site.baseurl }}/images/plasterFirstModule.png)
+![_config.yml]({{ site.baseurl }}/images/plaster/plasterFirstModule.png)
+
+Here's what that ended up looking like.
+![_config.yml]({{ site.baseurl }}/images/plaster/MyFirstModule.psm1.png)
+
+Since we chose to include pester tests, this folder and structure was created by plaster.
+![_config.yml]({{ site.baseurl }}/images/plaster/MyFirstModule.Test.Ps1.png)
+
+Ok thats not too bad, but this isn't exactly what i use. How can we change this behavior?
