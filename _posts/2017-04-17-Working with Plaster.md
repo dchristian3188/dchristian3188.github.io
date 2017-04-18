@@ -3,7 +3,15 @@ layout: post
 title: Working With Plaster
 ---
 **The Good Stuff**: Go check out plaster, a template-based file and project generator written in PowerShell. [Plaster Project Page](https://github.com/PowerShell/Plaster)
+<!-- TOC -->
 
+- [Installing](#installing)
+- [Exploring Commands](#exploring-commands)
+- [The default plaster template](#the-default-plaster-template)
+- [Creating our own Plaster template](#creating-our-own-plaster-template)
+    - [Examining a manifest and its schema](#examining-a-manifest-and-its-schema)
+
+<!-- /TOC -->
 ## Installing
 Get latest version from Gallery
 ```powershell
@@ -22,7 +30,8 @@ Function        New-PlasterManifest                                1.0.1      pl
 Function        Test-PlasterManifest                               1.0.1      plaster
 ```
 
-The default plaster template
+## The default plaster template
+Lets start with our only Get command in the module.
 ```powershell
 PS C:\> Get-PlasterTemplate
 
@@ -53,4 +62,52 @@ Here's what that ended up looking like.
 Since we chose to include pester tests, this folder and structure was created by plaster.
 ![_config.yml]({{ site.baseurl }}/images/plaster/MyFirstModule.Test.Ps1.png)
 
-Ok thats not too bad, but this isn't exactly what i use. How can we change this behavior?
+## Creating our own Plaster template
+Ok thats not too bad, but this isn't exactly what i use. How can we change this behavior? Lets take a look at ```New-PlasterManifest```
+![_config.yml]({{ site.baseurl }}/images/plaster/New-PlasterSyntax.png)
+
+So lets go ahead and create our first manifest. One important thing to note is the path name __must__ end in either ```PlasterManifest.xml```
+```powershell
+$manifestProperties = @{
+    Path = "C:\Temp\PlasterManifest.xml"
+    Title = "DC Custom Plaster Template"
+    TemplateName = 'MyCustomPlasterTemplate'
+    TemplateVersion = '0.0.1'
+    Author = 'David Christian'
+}
+
+New-PlasterManifest @manifestProperties
+```
+Which produced the below xml
+```xml
+PS C:\Temp> cat .\PlasterManifest.xml
+<?xml version="1.0" encoding="utf-8"?>
+<plasterManifest
+  schemaVersion="1.0" xmlns="http://www.microsoft.com/schemas/PowerShell/Plaster/v1">
+  <metadata>
+    <name>MyCustomPlasterTemplate</name>
+    <id>7ed96752-fc70-4346-8861-d2373d530181</id>
+    <version>0.0.1</version>
+    <title>DC Custom Plaster Template</title>
+    <description></description>
+    <author>David Christian</author>
+    <tags></tags>
+  </metadata>
+  <parameters></parameters>
+  <content></content>
+</plasterManifest>
+```
+
+Ok. Lets try running that
+![_config.yml]({{ site.baseurl }}/images/plaster/plasterError.png)
+
+What a bust! At this point, I went back and actually read the Plaster docs. Turns out there is more to a manifest that whats is given to you from ```New-PlasterManifest```. A whole lot more. 
+
+### Examining a manifest and its schema
+Essentially a manifest can be broken into 3 parts. 
+
+1. Metadata - This is information about the plaster template itself
+2. Parameters - These will be presented as prompts to your users
+3. Content - What is actually going to be created using those parameters
+
+Knowing this i re-examined my manifest. It turns on the ```New-PlasterManifest``` only helps you fill out the Metadata section. The rest is on you. 
