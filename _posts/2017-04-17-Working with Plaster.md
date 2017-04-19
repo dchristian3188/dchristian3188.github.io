@@ -2,6 +2,7 @@
 layout: post
 title: Working With Plaster
 ---
+Plaster is a powershell scaffolding module. It helps keep your module and resouces consists and following best practices. 
 **The Good Stuff**: Go check out plaster, a template-based file and project generator written in PowerShell. [Plaster Project Page](https://github.com/PowerShell/Plaster)
 <!-- TOC -->
 
@@ -111,3 +112,26 @@ Essentially a manifest can be broken into 3 parts.
 3. Content - What is actually going to be created using those parameters
 
 Knowing this i re-examined my manifest. It turns on the ```New-PlasterManifest``` only helps you fill out the Metadata section. The rest is on you. 
+
+Lets start looking at the parameter section. One parameters I'm going to need for sure is the module name. 
+```xml
+<parameter name="ModuleName" type="text" prompt="Name of your module" />
+```
+When working with modules locally i like to separate each function into a PS1 file. I then separate this into a folder for Public function and one for Internal. I also like to place any dlls or binaries my module maybe dependant on in their own folder. To get these options in Plaster, you can use the multichoice switch.
+```xml
+<parameter name="FunctionFolders" type="multichoice" prompt="Please select folders to include" default='0,1,2'>
+      <choice label="&amp;Public" help="Adds a public folder to module root" value="Public" />
+      <choice label="&amp;Internal" help="Adds a internal folder to module root" value="Internal" />
+      <choice label="&amp;Community" help="Adds a community folder to module root" value="Community" />
+      <choice label="&amp;Binaries" help="Adds a binaries folder to module root" value="Binaries" />
+      <choice label="&amp;Data" help="Adds a data folder to module root" value="Data" />
+    </parameter>
+```
+
+Finally I wanted the option to include pester tests. Notice the default of yes (hint hint).
+```xml
+ <parameter name="Pester" type="choice" prompt="Include Pester Tests?" default='0'>
+      <choice label="&amp;Yes" help="Adds a pester folder" value="Yes" />
+      <choice label="&amp;No" help="Does not add a pester folder" value="No" />
+    </parameter>
+```
