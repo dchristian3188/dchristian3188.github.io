@@ -54,7 +54,8 @@ Function Start-ElevatedProcess
     Created by:   David Christian 
 
     .LINK
-    http://www.opscripting.com/
+    https://github.com/dchristian3188
+    http://overpoweredshell.com/
 
 #>
 

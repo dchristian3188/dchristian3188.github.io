@@ -31,7 +31,8 @@ function Open-PSCommandHelp
     Created by:   David Christian
 
     .LINK
-    http://opscripting.com
+    https://github.com/dchristian3188
+    http://overpoweredshell.com/
 #>
     
     [CmdletBinding()]
