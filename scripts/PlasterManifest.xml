@@ -11,12 +11,17 @@
    </metadata>
    <parameters>
       <parameter name="ModuleName" type="text" prompt="Name of your module" />
-    <parameter name="Function Folders" type="multichoice" prompt="Please select folders to include" default='0,1,2'>
+    <parameter name="FunctionFolders" type="multichoice" prompt="Please select folders to include" default='0,1,2'>
     <choice label="&amp;Public" help="Adds a public folder to module root" value="Public" />
-    <choice label="&amp;Hidden" help="Adds a private folder to module root" value="Private" />
+    <choice label="&amp;Internal" help="Adds a internal folder to module root" value="Internal" />
     <choice label="&amp;Community" help="Adds a community folder to module root" value="Community" />
     <choice label="&amp;Binaries" help="Adds a binaries folder to module root" value="Binaries" />
     <choice label="&amp;Data" help="Adds a data folder to module root" value="Data" />
+    </parameter>
+    <parameter name="Pester" type="choice" prompt="Include Pester Tests?" default='0'>
+    <choice label="&amp;Yes" help="Adds a pester folder" value="Yes" />
+    <choice label="&amp;No" help="Does not add a pester folder" value="No" />
+</parameter>
 </parameter>
    </parameters>
    <content />
