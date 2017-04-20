@@ -11,15 +11,16 @@ Plaster is a powershell scaffolding module. It helps keep your module and resouc
 - [The default plaster template](#the-default-plaster-template)
 - [Creating our own Plaster template](#creating-our-own-plaster-template)
     - [Examining a manifest and its schema](#examining-a-manifest-and-its-schema)
+        - [Content](#content)
 
 <!-- /TOC -->
-## Installing
+# Installing
 Get latest version from Gallery
 ```powershell
 Install-Package -Name Plaster -Source PSGallery -Verbose -Force -ForceBootstrap
 ```
 
-## Exploring Commands
+# Exploring Commands
 ```powershell
 C:\> Get-Command -Module Plaster
 
@@ -31,7 +32,7 @@ Function        New-PlasterManifest                                1.0.1      pl
 Function        Test-PlasterManifest                               1.0.1      plaster
 ```
 
-## The default plaster template
+# The default plaster template
 Lets start with our only Get command in the module.
 ```powershell
 PS C:\> Get-PlasterTemplate
@@ -63,7 +64,7 @@ Here's what that ended up looking like.
 Since we chose to include pester tests, this folder and structure was created by plaster.
 ![_config.yml]({{ site.baseurl }}/images/plaster/MyFirstModule.Test.Ps1.png)
 
-## Creating our own Plaster template
+# Creating our own Plaster template
 Ok thats not too bad, but this isn't exactly what i use. How can we change this behavior? Lets take a look at ```New-PlasterManifest```
 ![_config.yml]({{ site.baseurl }}/images/plaster/New-PlasterSyntax.png)
 
@@ -104,7 +105,7 @@ Ok. Lets try running that
 
 What a bust! At this point, I went back and actually read the Plaster docs. Turns out there is more to a manifest that whats is given to you from ```New-PlasterManifest```. A whole lot more. 
 
-### Examining a manifest and its schema
+## Examining a manifest and its schema
 Essentially a manifest can be broken into 3 parts. 
 
 1. Metadata - This is information about the plaster template itself
@@ -116,22 +117,52 @@ Knowing this i re-examined my manifest. It turns on the ```New-PlasterManifest``
 Lets start looking at the parameter section. One parameters I'm going to need for sure is the module name. 
 ```xml
 <parameter name="ModuleName" type="text" prompt="Name of your module" />
+<parameter name="ModuleDesc" type="text" prompt="Brief description on this module" />
 ```
 When working with modules locally i like to separate each function into a PS1 file. I then separate this into a folder for Public function and one for Internal. I also like to place any dlls or binaries my module maybe dependant on in their own folder. To get these options in Plaster, you can use the multichoice switch.
 ```xml
 <parameter name="FunctionFolders" type="multichoice" prompt="Please select folders to include" default='0,1,2'>
-      <choice label="&amp;Public" help="Adds a public folder to module root" value="Public" />
-      <choice label="&amp;Internal" help="Adds a internal folder to module root" value="Internal" />
-      <choice label="&amp;Community" help="Adds a community folder to module root" value="Community" />
-      <choice label="&amp;Binaries" help="Adds a binaries folder to module root" value="Binaries" />
-      <choice label="&amp;Data" help="Adds a data folder to module root" value="Data" />
-    </parameter>
+    <choice label="&amp;Public" help="Adds a public folder to module root" value="Public" />
+    <choice label="&amp;Internal" help="Adds a internal folder to module root" value="Internal" />
+    <choice label="&amp;Classes" help="Adds a classes folder to module root" value="Classes" />
+    <choice label="&amp;Binaries" help="Adds a binaries folder to module root" value="Binaries" />
+    <choice label="&amp;Data" help="Adds a data folder to module root" value="Data" />
+</parameter>
 ```
 
 Finally I wanted the option to include pester tests. Notice the default of yes (hint hint).
 ```xml
- <parameter name="Pester" type="choice" prompt="Include Pester Tests?" default='0'>
-      <choice label="&amp;Yes" help="Adds a pester folder" value="Yes" />
-      <choice label="&amp;No" help="Does not add a pester folder" value="No" />
-    </parameter>
+<parameter name="Pester" type="choice" prompt="Include Pester Tests?" default='0'>
+    <choice label="&amp;Yes" help="Adds a pester folder" value="Yes" />
+    <choice label="&amp;No" help="Does not add a pester folder" value="No" />
+</parameter>
+```
+### Content
+This section tells Plaster what actions to take based on our parameters. 
+
+First thing We needed to do was create our PSM1 and PSD1. For the psd1, I'm using the built in Plaster commannd of newModuleManifest. The PSM1 is being pulled from a template file.
+```xml
+<newModuleManifest destination='${PLASTER_PARAM_ModuleName}.psd1' moduleVersion='$PLASTER_PARAM_Version' rootModule='${PLASTER_PARAM_ModuleName}.psm1' author='$PLASTER_PARAM_FullName' description='$PLASTER_PARAM_ModuleDesc'/>
+<file source='template.psm1' destination='${PLASTER_PARAM_ModuleName}.psm1'/>
+```    
+
+Content of the template file
+```powershell
+$functionFolders = @('Public', 'Internal', 'Classes')
+ForEach ($folder in $functionFolders)
+{
+    $folderPath = Join-Path -Path $PSScriptRoot -ChildPath $folder
+    If (Test-Path -Path $folderPath)
+    {
+        Write-Verbose -Message "Importing from $folder"
+        $functions = Get-ChildItem -Path $folderPath -Filter '*.ps1' 
+        ForEach ($function in $functions)
+        {
+            Write-Verbose -Message "  Importing $($function.BaseName)"
+            . $($function.FullName)
+        }
+    }    
+}
+$publicFunctions = (Get-ChildItem -Path "$PSScriptRoot\Public" -Filter '*.ps1').BaseName
+Export-ModuleMember -Function $publicFunctions
 ```

@@ -2,7 +2,7 @@
 layout: post
 title: Adding Sudo to PowerShell
 ---
-Lets be honest, before PowerShell the windows command line was a joke and the Linux guys were running circles around us. One of the best functions from Linux is sudo. Sudo is used when you need to run a command with elevated privileges, similar to running a program as administrator in windows. Here's my implementation of sudo for PowerShell. **The Good Stuff**: A script that implements sudo in Powershell. [Start-ElevatedProcess.ps1](https://github.com/dchristian3188/dchristian3188.github.io/blob/master/scripts/Start-ElevatedProcess.ps1)
+Lets be honest, before PowerShell the windows command line was a joke and the Linux guys were running circles around us. One of the best functions from Linux is sudo. Sudo is used when you need to run a command with elevated privileges, similar to running a program as administrator in windows. Here's my implementation of sudo for PowerShell. **The Good Stuff**: A script that implements sudo in Powershell. [Start-ElevatedProcess.ps1](https://github.com/dchristian3188/Scripts/blob/master/Functions/Start-ElevatedProcess.ps1)
 
 First we start with defining our parameters. Notice the ParameterSetName  in the parameter field. Parameter sets allow us to use totally different collections of parameters for the same command. If a parameter needs to be available to multiple sets, we simply add all the sets in the parameter declaration.
 
@@ -68,4 +68,4 @@ catch
         "Error starting process. Error Message: {0}" -f $_.Exception.Message)
 }
 ```
-I like to add this function to my profile. I also add this alias: ```New-Alias -Name sudo -Value Start-ElevatedProcess```. The full code can be downloaded [here.](https://github.com/dchristian3188/dchristian3188.github.io/blob/master/scripts/Start-ElevatedProcess.ps1) Hope this helps!
+I like to add this function to my profile. I also add this alias: ```New-Alias -Name sudo -Value Start-ElevatedProcess```. The full code can be downloaded [here.](https://github.com/dchristian3188/Scripts/blob/master/Functions/Start-ElevatedProcess.ps1) Hope this helps!
