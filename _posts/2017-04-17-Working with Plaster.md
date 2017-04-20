@@ -2,25 +2,28 @@
 layout: post
 title: Working With Plaster
 ---
-Plaster is a powershell scaffolding module. It helps keep your module and resouces consists and following best practices. 
+Do you or your team have a lot of modules? Do you find yourself creating the same folder structure over and over? What about the same function / test ps1 files? If you haven't yet, i would definitely check out Plaster. Plaster is a powershell scaffolding module. What that means for you is that its an easy way to keep your modules and functions consistent and following best practices. Its fully customizable and you can get started in just a few minutes. 
 **The Good Stuff**: Go check out plaster, a template-based file and project generator written in PowerShell. [Plaster Project Page](https://github.com/PowerShell/Plaster)
 <!-- TOC -->
 
 - [Installing](#installing)
 - [Exploring Commands](#exploring-commands)
-- [The default plaster template](#the-default-plaster-template)
+    - [The Default Plaster Template](#the-default-plaster-template)
 - [Creating our own Plaster template](#creating-our-own-plaster-template)
     - [Examining a manifest and its schema](#examining-a-manifest-and-its-schema)
+        - [Metadata](#metadata)
+        - [Parameters](#parameters)
         - [Content](#content)
 
 <!-- /TOC -->
 # Installing
-Get latest version from Gallery
+Plaster is completely open source and hosted on the PowerShell Team's Github, [Plaster Project Page.](https://github.com/PowerShell/Plaster)  We can grab the most recent version from the PowerShell gallery using the below command. 
 ```powershell
 Install-Package -Name Plaster -Source PSGallery -Verbose -Force -ForceBootstrap
 ```
 
 # Exploring Commands
+The first thing I do after installing a command is see what functions it has. Surprisingly at the time of this writing, Plaster only has 4 commands.  
 ```powershell
 C:\> Get-Command -Module Plaster
 
@@ -32,8 +35,8 @@ Function        New-PlasterManifest                                1.0.1      pl
 Function        Test-PlasterManifest                               1.0.1      plaster
 ```
 
-# The default plaster template
-Lets start with our only Get command in the module.
+## The Default Plaster Template
+Lets start with our only Get command in the module. Running this cmdlet on a fresh install, returns the default Plaster Template.
 ```powershell
 PS C:\> Get-PlasterTemplate
 
@@ -46,7 +49,7 @@ Tags         : {Module, ModuleManifest}
 TemplatePath : C:\Program Files\WindowsPowerShell\Modules\plaster\1.0.1\Templates\NewPowerShellManifestModule
 ```
 
-Invoking the default plaster template. Creating our first module. 
+Lets try to use this template to create our fist module. We can start Plaster by running the ```Invoke-Plaster``` cmdlet with the path to our template and a destination. 
 ```powershell
 $plasterDest = 'C:\temp'
 $defaultTemplate = Get-PlasterTemplate | 
@@ -55,19 +58,28 @@ $defaultTemplate = Get-PlasterTemplate |
 Invoke-Plaster -TemplatePath $defaultTemplate.TemplatePath -DestinationPath $plasterDest\MyFirstPlasterModule  -Verbose  
 ```
 
-Walking through the wizard. Prompted for module name, version, if you want to include pester tests (you know you should) and if you want a code folder created. 
+Running the Invoke-Plaster cmdlet starts a wizard. By default your prompted for module name, version, if you want to include pester tests (__you know you should__) and if you want a to include a VSCode folder.
 ![_config.yml]({{ site.baseurl }}/images/plaster/plasterFirstModule.png)
 
-Here's what that ended up looking like.
+Here is the structure that Plaster create based on our answers. 
 ![_config.yml]({{ site.baseurl }}/images/plaster/MyFirstModule.psm1.png)
 
-Since we chose to include pester tests, this folder and structure was created by plaster.
+Since we chose to include pester tests, this test folder and and test.ps1 file were also created. 
 ![_config.yml]({{ site.baseurl }}/images/plaster/MyFirstModule.Test.Ps1.png)
 
 # Creating our own Plaster template
-Ok thats not too bad, but this isn't exactly what i use. How can we change this behavior? Lets take a look at ```New-PlasterManifest```
+Ok thats not too bad, but this isn't exactly what I use. How can we change customize it to get what we want? Lets take a look at ```New-PlasterManifest```
 ![_config.yml]({{ site.baseurl }}/images/plaster/New-PlasterSyntax.png)
 
+## Examining a manifest and its schema
+Essentially a manifest can be broken into 3 parts. 
+
+1. Metadata - This is information about the plaster template itself
+2. Parameters - These will be presented as prompts to your users
+3. Content - What is actually going to be created using those parameters
+
+### Metadata
+Metadata is information about the Plaster template itself. We can create this section of the manifest by using the ```New-PlasterManifest``` cmdlet.
 So lets go ahead and create our first manifest. One important thing to note is the path name __must__ end in either ```PlasterManifest.xml```
 ```powershell
 $manifestProperties = @{
@@ -80,7 +92,7 @@ $manifestProperties = @{
 
 New-PlasterManifest @manifestProperties
 ```
-Which produced the below xml
+The cmdlet produced the below XML. Notice how the parameters and content sections are both null. 
 ```xml
 PS C:\Temp> cat .\PlasterManifest.xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -99,27 +111,13 @@ PS C:\Temp> cat .\PlasterManifest.xml
   <content></content>
 </plasterManifest>
 ```
-
-Ok. Lets try running that
-![_config.yml]({{ site.baseurl }}/images/plaster/plasterError.png)
-
-What a bust! At this point, I went back and actually read the Plaster docs. Turns out there is more to a manifest that whats is given to you from ```New-PlasterManifest```. A whole lot more. 
-
-## Examining a manifest and its schema
-Essentially a manifest can be broken into 3 parts. 
-
-1. Metadata - This is information about the plaster template itself
-2. Parameters - These will be presented as prompts to your users
-3. Content - What is actually going to be created using those parameters
-
-Knowing this i re-examined my manifest. It turns on the ```New-PlasterManifest``` only helps you fill out the Metadata section. The rest is on you. 
-
-Lets start looking at the parameter section. One parameters I'm going to need for sure is the module name. 
+### Parameters
+Lets start looking at the parameter section. One parameters I'm going to need for sure is the module name. I want Plaster to prompt the user for this name and a brief description of the module. We'll use this information later on in the Manifest.
 ```xml
 <parameter name="ModuleName" type="text" prompt="Name of your module" />
 <parameter name="ModuleDesc" type="text" prompt="Brief description on this module" />
 ```
-When working with modules locally i like to separate each function into a PS1 file. I then separate this into a folder for Public function and one for Internal. I also like to place any dlls or binaries my module maybe dependant on in their own folder. To get these options in Plaster, you can use the multichoice switch.
+The next thing I wanted to do is create my folder structure for modules. When working with modules locally I like to keep all functions and classes in their own PS1 files. I also create a folder for binaries and data if needed. To get these options in Plaster, you can use the multichoice switch.
 ```xml
 <parameter name="FunctionFolders" type="multichoice" prompt="Please select folders to include" default='0,1,2'>
     <choice label="&amp;Public" help="Adds a public folder to module root" value="Public" />
@@ -129,7 +127,6 @@ When working with modules locally i like to separate each function into a PS1 fi
     <choice label="&amp;Data" help="Adds a data folder to module root" value="Data" />
 </parameter>
 ```
-
 Finally I wanted the option to include pester tests. Notice the default of yes (hint hint).
 ```xml
 <parameter name="Pester" type="choice" prompt="Include Pester Tests?" default='0'>
@@ -138,15 +135,15 @@ Finally I wanted the option to include pester tests. Notice the default of yes (
 </parameter>
 ```
 ### Content
-This section tells Plaster what actions to take based on our parameters. 
+The final section is the content section. Content tells Plaster what actions to take based on our parameters. 
 
-First thing We needed to do was create our PSM1 and PSD1. For the psd1, I'm using the built in Plaster commannd of newModuleManifest. The PSM1 is being pulled from a template file.
+First thing We needed to do was create our PSM1 and PSD1. For the psd1, I'm using the built in Plaster command of newModuleManifest. I have a generic PSM1 file that i use to load up my functions. I also want this included. 
 ```xml
 <newModuleManifest destination='${PLASTER_PARAM_ModuleName}.psd1' moduleVersion='$PLASTER_PARAM_Version' rootModule='${PLASTER_PARAM_ModuleName}.psm1' author='$PLASTER_PARAM_FullName' description='$PLASTER_PARAM_ModuleDesc'/>
 <file source='template.psm1' destination='${PLASTER_PARAM_ModuleName}.psm1'/>
 ```    
 
-Content of the template file
+This is what the generic PSM1 file looks like. This template is stored with my Plaster manifest.
 ```powershell
 $functionFolders = @('Public', 'Internal', 'Classes')
 ForEach ($folder in $functionFolders)
@@ -165,4 +162,47 @@ ForEach ($folder in $functionFolders)
 }
 $publicFunctions = (Get-ChildItem -Path "$PSScriptRoot\Public" -Filter '*.ps1').BaseName
 Export-ModuleMember -Function $publicFunctions
+```
+Next we need to create the folders the user selected. I first start by displaying a message to the user telling them what step were on. Next we create the requested folders if the condition script block evaluates to ```true```. Whats really cool is Plaster will auto create those variables for you. Any variable from a parameter can be referenced via ```$PLASTER_PARAM_YourVariableNameHere```.
+```xml
+<message> Creating you folders for module: $PLASTER_PARAM_ModuleName </message>
+<file condition='$PLASTER_PARAM_FunctionFolders -contains "Public"' destination='Public\' source='' />
+<file condition='$PLASTER_PARAM_FunctionFolders -contains "Internal"' destination='Internal\' source='' />
+<file condition='$PLASTER_PARAM_FunctionFolders -contains "Classes"' destination='Classes\' source='' />
+<file condition='$PLASTER_PARAM_FunctionFolders -contains "Binaries"' destination='Binaries\' source='' />
+<file condition='$PLASTER_PARAM_FunctionFolders -contains "Data"' destination='Data\' source='' />
+```
+
+Finally if the user selected Pester tests, I wanted to create that folder, as well as include a basic Pester test for their module.
+```xml
+<message condition='$PLASTER_PARAM_Pester -eq "Yes"'>Creating a Tests folder </message>
+<file condition='$PLASTER_PARAM_Pester -eq "Yes"' destination='Tests\' source='' />
+<file condition='$PLASTER_PARAM_Pester -eq "Yes"' destination='Tests\${PLASTER_PARAM_ModuleName}.tests.ps1' source='basicTest.ps1' />
+```
+Here's my basic test file. It was shamelessly stolen from [Kevin Marquette's blog](https://kevinmarquette.github.io/2017-01-21-powershell-module-continious-delivery-pipeline/?utm_source=blog&utm_medium=blog&utm_content=titlelink). He did an amazing write up on creating a CI/CD pipeline and is worth the read.
+```PowerShell
+$moduleRoot = Resolve-Path "$PSScriptRoot\.."
+$moduleName = Split-Path $moduleRoot -Leaf
+
+Describe "General project validation: $moduleName" {
+
+    $scripts = Get-ChildItem $moduleRoot -Include *.ps1, *.psm1, *.psd1 -Recurse
+
+    # TestCases are splatted to the script so we need hashtables
+    $testCase = $scripts | Foreach-Object {@{file = $_}}         
+    It "Script <file> should be valid powershell" -TestCases $testCase {
+        param($file)
+
+        $file.fullname | Should Exist
+
+        $contents = Get-Content -Path $file.fullname -ErrorAction Stop
+        $errors = $null
+        $null = [System.Management.Automation.PSParser]::Tokenize($contents, [ref]$errors)
+        $errors.Count | Should Be 0
+    }
+
+    It "Module '$moduleName' can import cleanly" {
+        {Import-Module (Join-Path $moduleRoot "$moduleName.psm1") -force } | Should Not Throw
+    }
+}
 ```
