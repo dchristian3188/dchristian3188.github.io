@@ -210,7 +210,7 @@ Describe "General project validation: $moduleName" {
 OK, moment of truth. Lets run our manifest. 
 ![_config.yml]({{ site.baseurl }}/images/plaster/customPlasterWizard.png)
 
-Sure enough it worked!
+Sure enough it worked! Plaster took all of our parameters and created the below structure.
 ```powershell
 PS C:\Temp\DCPlasterModule> ls
 
@@ -233,3 +233,54 @@ PS C:\Temp\DCPlasterModule>
 ```
 
 ## Using Token Replacement
+Another very powerful feature of Plaster is its ability to use Template files and token replacement. To showcase these features i wanted to create another template manifest. This time, I wanted to have a flexible function template that i could use to get started.
+
+I'm going to skip the Metadata and Parameter section since nothing new is happening here. Instead focus on this new command ```TemplateFile```.
+```xml
+<content>
+    <templateFile source='functionTemplate.ps1' destination='${PLASTER_PARAM_FunctionName}.ps1'/>
+    <templateFile source='testsTemplate.ps1' destination='${PLASTER_PARAM_FunctionName}.tests.ps1'/>
+</content>
+  ```
+  A template file uses a combination of script blocks and token replacement. Scriptblocks in templates need to begin and end with ```<%``` and ```%>``` respectively. Its also important to note that these delimeters need to be the first characters on the line.
+Whats really neat is that you can include all the PowerShell logic you're use to inside these script blocks. Also remember you'll have full access to your Plaster Parameters. In the below example, I check if the user selected cmdlet based help. If they did, I'll inject this help snippet into the final file. 
+  ```powershell
+<%
+    If ($PLASTER_PARAM_Help -eq 'Yes')
+    {
+        @"
+  <#
+    .Synopsis
+      Short description
+    .DESCRIPTION
+      Long description
+    .EXAMPLE
+      Example of how to use this cmdlet
+  #>
+"@
+    }
+%>
+```
+Here's another example of we're we can change behavior depending on what the user selected
+```powershell
+<%
+    if ($PLASTER_PARAM_CmdletBinding -eq 'Simple')
+    {
+        @"
+    [CmdletBinding()]
+"@
+    }
+    else 
+    {
+        @"
+    [CmdletBinding(DefaultParameterSetName='Parameter Set 1', 
+                SupportsShouldProcess=$true, 
+                PositionalBinding=$false,
+                HelpUri = 'http://www.microsoft.com/',
+                ConfirmImpact='Medium')]
+"@
+    }
+%>
+```
+# Wrapping up
+Plaster is a fully customizable, incredibly powerful PowerShell scaffolding module. With a little bit of time and your existing PowerShell knowledge you can create clean templates to get new projects up and running quickly. For the completed module function covered in this article go [Here](https://github.com/dchristian3188/Scripts/tree/master/Plaster/Module). The complete function template can be found [Here](https://github.com/dchristian3188/Scripts/tree/master/Plaster/Function). Remember to go check out the [Plaster Project](https://github.com/PowerShell/Plaster) for more information and full documentation.
