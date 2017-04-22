@@ -15,6 +15,7 @@ Do you or your team have a lot of modules? Do you find yourself creating the sam
         - [Parameters](#parameters)
         - [Content](#content)
     - [Using Token Replacement](#using-token-replacement)
+- [Wrapping up](#wrapping-up)
 
 <!-- /TOC -->
 # Installing
