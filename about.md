@@ -3,8 +3,8 @@ layout: page
 title: About
 permalink: /about/
 ---
-#About
-David is an IT professional with over a decade of experience. He has a passion for automation and all things PowerShell. 
+David is an IT professional with over a decade of experience. He has a passion for automation and all things PowerShell. Lately this passion has driven him to DevOps, configuration management and large scale private and hybrid cloud environments. 
 ### Contact me
-
-[dchristian3188@gmail.com](mailto:dchristian3188@gmail.com)
+[LinkedIn](https://www.linkedin.com/in/david-christian-181545108/)
+[Github](https://github.com/dchristian3188)
+[Email](mailto:dchristian3188@gmail.com)
