@@ -125,3 +125,10 @@ BeforeAll {
     }
 }
 ```
+Hashtables are used since they are splatted into the ```IT``` under the covers. Each of the keys in the hashtable is converted to a variable and can be referenced inside of your ```IT``` statement. The caveat here is that the syntax is slightly different depending on where you want to use it. If you want to use the variable in the actual test description, you need to surround your variable in ```<``` and ```>```, with no ```$```. To use the variable in the test scriptblock, a ```param``` section needs to be added. 
+```powershell
+It "The quiet parameter on a <message> computer" -TestCases $quietTests {
+    param($computername, $result)
+    Test-Connection -ComputerName $computername -Count 1 -Quiet | Should Be $result
+}
+```
