@@ -47,8 +47,8 @@ Describe "Test-Connection" -Tags "CI" {
     }
 }
 ```
-## BeforeAll and AfterAll - Skipping Tests in Mass
-The first interesting thing, is the ```BeforeAll``` and ```AfterAll```. These 2 sections are the first and last things to be executed. Since ```Test-Connection``` is only available on Windows, we want to skip these tests on all other platforms. The ```skip``` parameter is already a built in part of the ```It``` statement. What we'll do is set this value to true using a PowerShell default parameter. Before we do this though, we need to preserve our current value (more on this in a minute)
+## Skipping Tests in Mass - BeforeAll and AfterAll 
+ Since ```Test-Connection``` is only available on Windows, we want to skip these tests on all other platforms. In PowerShell 6 there are are couple of new variables that we can use to determine what platform we're on, ```$IsWindows```, ```$IsLinux``` and ```$IsOSX```. If the tests are run on a non Window os, we need to skip over them.  The ```skip``` parameter is already a built in part of the ```It``` statement. What we'll do is set this value to true using a PowerShell default parameter. Before we do this though, we need to preserve our current value (more on this in a minute). The best place to before this type of setup is the ```BeforeAll``` and ```AfterAll```. These 2 sections are the first and last things to be executed. 
 ```powershell
  BeforeAll {
     $originalDefaultParameterValues = $PSDefaultParameterValues.Clone()
@@ -67,7 +67,7 @@ With the default parameter of ```skip``` set, we can quickly pass over these tes
     }
 ```
 ## Pester Test Cases
-Ok, we sorted out the operating system requirement and now need to setup our tests. One test I wanted to perform was to ensure that the ```Count``` parameter was actually working. I also wanted to make sure that I ran this test twice, with two different numbers (just in case it always returned the number I selected). Thinking thru this, there's a couple of ways we could right this test.
+Ok, we sorted out the operating system requirement and now need to setup our tests. One test I wanted to perform was to ensure that the ```Count``` parameter was actually working. I also wanted to make sure that I ran this test twice, with two different numbers (just in case it always returned the number I selected). Thinking thru this, there's a couple of ways we could write this test.
 ```powershell
 Describe Test-Connection {
     It "The count parameter counting to 2" {
@@ -103,7 +103,7 @@ Describe Test-Connection {
     }
 }
 ```
-While this is a little more work to setup, it separates the data from the tests and doesn't clutter our file with unnecessary looping logic. The best place to perform this setup is in the ```BeforeAll``` block. Lets take a look.
+While this is a little more work to setup, it separates the data from the tests and doesn't clutter our file with unnecessary looping logic. Since this still counts as test setup, we'll place this inside of our cd ```BeforeAll``` block. Lets take a look.
 ```powershell
 BeforeAll {
     $originalDefaultParameterValues = $PSDefaultParameterValues.Clone()
@@ -132,3 +132,5 @@ It "The quiet parameter on a <message> computer" -TestCases $quietTests {
     Test-Connection -ComputerName $computername -Count 1 -Quiet | Should Be $result
 }
 ```
+# Wrapping up
+I hope the examples in this article helped. For even more, check out the [Writing Pester Tests Doc](https://github.com/PowerShell/PowerShell/blob/master/docs/testing-guidelines/WritingPesterTests.md) by the PowerShell team. Of course 
