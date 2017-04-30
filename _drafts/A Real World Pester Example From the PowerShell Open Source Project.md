@@ -48,7 +48,7 @@ Describe "Test-Connection" -Tags "CI" {
 }
 ```
 ## Skipping Tests in Mass - BeforeAll and AfterAll 
- Since ```Test-Connection``` is only available on Windows, we want to skip these tests on all other platforms. In PowerShell 6 there are are couple of new variables that we can use to determine what platform we're on, ```$IsWindows```, ```$IsLinux``` and ```$IsOSX```. If ```$IsWindows``` evaluates to false, we're going to update the ```skip``` parameter of the ```it``` statement. Just like it sounds, if ```skip``` is ```$true```, the test is passed over. To set update all of the ```It``` statements in one shot, we'll use a PowerShell default parameter. Before we do this though, we need to preserve our current value (more on this in a minute). The best place to before this type of setup is the ```BeforeAll``` and ```AfterAll```. These 2 sections are the first and last things to be executed. 
+ Since ```Test-Connection``` is only available on Windows, we want to skip these tests on all other platforms. In PowerShell 6 there are are couple of new variables that we can use to determine what platform we're on, ```$IsWindows```, ```$IsLinux``` and ```$IsOSX```. If ```$IsWindows``` evaluates to false, we're going to update the ```skip``` parameter of the ```it``` statement. Just like it sounds, if ```skip``` is ```$true```, the test is passed over. To set update all of the ```It``` statements in one shot, we'll use a PowerShell default parameter. Before we do this though, we need to preserve our current value (more on this in a minute). The best place to before this type of setup is the ```BeforeAll``` and ```AfterAll``` statements as these 2 sections are the first and last things to be executed. 
 ```powershell
  BeforeAll {
     $originalDefaultParameterValues = $PSDefaultParameterValues.Clone()
@@ -103,7 +103,7 @@ Describe Test-Connection {
     }
 }
 ```
-While this is a little more work to setup, it separates the data from the tests and doesn't clutter our file with unnecessary looping logic. Since this still counts as test setup, we'll place this inside of our cd ```BeforeAll``` block. Lets take a look.
+While this is a little more work to setup, it separates the data from the tests and doesn't clutter our file with unnecessary looping logic. While we could initialize the test data just before the ```It``` statement it corresponds to, the cleaner solution is to place this in the ```BeforeAll``` block. Lets take a look.
 ```powershell
 BeforeAll {
     $originalDefaultParameterValues = $PSDefaultParameterValues.Clone()
@@ -133,4 +133,4 @@ It "The quiet parameter on a <message> computer" -TestCases $quietTests {
 }
 ```
 # Wrapping up
-I hope the examples in this article helped. For even more Pester best practices from the PowerShell team check out the [Writing Pester Tests Doc](https://github.com/PowerShell/PowerShell/blob/master/docs/testing-guidelines/WritingPesterTests.md). Of course the [Pester Wiki](https://github.com/pester/Pester/wiki) is another great resource. 
+I hope the examples in this article helped. For even more Pester best practices from the PowerShell team check out the [Writing Pester Tests Doc](https://github.com/PowerShell/PowerShell/blob/master/docs/testing-guidelines/WritingPesterTests.md). Of course the [Pester Wiki](https://github.com/pester/Pester/wiki) is another great resource. Finally and most importantly go to [The PoweShell Github Page](https://github.com/powershell/powershell) and get ***your*** contributor badge.
