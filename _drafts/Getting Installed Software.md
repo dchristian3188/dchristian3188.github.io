@@ -17,3 +17,26 @@ Get-EventLog -LogName Application -After (Get-Date).AddMinutes(-5) -Source MsiIn
 ````
 All of the entries look like
 ![_config.yml]({{ site.baseurl }}/images/InstalledProgramsEventViewer.png)
+
+# Good - Registry
+A better and much much faster way is to query the registry (in fact, this is how add remove programs does it). When software is installed it ***should*** leave an entry in the registry. 
+
+```powershell
+Get-ChildItem HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*
+```
+There's one catch. This registry location could be in a couple of different locations. There's 2 sections for software installed at the ***machine*** level, one for 32-bit applications and one for 64-bit.
+```
+HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\
+HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\
+```
+The other 2 locations are for software installed at the ***user*** level. Again there is a location for 32 and 64 bit.
+```
+HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\
+HKCU:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall
+```
+There's alot of great information in these registry keys, including the uninstall string. This is the command that get executed when you click uninstall from add remove programs. To make working with these keys easier, I created a function [Get-InstallProgram](https://github.com/dchristian3188/Main/blob/master/Functions/Get-InstalledProgram.ps1). It basically wraps the loop funcitonality required to check all 4 locations and adds parameters for ```DisplayName``` and ```Publisher```. Here's a shot of it in action:
+![_config.yml]({{ site.baseurl }}/images/InstalledProgramFunction.png)
+
+# The New
+In version 5 of PowerShell the team introduced the PackageManagement module. This module introduced a ton of great functionality for managing software and modules. ```Get-Package``` is now built in, and can be used to retrieve locally installed software. Not only will it find installed programs, it'll also list any chocolatey packages you have installed. 
+![_config.yml]({{ site.baseurl }}/images/InstalledProgramGetPackage.png)
