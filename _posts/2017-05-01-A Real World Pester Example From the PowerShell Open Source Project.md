@@ -67,7 +67,7 @@ With the default parameter of ```Skip``` set, we can quickly pass over these tes
     }
 ```
 ## Pester Test Cases
-Ok, we sorted out the operating system requirement and now need to setup our tests. One test I wanted to perform was to ensure that the ```Count``` parameter was actually working. I also wanted to make sure that I ran this test twice, with two different numbers (just in case it always returned the number I selected). Thinking thru this, there's a couple of ways we could write this test. The first was is to just include to ```It``` statements.
+Ok, we sorted out the operating system requirement and now need to setup our tests. One test I wanted to perform was to ensure that the ```Count``` parameter was actually working. I also wanted to make sure that I ran this test twice, with two different numbers (just in case it always returned the number I selected). Thinking thru this, there's a couple of ways we could write this test. The first was is to just include two ```It``` statements.
 ```powershell
 Describe Test-Connection {
     It "The count parameter counting to 2" {
