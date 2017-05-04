@@ -21,6 +21,21 @@ All of the entries look like
 # Good - Registry
 A better and much much faster way is to query the registry (in fact, this is how add remove programs does it). When software is installed it ***should*** leave an entry in the registry. 
 
+## Using Dot net
+```powershell
+
+$computerName = $env:COMPUTERNAME
+$registryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
+$registry = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($registryHive,$computerName)
+$registryPath = "Software\Microsoft\Windows\CurrentVersion\Uninstall"
+
+$keyNames = $registry.OpenSubKey($registryPath).GetSubKeyNames()
+ForEach($key in $keyNames)
+{
+    $registry.OpenSubKey($registryPath).OpenSubKey($key).GetValue('DisplayName')
+}
+```
+## Using the registry provider
 ```powershell
 Get-ChildItem HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*
 ```
