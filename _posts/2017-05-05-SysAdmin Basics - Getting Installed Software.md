@@ -4,8 +4,7 @@ title: SysAdmin Basics -  Getting Installed Software
 ---
 I spent a few years consulting in the field and one question would always come up. 
 How do I tell whats installed on my servers?
-There's tons of advice on how to do this, some good and some bad. 
-Lets go thru it.
+There's tons of advice on how to do this, some good and some bad, lets go thru it.
 **The Good Stuff**: A function to get installed programs from the registry. [Get-InstalledProgram](https://github.com/dchristian3188/Main/blob/master/Functions/Get-InstalledProgram.ps1)
 # The Bad - Win32_Product
 ```powershell
@@ -57,8 +56,7 @@ Due to this, it suffers from all of the same limitations and should be avoided w
 # The Good - Registry
 A much more efficient way to enumerate software is to query the registry (in fact, this is how add remove programs does it). 
 When software is installed it ***should*** leave an entry in the registry. 
-There's just one catch. 
-the location of this entry could be in a couple of different places. 
+There's just one catch, the location of this entry could be in a couple of different places. 
 There's 2 sections for software installed at the ***machine*** level, one for 32-bit applications and one for 64-bit.
 ```
 HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\
@@ -73,7 +71,7 @@ HKCU:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall
 ```powershell
 Get-ChildItem HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*
 ```
-There's alot of great information in these registry keys, including the uninstall string. This is the command that get executed when you click uninstall from add remove programs. To make working with these keys easier, I created a function [Get-InstallProgram](https://github.com/dchristian3188/Main/blob/master/Functions/Get-InstalledProgram.ps1). It basically wraps the loop funcitonality required to check all 4 locations and adds parameters for ```DisplayName``` and ```Publisher```. Here's a shot of it in action:
+There's alot of great information in these registry keys, including the uninstall string. This is the command that get executed when you click uninstall from add remove programs. To make working with these keys easier, I created a function [Get-InstallProgram](https://github.com/dchristian3188/Main/blob/master/Functions/Get-InstalledProgram.ps1). It basically wraps the loop functionality required to check all 4 locations and adds parameters for ```DisplayName``` and ```Publisher```. Here's a shot of it in action:
 ![_config.yml]({{ site.baseurl }}/images/InstalledProgramFunction.png)
 
 
@@ -96,9 +94,9 @@ ForEach($key in $keyNames)
 What's neat about using this method is, you can query computers using the remote registry service. 
 This could be useful in some scenario where PowerShell remoting is not available but remote registry is. 
 [This function](https://github.com/dchristian3188/Main/blob/master/Functions/Get-RemoteRegistryProgram.ps1) was created to make interacting with the remote registry a little easier. 
-# The New
+# The New - PackageManagement
 In version 5 of PowerShell the team introduced the PackageManagement module. 
-This module introduced a ton of great functionality for managing software and modules. 
+This module introduced a ton of great functionality for managing software. 
 ```Get-Package``` is now built in, and can be used to retrieve locally installed software. 
 Not only will it find installed programs, it'll also list any chocolatey packages you have installed. 
 If your on version 5 or later its quick, easy and built in.
