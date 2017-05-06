@@ -49,7 +49,7 @@ This same query could even be run against remote machines using the ```node``` s
 ```
 WMIC.exe /node:Server1 Product Get Name,Version
 ```
-The reason I wanted to include WMIC is because there are still alot of references to it online. 
+The reason I wanted to include WMIC is because there are still a lot of references to it online. 
 It's not obvious at first, but the above ```WMIC.exe``` command is performing a query against ```Win32_Product```. 
 Due to this, it suffers from all of the same limitations and should be avoided where ever possible.
 
@@ -71,7 +71,7 @@ HKCU:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall
 ```powershell
 Get-ChildItem HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*
 ```
-There's alot of great information in these registry keys, including the uninstall string. This is the command that get executed when you click uninstall from add remove programs. To make working with these keys easier, I created a function [Get-InstallProgram](https://github.com/dchristian3188/Main/blob/master/Functions/Get-InstalledProgram.ps1). It basically wraps the loop functionality required to check all 4 locations and adds parameters for ```DisplayName``` and ```Publisher```. Here's a shot of it in action:
+There's a lot of great information in these registry keys, including the uninstall string. This is the command that get executed when you click uninstall from add remove programs. To make working with these keys easier, I created a function [Get-InstallProgram](https://github.com/dchristian3188/Main/blob/master/Functions/Get-InstalledProgram.ps1). It basically wraps the loop functionality required to check all 4 locations and adds parameters for ```DisplayName``` and ```Publisher```. Here's a shot of it in action:
 ![_config.yml]({{ site.baseurl }}/images/InstalledProgramFunction.png)
 
 
@@ -99,7 +99,7 @@ In version 5 of PowerShell the team introduced the PackageManagement module.
 This module introduced a ton of great functionality for managing software. 
 ```Get-Package``` is now built in, and can be used to retrieve locally installed software. 
 Not only will it find installed programs, it'll also list any chocolatey packages you have installed. 
-If your on version 5 or later its quick, easy and built in.
+If you're on version 5 or later its quick, easy and built in.
 ![_config.yml]({{ site.baseurl }}/images/InstalledProgramGetPackage.png)
 # Wrapping Up
 I hope this post was helpful. 
