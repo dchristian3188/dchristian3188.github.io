@@ -7,6 +7,7 @@
         - [Property validation](#property-validation)
         - [Hidden Properties](#hidden-properties)
         - [Default Properties](#default-properties)
+        - [Static Properties](#static-properties)
     - [Methods](#methods)
 - [Base Class](#base-class)
     - [running it](#running-it)
@@ -31,7 +32,15 @@ class human
 
 }
 ```
-
+There's a couple of ways to create a instance of a class.
+The first is to use ```New-Object``` with the ```-TypeName``` switch.
+```powershell
+$me = New-Object -TypeName human
+```
+Another way to instantiate a class is to call the static constructor of the class. 
+```powershell
+$me = [human]::New()
+```
 # Describing the class
 Something hre
 ## Properties
@@ -132,54 +141,34 @@ By default not even ```Get-Member``` can see it.
 ```powershell
 
 $someGuy = [human]::new()
-$someGuy | Get-Member
+$someGuy | Get-Member -MemberType Properties
 
 
    TypeName: human
 
-Name        MemberType Definition                    
-----        ---------- ----------                    
-Equals      Method     bool Equals(System.Object obj)
-GetHashCode Method     int GetHashCode()             
-GetType     Method     type GetType()                
-ToString    Method     string ToString()             
-Height      Property   int Height {get;set;}         
-Name        Property   string Name {get;set;}        
-Weight      Property   int Weight {get;set;}         
+Name         MemberType Definition
+----         ---------- ----------
+HeightInches Property   int HeightInches {get;set;}
+Name         Property   string Name {get;set;}
+WeightLbs    Property   int WeightLbs {get;set;}
+   
 ```
 We'll thats not true. 
 To view the property with ```Get-Member```, you have to include the ```-force``` switch. 
 This will return all properties and methods of the object.
 ```powershell
 $someGuy = [human]::new()
-$someGuy | Get-Member -Force
-
+$someGuy | Get-Member -MemberType Properties -Force
 
    TypeName: human
 
-Name        MemberType   Definition                                                                                                                                                                                                                              
-----        ----------   ----------                                                                                                                                                                                                                              
-pstypenames CodeProperty System.Collections.ObjectModel.Collection`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]] pstypenames{get=PSTypeNames;}                                                                 
-psadapted   MemberSet    psadapted {Name, Height, Weight, get_ID, set_ID, get_Name, set_Name, get_Height, set_Height, get_Weight, set_Weight, ToString, Equals, GetHashCode, GetType}                                                                            
-psbase      MemberSet    psbase {Name, Height, Weight, get_ID, set_ID, get_Name, set_Name, get_Height, set_Height, get_Weight, set_Weight, ToString, Equals, GetHashCode, GetType}                                                                               
-psextended  MemberSet    psextended {}                                                                                                                                                                                                                           
-psobject    MemberSet    psobject {BaseObject, Members, Properties, Methods, ImmediateBaseObject, TypeNames, get_BaseObject, get_Members, get_Properties, get_Methods, get_ImmediateBaseObject, get_TypeNames, ToString, Copy, CompareTo, Equals, GetHashCode,...
-Equals      Method       bool Equals(System.Object obj)                                                                                                                                                                                                          
-GetHashCode Method       int GetHashCode()                                                                                                                                                                                                                       
-GetType     Method       type GetType()                                                                                                                                                                                                                          
-get_Height  Method       int get_Height()                                                                                                                                                                                                                        
-get_ID      Method       guid get_ID()                                                                                                                                                                                                                           
-get_Name    Method       string get_Name()                                                                                                                                                                                                                       
-get_Weight  Method       int get_Weight()                                                                                                                                                                                                                        
-set_Height  Method       void set_Height(int )                                                                                                                                                                                                                   
-set_ID      Method       void set_ID(guid )                                                                                                                                                                                                                      
-set_Name    Method       void set_Name(string )                                                                                                                                                                                                                  
-set_Weight  Method       void set_Weight(int )                                                                                                                                                                                                                   
-ToString    Method       string ToString()                                                                                                                                                                                                                       
-Height      Property     int Height {get;set;}                                                                                                                                                                                                                   
-ID          Property     guid ID {get;set;}                                                                                                                                                                                                                      
-Name        Property     string Name {get;set;}                                                                                                                                                                                                                  
-Weight      Property     int Weight {get;set;}                                                                                                                          
+Name         MemberType   Definition
+----         ----------   ----------
+pstypenames  CodeProperty System.Collections.ObjectModel.Collection`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]] pstypenames{get=PSTypeNames;}
+HeightInches Property     int HeightInches {get;set;}
+ID           Property     guid ID {get;set;}
+Name         Property     string Name {get;set;}
+WeightLbs    Property     int WeightLbs {get;set;}                                                                                                                 
 ```                                                                                         
 One big important thing to note with hidden properties, is that nothing prevents a user from interacting with them.
 Moreover, if a user specifically calls the property it will be displayed. This works when called from ```Select-Object```, any of the ```Format``` commands for if the property is referenced by dot notation.
@@ -187,6 +176,7 @@ Moreover, if a user specifically calls the property it will be displayed. This w
 $someGuy = [human]::new()
 $someGuy.ID = (New-Guid).Guid
 $someGuy.ID
+
 
 Guid                                
 ----                                
@@ -219,8 +209,29 @@ Now if we create a new instance of our class, it will already have a value for t
 ```
 $someOtherGuy = [human]::new()
 $someOtherGuy.ID
-```
 
+
+Guid
+----
+ab4bdcd9-b076-4869-bdbc-dde6be724b1a
+
+```
+### Static Properties
+You can also create static properties.
+Static properties are properties that can be referenced from the class itself, not an instance of an object.
+What this means is that, instance objects will not have this property.
+This can be useful for helper classes (the [math helper class](https://msdn.microsoft.com/en-us/library/system.math(v=vs.110).aspx) is a great example of a helper class).
+To define a static property, we use the ```Static``` keyword
+```powershell
+class TimeUtilities
+{
+    static $Time = "The Time is $((Get-Date).ToShortTimeString())"
+}
+```
+Since we don't need an instance object, we can call this property directly from the class.
+```powershell
+[TimeUtilities]::Time
+```
 ## Methods
 Methods are things the object does. 
 Sticking with our human example, methods could be jump or talk.
