@@ -13,6 +13,7 @@
         - [Method Overload](#method-overload)
         - [Method Property Validation](#method-property-validation)
         - [Static Methods](#static-methods)
+    - [Constructors](#constructors)
 - [Base Class](#base-class)
     - [running it](#running-it)
 
@@ -367,15 +368,102 @@ class TimeUtilities
 {
     static $Time = "The Time is $((Get-Date).ToShortTimeString())"
 
-    static [DateTime]Add90Days([DateTime]$StatingDate)
+    static [Bool]IsWeekend([DateTime]$DateToTest)
     {
-        return $StatingDate.AddDays(90)
-    }
+        $sunday = $DateToTest.DayOfWeek -eq [DayOfWeek]::Sunday 
+        $saturday = $DateToTest.DayOfWeek -eq [DayOfWeek]::Saturday
+        if($sunday -or $saturday)
+        {
+            Return $true
+        }
+        else
+        {
+            Return $false
+        }
+    }   
 }
 ```
 We could then run this method without an instance of the object.
 ```powershell
-[TimeUtilities]::Add90Days($(Get-Date))
+[TimeUtilities]::IsWeekend((Get-Date))
+```
+## Constructors
+Remember at the beginning of the article when we talked about creating a new object?
+One option available to us was to call the ```New``` static method.
+```powershell
+$someGuy = [human]::New()
+```
+This ```New``` method is inherited from the base class. 
+Whats neat is we can create our own overload methods for instantiating a new class.
+We create constructors by creating a new method with the same name as the class.
+Here I'll create an overload method to assign the name as an option. 
+```powershell
+class human
+{
+    [Guid]
+    hidden $ID = (New-Guid).Guid
+
+    [ValidatePattern('^[a-z]')]
+    [ValidateLength(3,15)]
+    [String]
+    $Name
+    
+    [ValidateRange(0,100)]
+    [int]
+    $Height
+    
+    [ValidateRange(0,1000)]
+    [int]
+    $Weight
+
+    Human([String]$name)
+    {
+        $this.Name = $name
+    }
+}
+```
+While this works there's a catch. 
+When you create your own constructor you lose the base one.
+Take a look at the output from this command
+```powershell
+[human]::New
+
+
+OverloadDefinitions     
+-------------------     
+human new(string name)  
+```
+In this example, I'm going to keep the orginal constuctor as an option.
+To do this, I can include an empty method
+```powershell
+class human
+{
+    [Guid]
+    hidden $ID = (New-Guid).Guid
+
+    [ValidatePattern('^[a-z]')]
+    [ValidateLength(3,15)]
+    [String]
+    $Name
+    
+    [ValidateRange(0,100)]
+    [int]
+    $Height
+    
+    [ValidateRange(0,1000)]
+    [int]
+    $Weight
+
+    Human()
+    {
+        
+    }
+
+    Human([String]$name)
+    {
+        $this.Name = $name
+    }
+}
 ```
 # Base Class
 ```powershell
