@@ -9,6 +9,10 @@
         - [Default Properties](#default-properties)
         - [Static Properties](#static-properties)
     - [Methods](#methods)
+        - [Return](#return)
+        - [Method Overload](#method-overload)
+        - [Method Property Validation](#method-property-validation)
+        - [Static Methods](#static-methods)
 - [Base Class](#base-class)
     - [running it](#running-it)
 
@@ -235,23 +239,143 @@ Since we don't need an instance object, we can call this property directly from 
 ## Methods
 Methods are things the object does. 
 Sticking with our human example, methods could be jump or talk.
+### Return
+When working with class methods you need to be explicit about what information the method will return.
+Due to this, all methods need to be prefixed with the type of data they will return, for example: ```[int]``` or ```[string]```.
+This syntax is exact to how properties are declared.
+Methods that do not return any data need to be prefixed with the type of ```[void]```.
 To define a method we first need to define what type that method will return.
-For example, the method talk
+For example, the method talk will return a string.
+I'm also going to mark the jump method as void, since it won't produce output.
 ```powershell
 class human
 {
-    [int]
-    $HeightInches
+    [Guid]
+    hidden $ID = (New-Guid).Guid
 
+    [ValidatePattern('^[a-z]')]
+    [ValidateLength(3,15)]
+    [String]
+    $Name
+    
+    [ValidateRange(0,100)]
     [int]
-    $WeightLbs
+    $Height
+    
+    [ValidateRange(0,1000)]
+    [int]
+    $Weight
 
     [void]Jump()
     {
-        Write-Verbose -Message "Look at that $($this.ToString()) jump!"
+        Write-Output -Message "You won't see this message"
         Return
     }
+
+    [String]SayHello()
+    {
+        
+        Return "Hello, nice to meet you"
+    }
+
+
 }
+```
+### Method Overload
+We can also overload methods.
+When we overload a method, we are defining that method twice, but this time with a different set of parameters.
+Lets overload the SayHello method and add a new parameter for name.
+```powershell
+class human
+{
+    [Guid]
+    hidden $ID = (New-Guid).Guid
+
+    [ValidatePattern('^[a-z]')]
+    [ValidateLength(3,15)]
+    [String]
+    $Name
+    
+    [ValidateRange(0,100)]
+    [int]
+    $Height
+    
+    [ValidateRange(0,1000)]
+    [int]
+    $Weight
+
+    [void]Jump()
+    {
+        Write-Output -Message "You won't see this message"
+        Return
+    }
+
+    [String]SayHello()
+    {
+        
+        Return "Hello, nice to meet you"
+    }
+
+    [String]SayHello([String]$Name)
+    {
+            
+        Return "Hey $Name. Its nice to meet you"
+    }
+}
+```
+We can inspect the different overload signatures by calling an instance of the class with the method, notice no parenthesis after the method name.
+```powershell
+$me = New-Object -TypeName Human
+$me.SayHello
+
+
+
+OverloadDefinitions                              
+-------------------                              
+string SayHello()                                
+string SayHello(string Name)  
+```
+If you don't provide a type for the parameters of your methods, they will default to ```System.Object```.
+This can be important because while you can have an unlimited number of method overloads, they all have to have a unique signature.
+This signature is determined by the number of parameters for the method and their types. 
+To see what I mean, try to run the below example. 
+It should throw an error saying that the ```HonkHorn``` method is already defined. 
+```powershell
+class car {
+    [Void]HonkHorn([string]$beep)
+    {
+
+    }
+
+    [Void]HonkHorn([string]$boop)
+    {
+
+    }
+}
+```
+### Method Property Validation
+I wanted to include this for the sake of completeness. 
+I was unable to find any type of validation modifiers for parameters to methods. 
+What this means is you need to rely on your code to perform the checks. 
+For example, if your method is expecting a positive number, you couldn't just add a ```[ValidateRange()]``` attribute.
+### Static Methods
+Just like static properties we can define a method to be static.
+This again is done with the static keyword.
+Lets update the ```TimeUtilities``` class to work with a new static method.
+```powershell
+class TimeUtilities
+{
+    static $Time = "The Time is $((Get-Date).ToShortTimeString())"
+
+    static [DateTime]Add90Days([DateTime]$StatingDate)
+    {
+        return $StatingDate.AddDays(90)
+    }
+}
+```
+We could then run this method without an instance of the object.
+```powershell
+[TimeUtilities]::Add90Days($(Get-Date))
 ```
 # Base Class
 ```powershell
