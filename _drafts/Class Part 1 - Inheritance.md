@@ -14,7 +14,7 @@
         - [Method Property Validation](#method-property-validation)
         - [Static Methods](#static-methods)
     - [Constructors](#constructors)
-- [Base Class](#base-class)
+- [Inheritance](#inheritance)
     - [running it](#running-it)
 
 <!-- /TOC -->
@@ -465,13 +465,20 @@ class human
     }
 }
 ```
-# Base Class
+# Inheritance
+Inheritance allows us to define one class as a starting point for another.
+This is helpful when you need multiple classes to share similar features and properties.
+Instead of duplicating the code, we can place the shared functions in a base class and then use inheritance to work out the details on the others. 
+Lets first start by creating a base class for animals.
 ```powershell
 class animal
 {
     [int]
     $Legs
 
+    [int]
+    $Age
+    
     [int]
     $WeightLbs
 
@@ -490,9 +497,18 @@ class animal
 
 }
 ```
+I purposly left the have the speak method throwing in this base class.
+Next I will create a dog class that inherits from our base class of animal
+To do this we use the syntax ```class NewClass : BaseClass```. 
+This example brings in the old properties of the new class
 ```powershell
 class dog : animal
 {
+    [int]GetDogYears()
+    {
+        return $this.Age
+    }
+    
     [string]Speak()
     {
         Return "woof!"
