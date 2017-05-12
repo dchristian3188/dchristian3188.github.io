@@ -18,8 +18,8 @@ Before we get to the advance use cases, lets go thru the basics.
     - [Methods](#methods)
         - [Return](#return)
         - [$This](#this)
-        - [Method Signature](#method-signature)
         - [Method Overload](#method-overload)
+        - [Method Signature](#method-signature)
         - [Method Property Validation](#method-property-validation)
         - [Static Methods](#static-methods)
     - [Constructors](#constructors)
@@ -82,10 +82,10 @@ class human
     $Name
     
     [int]
-    $HeightInches
+    $Height
 
     [int]
-    $WeightLbs
+    $Weight
 }
 ```
 ### Property validation
@@ -101,11 +101,11 @@ class human
     
     [ValidateRange(0,100)]
     [int]
-    $HeightInches
+    $Height
 
     [ValidateRange(0,1000)]
     [int]
-    $WeightLbs
+    $Weight
 }
 ```
 **Most** of the parameter validation you are use to in functions is available to classes properties.
@@ -148,11 +148,11 @@ class human
     
     [ValidateRange(0,100)]
     [int]
-    $HeightInches
+    $Height
     
     [ValidateRange(0,1000)]
     [int]
-    $WeightLbs
+    $Weight
 }
 ```
 Now if we create a new human object, and look at its properties the ```$ID``` property will not be shown. 
@@ -201,7 +201,7 @@ Name         Property     string Name {get;set;}
 WeightLbs    Property     int WeightLbs {get;set;}                                                                                                                 
 ```                                                                                         
 One **important** thing to note with hidden properties is that nothing prevents a user from interacting with them.
-Moreover, if a user specifically calls the property it will be displayed. This works when called from ```Select-Object```, any of the ```Format``` commands for if the property is referenced by dot notation.
+Moreover, if a user specifically calls the property it will be displayed. This works when called from ```Select-Object```, any of the ```Format``` commands or if the property is referenced by dot notation.
 ```powershell
 $someGuy = [human]::new()
 $someGuy.ID = (New-Guid).Guid
@@ -324,28 +324,10 @@ class human
     }
 }
 ```
-### Method Signature
-If you don't provide a type for the parameters of your methods, they will default to ```System.Object```.
-This can be important because while you can have an unlimited number of method overloads, they all have to have a unique signature.
-This signature is determined by the number of parameters for the method and their types. 
-To see what I mean, try to run the below example. 
-It should throw an error saying that the ```HonkHorn``` method is already defined. 
-```powershell
-class car {
-    [Void]HonkHorn([string]$beep)
-    {
-
-    }
-
-    [Void]HonkHorn([string]$boop)
-    {
-
-    }
-}
-```
 ### Method Overload
-We can also overload methods.
+Methods in PowerShell classes support overload.
 When we overload a method, we define a method more than once.
+This is similar to defining a function with multiple parameter sets.
 Lets overload the SayHello method and add a new parameter for name.
 ```powershell
 class human
@@ -397,6 +379,26 @@ OverloadDefinitions
 string SayHello()                                
 string SayHello(string Name)  
 ```
+### Method Signature
+If you don't provide a type for the parameters of your methods, they will default to ```System.Object```.
+This can be important because while you can have an unlimited number of method overloads, they all have to have a unique signature.
+This signature is determined by the number of parameters for the method and their types. 
+To see what I mean, try to run the below example. 
+It should throw an error saying that the ```HonkHorn``` method is already defined. 
+```powershell
+class car {
+    [Void]HonkHorn([string]$beep)
+    {
+
+    }
+
+    [Void]HonkHorn([string]$boop)
+    {
+
+    }
+}
+```
+
 ### Method Property Validation
 I wanted to include this for the sake of completeness. 
 I was unable to find any type of validation modifiers for parameters to methods. 
@@ -493,7 +495,7 @@ OverloadDefinitions
 human new(string name)  
 ```
 In this example, I'm going to keep the original constructor as an option.
-To do this, I can include an empty method
+To do this, I can include an empty human method with no parameters.
 ```powershell
 class human
 {
