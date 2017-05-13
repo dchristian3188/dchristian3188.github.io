@@ -1,6 +1,6 @@
 ﻿This is going to be part the first in a series of posts regrading classes.
 I want to talk more about DSC and especially some of the cool things you can do with class based resources.
-Before we get to the advance use cases, lets go thru the basics.
+Before we get to the advance use cases, lets go through the basics.
 **The Good Stuff**: An introduction to PowerShell classes. 
 <!-- TOC -->
 
@@ -8,8 +8,8 @@ Before we get to the advance use cases, lets go thru the basics.
 - [Class Basics](#class-basics)
     - [What is a Class?](#what-is-a-class)
     - [Classes and Objects](#classes-and-objects)
-    - [Create a class](#create-a-class)
-- [Describing the class](#describing-the-class)
+    - [Creating A Class](#creating-a-class)
+- [Describing The Class](#describing-the-class)
     - [Properties](#properties)
         - [Property validation](#property-validation)
         - [Hidden Properties](#hidden-properties)
@@ -33,12 +33,17 @@ Before we get to the advance use cases, lets go thru the basics.
 
 <!-- /TOC -->
 # Why Classes
-For me there are two big reasons to use powershell classes.
-The first is if your creating your own modules.
+For me there are two big reasons to use PowerShell classes.
+The first is if your creating your own modules and functions.
 You can use classes to represent complex data structures. 
-With these classes in place, you can bind parameters in your functions to those classes.
+Once the classes are defined, they work just like any other type in PowerShell.
+This is incredibly helpful when multiple functions need to pass the same data around.
+You can bind the functions to the specific class type and be done with it.
 The other big use case is DSC.
-DSC classes are easier to develop and maintain then traditional mof resources.
+DSC is gaining more and more traction everyday.
+With this increased adoption, there is an even larger gap for new resources.
+DSC Class based resources are just easier to to develop and maintain. 
+In an upcoming post, I will detail this process further.
 # Class Basics
 ## What is a Class?
 A class is just a template for an object. 
@@ -49,9 +54,9 @@ I always found this concept confusing and want to make sure we define the terms 
 A class is a template for what an object should look like. 
 It's not till we instantiate an instance of that class, do we have an object. 
 For example, we are going to create a human class. 
-We then use that class to create human object.
+We then use that class to create a human object.
 David is an instance of the human class.
-## Create a class
+## Creating A Class
 We can create a new class by using the new ```class``` keyword. 
 ```powershell
 class human
@@ -65,13 +70,16 @@ The first is to use ```New-Object``` with the ```-TypeName``` switch.
 ```powershell
 $david = New-Object -TypeName human
 ```
-Another way to instantiate a class is to call the [static constructor](#constructors) of the class. 
+Another way to instantiate a class is to call the static constructor of the class. 
+If your unsure what the words static and constructor means, its ok.
+We will cover these concepts later in the article. 
+For now, just familiarize yourself with the syntax below. 
 ```powershell
 $david = [human]::New()
 ```
-# Describing the class
+# Describing The Class
 ## Properties
-Properties are things about the object.
+Properties are things about an object.
 If we were describing a human, properties might be height and weight.
 We add properties to a class by adding variables inside the class.
 While not required, it is a good idea to define the variable type.
@@ -132,7 +140,7 @@ Attribute argument must be a constant.
  
 ```
 ### Hidden Properties
-Powershell classes also support hidden properties.
+PowerShell classes also support hidden properties.
 To hide a property use the ```hidden``` keyword just before the property name. 
 Here we will make the ```ID``` property a ```GUID``` and have it hidden from the user.
 ```powershell
@@ -177,13 +185,12 @@ Output:
 
 Name         MemberType Definition
 ----         ---------- ----------
-HeightInches Property   int HeightInches {get;set;}
+Height       Property   int Height {get;set;}
 Name         Property   string Name {get;set;}
-WeightLbs    Property   int WeightLbs {get;set;}
+Weight       Property   int Weight {get;set;}
    
 ```
 To view the property with ```Get-Member```, you have to include the ```-force``` switch. 
-This will return all properties and methods of the object.
 ```powershell
 $someGuy = [human]::new()
 $someGuy | Get-Member -MemberType Properties -Force
@@ -195,10 +202,10 @@ Output:
 Name         MemberType   Definition
 ----         ----------   ----------
 pstypenames  CodeProperty System.Collections.ObjectModel.Collection`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]] pstypenames{get=PSTypeNames;}
-HeightInches Property     int HeightInches {get;set;}
+Height       Property     int Height {get;set;}
 ID           Property     guid ID {get;set;}
 Name         Property     string Name {get;set;}
-WeightLbs    Property     int WeightLbs {get;set;}                                                                                                                 
+Weight       Property     int Weight {get;set;}                                                                                                                 
 ```                                                                                         
 One **important** thing to note with hidden properties is that nothing prevents a user from interacting with them.
 Moreover, if a user specifically calls the property it will be displayed. This works when called from ```Select-Object```, any of the ```Format``` commands or if the property is referenced by dot notation.
@@ -428,7 +435,7 @@ class TimeUtilities
     }   
 }
 ```
-We could then run this method without an instance of the object.
+We could then run this method without an instance of the class.
 ```powershell
 [TimeUtilities]::IsWeekend((Get-Date))
 ```
@@ -541,8 +548,8 @@ human new(string name)
 ## Creating Child Classes
 Inheritance allows us to define one class as a starting point for another.
 This is helpful when you need multiple classes to share similar features and properties.
-Instead of duplicating the code, we can place the shared logic in a base class and then use inheritance to work out the details on the others. 
-Lets first start by creating a base class for animals.
+Instead of duplicating the code, we can place the shared logic in a base class and then use inheritance to work out the details on the children. 
+Let's first start by creating a base class for animals.
 ```powershell
 class animal
 {
@@ -560,7 +567,7 @@ class animal
     $WeightLbs
 
     [int]
-    $HeightInchesInches
+    $HeightInches
 
     animal([string]$NewName)
     {
@@ -625,10 +632,11 @@ Name               Property   string Name {get;set;}
 TailLength         Property   int TailLength {get;set;}        
 WeightLbs          Property   int WeightLbs {get;set;}    
 ```
+Thanks to inheritance the child class has ll the properties of its parent.
 ## Overriding Methods
 We override methods by providing them the same method signature in the child class.
 Remember how the speak method thew an error in the base class?
-Lets add an override to the dog class to make this method work a little better.
+Let's add an override to the dog class to make this method work a little better.
 ```powershell
 class dog : animal
 {
@@ -707,8 +715,9 @@ $puppy.Name
 ```
 ### Calling Base Methods
 We can also call a base method from an override if we cast ```$this``` to the parent class.
+The syntax to accomplish this is ```([baseclass]$this).Method()```.
 In this example, I'm going to create a Kangaroo class that will override the base ```Jump``` method. 
-But since this is a Kangaroo, he's going to jump like all other animals, only twice.
+I will use this technique to be able to call the parents jump method from inside the override. 
 ```powershell
 class kangaroo : animal
 {
