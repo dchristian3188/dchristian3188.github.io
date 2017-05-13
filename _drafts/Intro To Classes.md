@@ -98,7 +98,7 @@ class human
 ```
 ### Property validation
 Classes also support property validation.
-Lets add some validation to make sure we are getting good data.
+Let's add some validation to make sure we are getting good data.
 ```powershell
 class human
 {
@@ -263,7 +263,7 @@ To define a static property, we use the ```Static``` keyword
 ```powershell
 class TimeUtilities
 {
-    static $Time = "The Time is $((Get-Date).ToShortTimeString())"
+    static [string]$Time = "The Time is $((Get-Date).ToShortTimeString())"
 }
 ```
 Since we don't need an object, we call this property directly from the class.
@@ -278,7 +278,7 @@ If you have ever written a PowerShell function, you can write a class method.
 When working with class methods you need to be explicit about what information the method will return.
 Due to this, all methods need to be prefixed with the type of data they will return, such as ```[int]``` or ```[string]```.
 Methods that do not return any data need to be prefixed with the type of ```[void]```.
-After your function has finished its processing, it needs to return an object of that type.
+After your method has finished its processing, it needs to return an object of that type.
 This is done using the ```return``` keyword.
 In this example, the talk method will return a string.
 I'm also going to assign the ```[void]``` type to the Jump method since it won't produce output.
@@ -316,9 +316,9 @@ class human
 ### $This
 When you are inside of a method, the ```$this``` variable is automatically created for you.
 You use the ```$this``` variable to make a reference back to your current instance.
-For example, lets say you have a human class with a name property. 
-One of the methods for this class could be ```SayName```. 
-To do this, we will need to reference this variable inside of the method.
+For example, say you have a human class with a name property. 
+One of the methods in the class could echo this name to the user.
+To do that, it needs to reference one of its own properties.
 ```powershell
 class human
 {
@@ -331,11 +331,13 @@ class human
     }
 }
 ```
+Its important to note, that you can also use the ```$this``` variable to call methods of your current instance.
+This is helpful when a class has a helper method used by other methods.
 ### Method Overload
 Methods in PowerShell classes support overload.
 When we overload a method, we define a method more than once.
 This is similar to defining a function with multiple parameter sets.
-Lets overload the SayHello method and add a new parameter for name.
+Let's overload the SayHello method and add a new parameter for name.
 ```powershell
 class human
 {
@@ -374,7 +376,8 @@ class human
     }
 }
 ```
-We can inspect the different overload signatures by calling an instance of the class with the method, notice no parenthesis after the method name.
+We can inspect the different overload signatures by calling an instance of the class with the method name.
+Notice there are no parenthesis after the method name so we aren't invoking it.
 ```powershell
 $me = New-Object -TypeName Human
 $me.SayHello
@@ -389,11 +392,12 @@ string SayHello(string Name)
 ### Method Signature
 If you don't provide a type for the parameters of your methods, they will default to ```System.Object```.
 This can be important because while you can have an unlimited number of method overloads, they all have to have a unique signature.
-This signature is determined by the number of parameters for the method and their types. 
+This signature is determined by the number of parameters for the method, those parameters types and the order they are passed. 
 To see what I mean, try to run the below example. 
 It should throw an error saying that the ```HonkHorn``` method is already defined. 
 ```powershell
-class car {
+class car 
+{
     [Void]HonkHorn([string]$beep)
     {
 
@@ -405,7 +409,21 @@ class car {
     }
 }
 ```
+This next example would be a valid signature since it has a unique order.
+```powershell
+class car 
+{
+    [Void]HonkHorn([string]$beep, [int]$times)
+    {
 
+    }
+
+    [Void]HonkHorn([int]$times,[string]$beep)
+    {
+
+    }
+}
+```
 ### Method Property Validation
 I wanted to include this for the sake of completeness. 
 I was unable to find any type of validation modifiers for parameters to methods. 
@@ -414,11 +432,11 @@ For example, if your method is expecting a positive number, you couldn't just ad
 ### Static Methods
 Just like static properties we can define a method to be static.
 This again is done with the ```static``` keyword.
-Lets update the ```TimeUtilities``` class to work with a new static method.
+Let's update the ```TimeUtilities``` class to work with a new static method.
 ```powershell
 class TimeUtilities
 {
-    static $Time = "The Time is $((Get-Date).ToShortTimeString())"
+    static [string]$Time = "The Time is $((Get-Date).ToShortTimeString())"
 
     static [Bool]IsWeekend([DateTime]$DateToTest)
     {
@@ -463,7 +481,7 @@ $someGuy = [human]::New()
 This ```New``` method is inherited from the base class. 
 Since ```New``` is a method, we can override and overload it just like anything else.
 We create constructors by creating a new method with the same name as the class.
-Here I'll create an overload method to assign the name as an option. 
+Here I'll create an overload method to assign the name property at object creation time.
 ```powershell
 class human
 {
@@ -591,7 +609,7 @@ class animal
 }
 ```
 I purposely left the ```Throw``` statement in the speak method of this base class.
-The reason behind this, is I want to ensure that any child classes **must** override this method.
+The reason behind this, is I want to ensure that any child classes must override it if they want to use it.
 Next I create a dog class that inherits from our base class of animal,
 To do this we use the syntax ```class NewClass : BaseClass```. 
 This example brings in the old properties of the new class, plus any new properties and methods we add here.
@@ -607,7 +625,7 @@ class dog : animal
     }
 }
 ```
-Lets create a new dog and look at its properties
+Let's create a new dog and look at its properties
 ```powershell
 $spot = [dog]::new()
 $spot | Get-Member
@@ -657,7 +675,7 @@ class dog : animal
 ## Using The Base Keyword
 ### Base Constructors
 One thing that will not automatically be inherited is any constructors that take parameters.
-Before we look at the constructors for our new dog class, lets look at its parent.
+Before we look at the constructors for our new dog class, let's look at its parent.
 ```powershell
 [animal]::new
 ```
@@ -668,7 +686,7 @@ OverloadDefinitions
 animal new(string NewName)                
 animal new()    
 ```
-Now lets look at the child's classes constructors.
+Now let's look at the child's classes constructors.
 ```powershell
 [dog]::new
 ```
@@ -727,7 +745,7 @@ class kangaroo : animal
     }
 }
 ```
-Now lets create a new kangaroo and make him jump.
+Now let's create a new kangaroo and make him jump.
 ```powershell
 $kango = [kangaroo]::new()
 $kango.Jump()
