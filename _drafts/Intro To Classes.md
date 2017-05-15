@@ -1,13 +1,13 @@
 ﻿This is going to be part the first in a series of posts regrading classes.
 I want to talk more about DSC and especially some of the cool things you can do with class based resources.
-Before we get to the advance use cases, lets go through the basics.
+Before we get to the advance use cases, we need to cover the basics.
 **The Good Stuff**: An introduction to PowerShell classes. 
 <!-- TOC -->
 
 - [Why Classes](#why-classes)
 - [Class Basics](#class-basics)
     - [What is a Class?](#what-is-a-class)
-    - [Classes and Objects](#classes-and-objects)
+    - [Classes And Objects](#classes-and-objects)
     - [Creating A Class](#creating-a-class)
 - [Describing The Class](#describing-the-class)
     - [Properties](#properties)
@@ -47,15 +47,15 @@ In an upcoming post, I will detail this process further.
 # Class Basics
 ## What is a Class?
 A class is just a template for an object. 
-Classes define how an object should look, what is does and potentially what it takes to create a new instance. 
-## Classes and Objects
+Classes define how an object should look, what is does and potentially what it takes to create a new one. 
+## Classes And Objects
 When we create an instance of a class, it becomes an object made from that template. 
 I always found this concept confusing and want to make sure we define the terms early.
 A class is a template for what an object should look like. 
 It's not till we instantiate an instance of that class, do we have an object. 
 For example, we are going to create a human class. 
 We then use that class to create a human object.
-David is an instance of the human class.
+Here ```$David``` is an instance (object) of the human class.
 ## Creating A Class
 We can create a new class by using the new ```class``` keyword. 
 ```powershell
@@ -71,7 +71,7 @@ The first is to use ```New-Object``` with the ```-TypeName``` switch.
 $david = New-Object -TypeName human
 ```
 Another way to instantiate a class is to call the static constructor of the class. 
-If your unsure what the words static and constructor means, its ok.
+If your unsure what a "static constructor" is, it's ok.
 We will cover these concepts later in the article. 
 For now, just familiarize yourself with the syntax below. 
 ```powershell
