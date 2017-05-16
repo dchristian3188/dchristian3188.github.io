@@ -34,7 +34,7 @@ Before we get to the advance use cases, we need to cover the basics.
 <!-- /TOC -->
 # Why Classes
 For me there are two big reasons to use PowerShell classes.
-The first is if your creating your own modules and functions.
+The first is if you're creating your own modules and functions.
 You can use classes to represent complex data structures. 
 Once the classes are defined, they work just like any other type in PowerShell.
 This is incredibly helpful when multiple functions need to pass the same data around.
@@ -71,7 +71,7 @@ The first is to use ```New-Object``` with the ```-TypeName``` switch.
 $david = New-Object -TypeName human
 ```
 Another way to instantiate a class is to call the static constructor of the class. 
-If your unsure what a "static constructor" is, it's ok.
+If you're unsure what a "static constructor" is, it's ok.
 We will cover these concepts later in the article. 
 For now, just familiarize yourself with the syntax below. 
 ```powershell
