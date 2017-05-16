@@ -1,6 +1,6 @@
 ﻿---
-title: Introduction to PowerShell Classes
 layout: post
+title: Working With Plaster
 ---
 This is going to be the first in a series of posts regrading classes.
 I want to talk more about DSC and especially some of the cool things you can do with class based resources.
