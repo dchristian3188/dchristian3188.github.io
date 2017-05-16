@@ -1,4 +1,8 @@
-﻿This is going to be part the first in a series of posts regrading classes.
+﻿---
+layout: post
+title: An Introduction to PowerShell Classes
+---
+This is going to be the first in a series of posts regrading classes.
 I want to talk more about DSC and especially some of the cool things you can do with class based resources.
 Before we get to the advance use cases, we need to cover the basics.
 **The Good Stuff**: An introduction to PowerShell classes. 
@@ -6,7 +10,7 @@ Before we get to the advance use cases, we need to cover the basics.
 
 - [Why Classes](#why-classes)
 - [Class Basics](#class-basics)
-    - [What is a Class?](#what-is-a-class)
+    - [What Is A Class?](#what-is-a-class)
     - [Classes And Objects](#classes-and-objects)
     - [Creating A Class](#creating-a-class)
 - [Describing The Class](#describing-the-class)
@@ -43,9 +47,9 @@ The other big use case is DSC.
 DSC is gaining more and more traction everyday.
 With this increased adoption, there is an even larger gap for new resources.
 DSC Class based resources are just easier to to develop and maintain. 
-In an upcoming post, I will detail this process further.
+I will detail this process further in an upcoming post.
 # Class Basics
-## What is a Class?
+## What Is A Class?
 A class is just a template for an object. 
 Classes define how an object should look, what is does and potentially what it takes to create a new one. 
 ## Classes And Objects
@@ -163,7 +167,7 @@ class human
     $Weight
 }
 ```
-Now if we create a new human object, and look at its properties the ```$ID``` property will not be shown. 
+Now if we create a new human object and look at its properties, the ```$ID``` property will not be shown. 
 ```powershell
 $someGuy = [human]::new()
 $someGuy
@@ -208,7 +212,8 @@ Name         Property     string Name {get;set;}
 Weight       Property     int Weight {get;set;}                                                                                                                 
 ```                                                                                         
 One **important** thing to note with hidden properties is that nothing prevents a user from interacting with them.
-Moreover, if a user specifically calls the property it will be displayed. This works when called from ```Select-Object```, any of the ```Format``` commands or if the property is referenced by dot notation.
+If a user specifically calls the property it will be displayed. 
+This works when called from ```Select-Object```, any of the ```Format``` commands or if the property is referenced by dot notation.
 ```powershell
 $someGuy = [human]::new()
 $someGuy.ID = (New-Guid).Guid
@@ -335,7 +340,7 @@ Its important to note, that you can also use the ```$this``` variable to call me
 This is helpful when a class has a helper method used by other methods.
 ### Method Overload
 Methods in PowerShell classes support overload.
-When we overload a method, we define a method more than once.
+When we overload a method, we define that method more than once with different parameters.
 This is similar to defining a function with multiple parameter sets.
 Let's overload the SayHello method and add a new parameter for name.
 ```powershell
@@ -377,7 +382,7 @@ class human
 }
 ```
 We can inspect the different overload signatures by calling an instance of the class with the method name.
-Notice there are no parenthesis after the method name so we aren't invoking it.
+Notice there are no parenthesis after the method name so we are not actually invoking it.
 ```powershell
 $me = New-Object -TypeName Human
 $me.SayHello
@@ -392,7 +397,7 @@ string SayHello(string Name)
 ### Method Signature
 If you don't provide a type for the parameters of your methods, they will default to ```System.Object```.
 This can be important because while you can have an unlimited number of method overloads, they all have to have a unique signature.
-This signature is determined by the number of parameters for the method, those parameters types and the order they are passed. 
+This signature is determined by the number of parameters for the method, those parameter's types and the order they are passed. 
 To see what I mean, try to run the below example. 
 It should throw an error saying that the ```HonkHorn``` method is already defined. 
 ```powershell
@@ -457,7 +462,7 @@ We could then run this method without an instance of the class.
 ```powershell
 [TimeUtilities]::IsWeekend((Get-Date))
 ```
-You can find static methods by piping the class name into ```Get-Member``` with the static keyword.
+You can find static methods by piping the class name into ```Get-Member``` with the ```Static``` switch.
 ```powershell
 [TimeUtilities] | Get-Member -Static
 ```
@@ -470,15 +475,15 @@ Name            MemberType Definition
 Equals          Method     static bool Equals(System.Object objA, System.Object objB)
 IsWeekend       Method     static bool IsWeekend(datetime DateToTest)
 ReferenceEquals Method     static bool ReferenceEquals(System.Object objA, System.Object objB)
-Time            Property   static System.Object Time {get;set;}
+Time            Property   static string Time {get;set;}
 ```
 ## Constructors
 Remember at the beginning of the article when we talked about creating a new object?
-One option available to us was to call the ```New``` static method.
+One option available to us was to call the ```New``` static constructor.
 ```powershell
 $someGuy = [human]::New()
 ```
-This ```New``` method is inherited from the base class. 
+This ```New``` constructor is just a method inherited from the base class. 
 Since ```New``` is a method, we can override and overload it just like anything else.
 We create constructors by creating a new method with the same name as the class.
 Here I'll create an overload method to assign the name property at object creation time.
@@ -565,7 +570,7 @@ human new(string name)
 # Inheritance
 ## Creating Child Classes
 Inheritance allows us to define one class as a starting point for another.
-This is helpful when you need multiple classes to share similar features and properties.
+This is helpful when you need multiple classes to share similar methods and properties.
 Instead of duplicating the code, we can place the shared logic in a base class and then use inheritance to work out the details on the children. 
 Let's first start by creating a base class for animals.
 ```powershell
@@ -612,7 +617,6 @@ I purposely left the ```Throw``` statement in the speak method of this base clas
 The reason behind this, is I want to ensure that any child classes must override it if they want to use it.
 Next I create a dog class that inherits from our base class of animal,
 To do this we use the syntax ```class NewClass : BaseClass```. 
-This example brings in the old properties of the new class, plus any new properties and methods we add here.
 ```powershell
 class dog : animal
 {
@@ -625,7 +629,7 @@ class dog : animal
     }
 }
 ```
-Let's create a new dog and look at its properties
+Let's create a new dog and look at its properties and methods.
 ```powershell
 $spot = [dog]::new()
 $spot | Get-Member
@@ -650,7 +654,7 @@ Name               Property   string Name {get;set;}
 TailLength         Property   int TailLength {get;set;}        
 WeightLbs          Property   int WeightLbs {get;set;}    
 ```
-Thanks to inheritance the child class has ll the properties of its parent.
+Thanks to inheritance the child class has all the properties and methods of its parent.
 ## Overriding Methods
 We override methods by providing them the same method signature in the child class.
 Remember how the speak method thew an error in the base class?
@@ -697,7 +701,7 @@ OverloadDefinitions
 dog new()          
 ```
 To regain this functionality we can create a new constructor that matches the method signature of the parent class.
-We'll then map this signature to the parents signature using ```: base(Params,Go,Here)```
+We'll then map this signature to the parent's signature using ```: base(Params,Go,Here)```
 ```powershell
 class dog : animal
 {
@@ -733,9 +737,9 @@ $puppy.Name
 ```
 ### Calling Base Methods
 We can also call a base method from an override if we cast ```$this``` to the parent class.
-The syntax to accomplish this is ```([baseclass]$this).Method()```.
+The syntax is ```([baseclass]$this).Method()```.
 In this example, I'm going to create a Kangaroo class that will override the base ```Jump``` method. 
-I will use this technique to be able to call the parents jump method from inside the override. 
+I will use this technique to be able to call the parent's jump method from inside the override. 
 ```powershell
 class kangaroo : animal
 {
