@@ -818,7 +818,8 @@ class kangaroo : animal
 {
     [string]Jump()
     {
-        return ([animal]$this).Jump() * 2
+        $originalString = ([animal]$this).Jump()
+        return  $originalString * 2
     }
 }
 ```
