@@ -1,4 +1,8 @@
-﻿This is going to be the first in a series of posts regrading classes.
+---
+layout: post
+title: Introduction To PowerShell Classes
+---
+This is going to be the first in a series of posts regrading classes.
 I want to talk more about DSC and especially some of the cool things you can do with class based resources.
 Before we get to the advance use cases, we need to cover the basics.
 **The Good Stuff**: An introduction to PowerShell classes. 
