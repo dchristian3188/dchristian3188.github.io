@@ -17,6 +17,9 @@ While the syntax maybe different, all the concepts are the same.
         - [Get](#get)
         - [Test](#test)
         - [Set](#set)
+- [Creating The Module Structure](#creating-the-module-structure)
+    - [Module Manifest](#module-manifest)
+    - [PSM1 Module](#psm1-module)
 
 <!-- /TOC -->
 # Declaring a Resource
@@ -158,6 +161,92 @@ This resource is response for correcting the current state.
 class DriveLabel
 {
 ...
+    [void]Set()
+    {
+        Get-Volume -DriveLetter $this.DriveLetter  |
+            Set-Volume -NewFileSystemLabel $this.Label
+    }
+}
+```
+# Creating The Module Structure
+The first thing we'll need is a new folder for our module.
+```powershell
+New-Item -Path DCDisk -ItemType Directory
+```
+## Module Manifest
+GO TRY PLASTER.
+Next we need to create a module manifest. 
+We can use the same ```New-ModuleManifest```.
+Let's see what's available to us.
+```powershell
+Get-Command -Name New-ModuleManifest -Syntax
+```
+Output:
+```powershell
+New-ModuleManifest [-Path] <string> [-NestedModules <Object[]>] [-Guid <guid>] [-Author <string>] [-CompanyName <string>] [-Copyright <string>] [-RootModule <string>] [-ModuleVersion <version>] [-Description <string>] [-ProcessorArchitecture <ProcessorArchit
+ecture>] [-PowerShellVersion <version>] [-ClrVersion <version>] [-DotNetFrameworkVersion <version>] [-PowerShellHostName <string>] [-PowerShellHostVersion <version>] [-RequiredModules <Object[]>] [-TypesToProcess <string[]>] [-FormatsToProcess <string[]>] [-
+ScriptsToProcess <string[]>] [-RequiredAssemblies <string[]>] [-FileList <string[]>] [-ModuleList <Object[]>] [-FunctionsToExport <string[]>] [-AliasesToExport <string[]>] [-VariablesToExport <string[]>] [-CmdletsToExport <string[]>] [-DscResourcesToExport <
+string[]>] [-CompatiblePSEditions <string[]>] [-PrivateData <Object>] [-Tags <string[]>] [-ProjectUri <uri>] [-LicenseUri <uri>] [-IconUri <uri>] [-ReleaseNotes <string>] [-HelpInfoUri <string>] [-PassThru] [-DefaultCommandPrefix <string>] [-WhatIf] [-Confir
+m] [<CommonParameters>]
+```
+We'll set out options and create.
+```powershell
+$manifestProperties = @{
+    Path = 'DCDisk.psd1'
+    RootModule = 'DCDisk.psm1'
+    Author = 'David Christian'
+    Description = 'Custom module for disk related DSC resources'
+    PowerShellVersion = '5.0'
+    DscResourcesToExport = 'DriveLabel'
+    CompanyName = 'OverPoweredShell.com'
+    Verbose = $true
+}
+
+New-ModuleManifest @manifestProperties
+```
+## PSM1 Module
+Next we'll create a new psm1 named ```DCDisk.psm1``` in the same folder. 
+Here we'll place our completed class.
+```powershell
+[DscResource()]
+class DriveLabel
+{
+    [DscProperty(Key)]
+    [string]
+    $DriveLetter
+
+    [DscProperty(Mandatory)]
+    [string]
+    $Label
+
+    [DscProperty(NotConfigurable)]
+    [string]
+    $FileSystemType
+
+    [DriveLabel]Get()
+    {
+        $this.DriveLetter
+        $volumeInfo = Get-Volume -DriveLetter $this.DriveLetter
+        $this.Label = $volumeInfo.FileSystemLabel
+        $this.FileSystemType = $volumeInfo.FileSystemType
+        return $this
+    }
+
+    [bool]Test()
+    {
+        $labelCorrect = Get-Volume -DriveLetter $this.DriveLetter |
+            Where-Object -FilterScript {$PSItem.FileSystemLabel -eq $this.Label}
+        
+        if($labelCorrect)
+        {
+            return $true
+        }
+        else
+        {
+            return $false
+        }
+    }
+
     [void]Set()
     {
         Get-Volume -DriveLetter $this.DriveLetter  |
