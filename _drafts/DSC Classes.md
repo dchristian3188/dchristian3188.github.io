@@ -20,6 +20,9 @@ While the syntax maybe different, all the concepts are the same.
 - [Creating The Module Structure](#creating-the-module-structure)
     - [Module Manifest](#module-manifest)
     - [PSM1 Module](#psm1-module)
+- [Working with the resource](#working-with-the-resource)
+    - [Checking syntax](#checking-syntax)
+    - [Creating a Configuration](#creating-a-configuration)
 
 <!-- /TOC -->
 # Declaring a Resource
@@ -228,7 +231,7 @@ class DriveLabel
         $this.DriveLetter
         $volumeInfo = Get-Volume -DriveLetter $this.DriveLetter
         $this.Label = $volumeInfo.FileSystemLabel
-        $this.FileSystemType = $volumeInfo.FileSystemType
+        $this.FileSystemType = $volumeInfo.FileSystem
         return $this
     }
 
@@ -249,8 +252,50 @@ class DriveLabel
 
     [void]Set()
     {
+        Write-Verbose -Message "Adding label [$($this.Label)] to [$($this.DriveLetter)] Drive"
         Get-Volume -DriveLetter $this.DriveLetter  |
             Set-Volume -NewFileSystemLabel $this.Label
     }
 }
+```
+With these two files saved, we can place them in our module directory. 
+# Working with the resource
+## Checking syntax
+We can check that our new resource is register.
+```powershell
+Get-DscResource -Name DriveLabel -Syntax
+```
+Output:
+```powershell
+DriveLabel [String] #ResourceName
+{
+    DriveLetter = [string]
+    Label = [string]
+    [DependsOn = [string[]]]
+    [PsDscRunAsCredential = [PSCredential]]
+}
+```
+## Creating a Configuration
+Lets create a new configuration 
+```powershell
+configuration DiskConfig
+{
+    Import-DscResource -ModuleName DCDisk
+    node ("localhost")
+    {
+        DriveLabel CDrive
+        {
+            DriveLetter = 'C'
+            Label = 'OperatingSystem'
+        }
+    }
+}
+```
+Running the configuration
+```powershell
+New-Item -ItemType Directory -Path C:\PS -Verbose -ErrorAction SilentlyContinue
+Push-Location -Path C:\PS
+DiskConfig
+Start-DscConfiguration .\DiskConfig -Verbose -Wait -Force 
+Pop-Location 
 ```

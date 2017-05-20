@@ -172,7 +172,7 @@ class Human
 [ValidatePattern()]
 [ValidateLength()] 
 ```
-Interestingly enough ```[ValidateScript()]```did not work. 
+Interestingly enough ```[ValidateScript()]``` did not work. 
 Any value I tried produced the same error message, you must provide a constant.
 ```powershell
 +     [ValidateScript({$true})]
