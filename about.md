@@ -8,5 +8,3 @@ David is an IT professional with over a decade of experience. He has a passion f
 [LinkedIn](https://www.linkedin.com/in/david-christian-181545108/)
 
 [Github](https://github.com/dchristian3188)
-
-[Email](mailto:dchristian3188@gmail.com)
