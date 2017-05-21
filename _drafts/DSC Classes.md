@@ -28,6 +28,8 @@ While the syntax maybe different, all the concepts are the same.
     - [Properties](#properties)
     - [Helper Methods](#helper-methods)
     - [Big Three Methods](#big-three-methods)
+- [Debugging A Class-Based Resource](#debugging-a-class-based-resource)
+    - [Debug The Class](#debug-the-class)
 - [Wrapping Up](#wrapping-up)
 
 <!-- /TOC -->
@@ -430,5 +432,11 @@ The set method couldn't be easier.
     Restart-Service -Name $this.ServiceName -Force
 }
 ```
+# Debugging A Class-Based Resource
+## Debug The Class
+It took me a while to realize this one. 
+Since the resource was defined as a PowerShell Class, it's available to us just like any other type is. 
+What that means is we can debug this just like we do any other class.
+First start by definning your new class an a separate .ps1 file.
 # Wrapping Up
 PowerShell class FTW.
