@@ -437,6 +437,15 @@ The set method couldn't be easier.
 It took me a while to realize this one. 
 Since the resource was defined as a PowerShell Class, it's available to us just like any other type is. 
 What that means is we can debug this just like we do any other class.
-First start by definning your new class an a separate .ps1 file.
+When initially designing a resource, this is my preferred approach.
+Usually at initial design I have my resource saved in a ```.ps1``` file. 
+Its not till module compilation time that all files are combined into the finished ```.psm1```.
+With our class defined, I'll set a breakpoint to the method in question.
+Next all we have to do is create an instance of the class, and run the method. 
+![debug](https://github.com/dchristian3188/dchristian3188.github.io/blob/master/images/classDebugGif.gif)
+
+
+
+
 # Wrapping Up
 PowerShell class FTW.
