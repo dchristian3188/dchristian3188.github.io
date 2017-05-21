@@ -190,14 +190,6 @@ Let's see what's available to us.
 ```powershell
 Get-Command -Name New-ModuleManifest -Syntax
 ```
-Output:
-```powershell
-New-ModuleManifest [-Path] <string> [-NestedModules <Object[]>] [-Guid <guid>] [-Author <string>] [-CompanyName <string>] [-Copyright <string>] [-RootModule <string>] [-ModuleVersion <version>] [-Description <string>] [-ProcessorArchitecture <ProcessorArchit
-ecture>] [-PowerShellVersion <version>] [-ClrVersion <version>] [-DotNetFrameworkVersion <version>] [-PowerShellHostName <string>] [-PowerShellHostVersion <version>] [-RequiredModules <Object[]>] [-TypesToProcess <string[]>] [-FormatsToProcess <string[]>] [-
-ScriptsToProcess <string[]>] [-RequiredAssemblies <string[]>] [-FileList <string[]>] [-ModuleList <Object[]>] [-FunctionsToExport <string[]>] [-AliasesToExport <string[]>] [-VariablesToExport <string[]>] [-CmdletsToExport <string[]>] [-DscResourcesToExport <
-string[]>] [-CompatiblePSEditions <string[]>] [-PrivateData <Object>] [-Tags <string[]>] [-ProjectUri <uri>] [-LicenseUri <uri>] [-IconUri <uri>] [-ReleaseNotes <string>] [-HelpInfoUri <string>] [-PassThru] [-DefaultCommandPrefix <string>] [-WhatIf] [-Confir
-m] [<CommonParameters>]
-```
 We'll set out options and create.
 ```powershell
 $manifestProperties = @{
@@ -403,7 +395,7 @@ To do this, we first need to get the process id that's running the service.
 }
 ```
 ## Big Three Methods
-With the new helper methods in place the bigg three are pretty straight forward.
+With the new helper methods in place the big three are pretty straight forward.
 Below is our ```Get```.
 ```powershell
 [SmartSeviceRestart]Get()
