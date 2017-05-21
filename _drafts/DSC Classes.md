@@ -138,7 +138,7 @@ class DriveLabel
 ```
 ### Test
 This method is responsible for checking if this current state matches our desired state.
-The ```Test``` method must return the type of ```[boo]```.
+The ```Test``` method must return the type of ```[bool]```.
 Below we will test if the drive label matches the value the user supplied.
 If it doesn't we will return ```$false``` for this method.
 ```powershell
