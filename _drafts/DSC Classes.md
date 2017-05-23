@@ -181,19 +181,20 @@ class DriveLabel
 }
 ```
 # Creating The Module Structure
-The first thing we'll need is a new folder for our module.
+The structure of a DSC Classed-Based resource is the same as any other module.
+First we'll need a new directory to hold the contents of our module.
 ```powershell
 New-Item -Path DCDisk -ItemType Directory
 ```
 ## Module Manifest
-GO TRY PLASTER.
 Next we need to create a module manifest. 
-We can use the same ```New-ModuleManifest```.
+We can use the same ```New-ModuleManifest``` that creates traditional modules.
+I first inspect what my availble options are using ```Get-Command```.
 Let's see what's available to us.
 ```powershell
 Get-Command -Name New-ModuleManifest -Syntax
 ```
-We'll set out options and create.
+My list of parameters gets a little long so I like to create a hashtable and splat them into ```New-ModuleManifest```.
 ```powershell
 $manifestProperties = @{
     Path = 'DCDisk.psd1'
