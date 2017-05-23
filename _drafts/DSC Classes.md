@@ -3,9 +3,9 @@ layout: post
 title: DSC Class-Based Resources
 ---
 Now that we know what a PowerShell class is, it's time we start putting them to use.
-Classes are new with version 5 and one of the best places to put them to use is DSC. 
-While the syntax maybe different, all the concepts are the same. 
-**The Good Stuff** How to create a DSC Class-Based Resource
+Classes are new with version 5 and one of the best places for them is DSC. 
+While the syntax maybe different, all the DSC concepts are the same. 
+**The Good Stuff**: How to create a DSC Class-Based Resource
 <!-- TOC -->
 
 - [Declaring a Resource](#declaring-a-resource)
@@ -20,8 +20,8 @@ While the syntax maybe different, all the concepts are the same.
 - [Creating The Module Structure](#creating-the-module-structure)
     - [Module Manifest](#module-manifest)
     - [PSM1 Module](#psm1-module)
-- [Working with the resource](#working-with-the-resource)
-    - [Checking syntax](#checking-syntax)
+- [Working With The Resource](#working-with-the-resource)
+    - [Checking Syntax](#checking-syntax)
     - [Creating a Configuration](#creating-a-configuration)
 - [A More Complex Example](#a-more-complex-example)
     - [Overview](#overview)
@@ -34,9 +34,9 @@ While the syntax maybe different, all the concepts are the same.
 
 <!-- /TOC -->
 # Declaring a Resource
-The first example for today will be a resource to set the drive label.
+The first example for today will be a resource to update the drive label.
 To define our new resource, we start by creating a class.
-However, before the class declaration we're going to add the ```[DSCResource]``` attribute.
+The only difference is, just before the class declaration we're going to add the ```[DSCResource]``` attribute.
 ```powershell
 [DscResource()]
 class DriveLabel
@@ -47,7 +47,7 @@ class DriveLabel
 ## Resource Parameters - Properties
 Resource parameters are just properties to the DSC class. 
 In this example, we are going to add a ```DriveLetter``` and ```Label``` parameter.
-Just like any class, we will prefix these variables with their types.
+Just like any class, we will prefix these properties with their types.
 ```powershell
 [DscResource()]
 class DriveLabel
@@ -78,8 +78,8 @@ class DriveLabel
 ```
 ### DscProperty - Mandatory
 Assigning a property the ```[DscProperty(Mandatory)]``` attribute does exactly what it sounds like.
-We can use this attribute when we want to ensure our user set this value in their configuration.
-For our example below, we will mark the ```$Label``` parameter mandatory.
+We can use this attribute when we want to ensure our user sets this value in their configuration.
+For our example below, we will tag the ```$Label``` parameter mandatory.
 ```powershell
 class DriveLabel
 {
@@ -87,6 +87,7 @@ class DriveLabel
     [string]
     $DriveLetter
 
+    [DscProperty(Mandatory)]
     [string]
     $Label
 }
@@ -94,9 +95,10 @@ class DriveLabel
 ### DscProperty - NotConfigurable
 The ```[DscProperty(NotConfigurable)]``` attribute is used in a couple of scenarios.
 The first is if we want to include additional information to our user in the ```Get``` Method.
-Here We'll add a new property for the filesystem type.
+This can be helpful for reporting purposes.
+Here we'll add a new property for the filesystem type.
 Our ```Get``` method will then populate this property before returning it back to the user. 
-Since this new property is not configurable it will not be a parameter to the resource.
+Since this new property is ```NotConfigurable``` it will not be a parameter to the resource.
 ```powershell
 [DscResource()]
 class DriveLabel
@@ -114,8 +116,8 @@ class DriveLabel
     $FileSystemType
 }
 ```
-The next big scenario to use a NotConfigurable property is when two helper methods need to share information. 
-The advanced example in the second half of this article will provide an example of this. 
+The next big scenario to use a ```NotConfigurable``` property is when two methods need to share information. 
+The advanced example in the later in this article will provide an example of this. 
 ## The Big Three Methods
 All DSC Class-Based resources must override the next three methods. 
 Each of these methods should be implemented with no parameters.
@@ -142,7 +144,7 @@ class DriveLabel
 ### Test
 This ```Test``` method is responsible for checking if this current state matches our desired state.
 When defining the ```Test``` method make sure it has a return type of ```[bool]```.
-Below we will test if the drive label matches the value the user supplied.
+Below we will test if the drive label matches the user supplied value.
 ```powershell
 [DscResource()]
 class DriveLabel
@@ -166,7 +168,7 @@ class DriveLabel
 ```
 ### Set
 The ```Set``` method needs to enforce our actual desired state.
-Considering we are not expecting output here and we should use the output type of ```[void]```.
+Considering we are not expecting output, this method should be prefixed with the ```[void]``` type.
 In our current example, we will use the ```Set-Volume``` cmdlet to update the label.
 ```powershell
 [DscResource()]
@@ -175,6 +177,7 @@ class DriveLabel
 ...
     [void]Set()
     {
+        Write-Verbose -Message "Adding label [$($this.Label)] to [$($this.DriveLetter)] Drive"
         Get-Volume -DriveLetter $this.DriveLetter  |
             Set-Volume -NewFileSystemLabel $this.Label
     }
@@ -187,14 +190,10 @@ First we'll need a new directory to hold the contents of our module.
 New-Item -Path DCDisk -ItemType Directory
 ```
 ## Module Manifest
-Next we need to create a module manifest. 
-We can use the same ```New-ModuleManifest``` that creates traditional modules.
-I first inspect what my availble options are using ```Get-Command```.
-Let's see what's available to us.
-```powershell
-Get-Command -Name New-ModuleManifest -Syntax
-```
+Inside of the new directory we need to create a module manifest. 
 My list of parameters gets a little long so I like to create a hashtable and splat them into ```New-ModuleManifest```.
+Notice the ```DscResourcesToExport``` key?
+Remember that as you add resources to a module, this needs to be updated inside of the manifest.
 ```powershell
 $manifestProperties = @{
     Path = 'DCDisk.psd1'
@@ -210,7 +209,7 @@ $manifestProperties = @{
 New-ModuleManifest @manifestProperties
 ```
 ## PSM1 Module
-Next we'll create a new psm1 named ```DCDisk.psm1``` in the same folder. 
+Next we'll create a new psm1 named ```DCDisk.psm1```.
 Here we'll place our completed class.
 ```powershell
 [DscResource()]
@@ -230,7 +229,6 @@ class DriveLabel
 
     [DriveLabel]Get()
     {
-        $this.DriveLetter
         $volumeInfo = Get-Volume -DriveLetter $this.DriveLetter
         $this.Label = $volumeInfo.FileSystemLabel
         $this.FileSystemType = $volumeInfo.FileSystem
@@ -260,10 +258,13 @@ class DriveLabel
     }
 }
 ```
-With these two files saved, we can place them in our module directory. 
-# Working with the resource
-## Checking syntax
-We can check that our new resource is register.
+With these two files saved, we can place the entire folder in our module directory. 
+# Working With The Resource
+## Checking Syntax
+Now let's see if our resource is properly registered.
+To do this, we can call the ```Get-DscResource``` cmdlet.
+I also include the ```Syntax``` switch to inspect the parameters.
+Two birds one stone.
 ```powershell
 Get-DscResource -Name DriveLabel -Syntax
 ```
@@ -278,7 +279,8 @@ DriveLabel [String] #ResourceName
 }
 ```
 ## Creating a Configuration
-Lets create a new configuration 
+Ok moment of truth. 
+Lets create a new configuration to test the new resource.
 ```powershell
 configuration DiskConfig
 {
@@ -293,7 +295,8 @@ configuration DiskConfig
     }
 }
 ```
-Running the configuration
+The only thing left to do, is run the config.
+The below commands will create the localmof in the ```C:\PS``` directory.
 ```powershell
 New-Item -ItemType Directory -Path C:\PS -Verbose -ErrorAction SilentlyContinue
 Push-Location -Path C:\PS
