@@ -2,8 +2,8 @@
 layout: post
 title: DSC Class-Based Resources
 ---
-Now that we know what a PowerShell class is, it's time we start using them.
-DSC Classes are new with version 5.
+Now that we know what a PowerShell class is, it's time we start putting them to use.
+Classes are new with version 5 and one of the best places to put them to use is DSC. 
 While the syntax maybe different, all the concepts are the same. 
 **The Good Stuff** How to create a DSC Class-Based Resource
 <!-- TOC -->
@@ -35,7 +35,7 @@ While the syntax maybe different, all the concepts are the same.
 <!-- /TOC -->
 # Declaring a Resource
 The first example for today will be a resource to set the drive label.
-To define our new resource, we start by create a class.
+To define our new resource, we start by creating a class.
 However, before the class declaration we're going to add the ```[DSCResource]``` attribute.
 ```powershell
 [DscResource()]
@@ -60,10 +60,11 @@ class DriveLabel
 }
 ```
 ### DscProperty - Key
-The key property uniquely identifies an instance of the DSC resource.
-This is important because we cannot have multiple DSC resources in a configuration with the same key property.
-When creating our own resources, at least one parameter in the class will need to have the attribute of ```[DscProperty(Key)]```.
-Since we don't want the user to have two resources with the same drive letter in a configuration we'll assign it the ```[DscProperty(Key)]``` attribute.
+We want to prevent the user from trying to define two labels for the same drive. 
+To accomplish this, we'll assign the ```$DriveLabel``` property the ```DscProperty(Key)]``` attribute.
+This key attribute uniquely identifies the an instance of the DSC resource.
+This is important because we cannot have multiple DSC resources in a configuration share the same key.
+At least one parameter in the class will need to have the attribute of ```[DscProperty(Key)]```.
 ```powershell
 class DriveLabel
 {
@@ -93,8 +94,9 @@ class DriveLabel
 ### DscProperty - NotConfigurable
 The ```[DscProperty(NotConfigurable)]``` attribute is used in a couple of scenarios.
 The first is if we want to include additional information to our user in the ```Get``` Method.
-We'll add a new property to the class for the filesystem type. 
-Since this new property has the ```[DscProperty(NotConfigurable)]``` attribute, it will not be a parameter to the resource.
+Here We'll add a new property for the filesystem type.
+Our ```Get``` method will then populate this property before returning it back to the user. 
+Since this new property is not configurable it will not be a parameter to the resource.
 ```powershell
 [DscResource()]
 class DriveLabel
@@ -112,15 +114,15 @@ class DriveLabel
     $FileSystemType
 }
 ```
-The next big scenario to use a NotConfigurable property is when two help methods need to share information. 
+The next big scenario to use a NotConfigurable property is when two helper methods need to share information. 
 The advanced example in the second half of this article will provide an example of this. 
 ## The Big Three Methods
-All DSC Class-Based resources must implement the next three methods. 
+All DSC Class-Based resources must override the next three methods. 
 Each of these methods should be implemented with no parameters.
 ### Get
-The get method must return a type of the current class. 
-This means the last thing in our ```Get``` method should be the variable ```$this```.
 The main responsibility of the ```Get``` method is to check the current state of the resource. 
+When defining the ```Get``` method, prefix it with the type of the class.
+Once all processing is complete, return ```$this```. 
 Here's what that would look like for our drive label example.
 ```powershell
 [DscResource()]
@@ -129,7 +131,6 @@ class DriveLabel
 ...
     [DriveLabel]Get()
     {
-        $this.DriveLetter
         $volumeInfo = Get-Volume -DriveLetter $this.DriveLetter
         $this.Label = $volumeInfo.FileSystemLabel
         $this.FileSystemType = $volumeInfo.FileSystemType
@@ -139,10 +140,9 @@ class DriveLabel
 }
 ```
 ### Test
-This method is responsible for checking if this current state matches our desired state.
-The ```Test``` method must return the type of ```[bool]```.
+This ```Test``` method is responsible for checking if this current state matches our desired state.
+When defining the ```Test``` method make sure it has a return type of ```[bool]```.
 Below we will test if the drive label matches the value the user supplied.
-If it doesn't we will return ```$false``` for this method.
 ```powershell
 [DscResource()]
 class DriveLabel
@@ -165,8 +165,9 @@ class DriveLabel
 }
 ```
 ### Set
-The set method should return the type of ```[void]```.
-This resource is response for correcting the current state.
+The ```Set``` method needs to enforce our actual desired state.
+Considering we are not expecting output here and we should use the output type of ```[void]```.
+In our current example, we will use the ```Set-Volume``` cmdlet to update the label.
 ```powershell
 [DscResource()]
 class DriveLabel
@@ -442,10 +443,17 @@ Usually at initial design I have my resource saved in a ```.ps1``` file.
 Its not till module compilation time that all files are combined into the finished ```.psm1```.
 With our class defined, I'll set a breakpoint to the method in question.
 Next all we have to do is create an instance of the class, and run the method. 
+I also like to set ```$VerbosePreference = 'Continue'``` to see as much information as possible.
+```powershell
+$ogVerbosePerf = $VerbosePreference
+$VerbosePreference = 'Continue'
+$sw = [SmartSeviceRestart]::new()
+$sw.ServiceName = 'Spooler'
+$sw.Path = 'C:\Temp\test.txt'
+$sw.Test()
+$VerbosePreference = $ogVerbosePerf
+```
 ![debug](https://github.com/dchristian3188/dchristian3188.github.io/blob/master/images/classDebugGif.gif)
-
-
-
 
 # Wrapping Up
 PowerShell class FTW.
