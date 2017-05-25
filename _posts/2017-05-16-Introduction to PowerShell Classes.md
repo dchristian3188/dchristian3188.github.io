@@ -835,4 +835,4 @@ look at that kangaroo jump!look at that kangaroo jump!
 # Wrapping Up
 I hope this was helpful. 
 Classes can take a while to get use to but can be incredibly powerful.
-In the next post, we'll talk about how to use a class to create a DSC resource.
+In the [next post](http://overpoweredshell.com/Creating-A-DSC-Class-Based-Resource/), we'll talk about how to use a class to create a DSC resource.
