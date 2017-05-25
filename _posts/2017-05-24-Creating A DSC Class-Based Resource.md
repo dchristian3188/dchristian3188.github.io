@@ -1,6 +1,6 @@
 ---
 layout: post
-title: DSC Class-Based Resources
+title: Creating A DSC Class-Based Resource
 ---
 Now that we know what a PowerShell class is, it's time we start putting them to use.
 Classes are new with version 5 and one of the best places for them is DSC. 
@@ -9,7 +9,7 @@ If you need a refresher on the basics of a PowerShell class, please see my previ
 **The Good Stuff**: How to create a DSC Class-Based Resource.
 <!-- TOC -->
 
-- [Declaring a Resource](#declaring-a-resource)
+- [Declaring A Resource](#declaring-a-resource)
     - [Resource Parameters - Properties](#resource-parameters---properties)
         - [DscProperty - Key](#dscproperty---key)
         - [DscProperty - Mandatory](#dscproperty---mandatory)
@@ -23,11 +23,11 @@ If you need a refresher on the basics of a PowerShell class, please see my previ
     - [PSM1 Module](#psm1-module)
 - [Working With The Resource](#working-with-the-resource)
     - [Checking Syntax](#checking-syntax)
-    - [Creating a Configuration](#creating-a-configuration)
+    - [Creating A Configuration](#creating-a-configuration)
 - [Wrapping Up](#wrapping-up)
 
 <!-- /TOC -->
-# Declaring a Resource
+# Declaring A Resource
 The example for today will be a resource to update the drive label.
 To define our new resource, we start by creating a class.
 The only difference is, just before the class declaration we're going to add the ```[DSCResource]``` attribute.
@@ -146,16 +146,9 @@ class DriveLabel
 ...
     [bool]Test()
     {
-        $labelCorrect = Get-Volume -DriveLetter $this.DriveLetter |
-            Where-Object -FilterScript {$PSItem.FileSystemLabel -eq $this.Label}
-        if($labelCorrect)
-        {
-            return $true
-        }
-        else
-        {
-            return $false
-        }
+        $currentLabel = (Get-Volume -DriveLetter $this.DriveLetter).FileSystemLabel
+        Write-Verbose -Message "Current Label is [$currentLabel)], Expecting [$($this.Label)]"
+        return ($currentLabel -eq $this.Label)
     }
 ...
 }
@@ -184,10 +177,10 @@ First we'll need a new directory to hold all of our files.
 New-Item -Path DCDisk -ItemType Directory
 ```
 ## Module Manifest
-Inside of the new directory we need to create a module manifest. 
-My list of parameters gets a little long so I like to create a hashtable and splat them into ```New-ModuleManifest```.
-Notice the ```DscResourcesToExport``` key?
-Remember that as you add resources to a module, this needs to be updated inside of the manifest.
+Inside of the directory we're going to need a manifest.
+My list of parameters gets a little long so I like to create a hashtable and splat them into the ```New-ModuleManifest``` cmdlet.
+Be sure to notice the ```DscResourcesToExport``` key.
+Remember that as you add resources to a module, this value needs to be updated inside of the manifest.
 ```powershell
 $manifestProperties = @{
     Path = 'DCDisk.psd1'
@@ -231,17 +224,9 @@ class DriveLabel
 
     [bool]Test()
     {
-        $labelCorrect = Get-Volume -DriveLetter $this.DriveLetter |
-            Where-Object -FilterScript {$PSItem.FileSystemLabel -eq $this.Label}
-        
-        if($labelCorrect)
-        {
-            return $true
-        }
-        else
-        {
-            return $false
-        }
+        $currentLabel = (Get-Volume -DriveLetter $this.DriveLetter).FileSystemLabel
+        Write-Verbose -Message "Current Label is [$currentLabel)], Expecting [$($this.Label)]"
+        return ($currentLabel -eq $this.Label)
     }
 
     [void]Set()
@@ -252,10 +237,10 @@ class DriveLabel
     }
 }
 ```
-With these two files saved, we can place the entire folder in our module directory, ```"$Env:ProgramFiles\WindowsPowerShell\Modules\"```
+With these two files saved, we can place the entire folder in our module directory (```"$Env:ProgramFiles\WindowsPowerShell\Modules\"```).
 # Working With The Resource
 ## Checking Syntax
-Now let's see if our resource is properly registered.
+Now we need to see if our resource is properly registered.
 To do this, we can call the ```Get-DscResource``` cmdlet.
 I also include the ```Syntax``` switch to inspect the parameters.
 Two birds one stone.
@@ -272,9 +257,9 @@ DriveLabel [String] #ResourceName
     [PsDscRunAsCredential = [PSCredential]]
 }
 ```
-## Creating a Configuration
+## Creating A Configuration
 Ok moment of truth. 
-Let's create a new configuration to test the new resource.
+Let's create a configuration to test the new resource.
 ```powershell
 configuration DiskConfig
 {
@@ -301,9 +286,14 @@ Pop-Location
 Here's a screen shot of our resource in action.
 ![_config.yml]({{ site.baseurl }}/images/dscClassesRun.png)
 
-Also, remember since we set our ```NotConfigurable``` it will be returned in our ```Get```
+We also had the ```NotConfigurable``` property for the file system type.
+While it wasn't a parameter, it is present in the get method. 
+This screen shot shows our complete class. 
+```powershell
+Get-DscConfiguration
+```
 ![_config.yml]({{ site.baseurl }}/images/dscClassesGet.png)
 # Wrapping Up
 Thats really it for a basic DSC Class-Based resource.
 I hope this post was helpful and points you in the right direction creating your own resources.
-Stay on the look out for an upcoming post where we'll cover a more advanced example. 
+Coming up in a future post, we'll cover a more complex example and talk about some troubleshooting techniques. 
