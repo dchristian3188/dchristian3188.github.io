@@ -147,7 +147,7 @@ class DriveLabel
     [bool]Test()
     {
         $currentLabel = (Get-Volume -DriveLetter $this.DriveLetter).FileSystemLabel
-        Write-Verbose -Message "Current Label is [$currentLabel)], Expecting [$($this.Label)]"
+        Write-Verbose -Message "Current Label is [$currentLabel], Expecting [$($this.Label)]"
         return ($currentLabel -eq $this.Label)
     }
 ...
@@ -225,7 +225,7 @@ class DriveLabel
     [bool]Test()
     {
         $currentLabel = (Get-Volume -DriveLetter $this.DriveLetter).FileSystemLabel
-        Write-Verbose -Message "Current Label is [$currentLabel)], Expecting [$($this.Label)]"
+        Write-Verbose -Message "Current Label is [$currentLabel], Expecting [$($this.Label)]"
         return ($currentLabel -eq $this.Label)
     }
 
