@@ -9,6 +9,7 @@ If you need a refresher on the basics of a PowerShell class, please see my previ
 **The Good Stuff**: How to create a DSC Class-Based Resource.
 <!-- TOC -->
 
+- [Why Use Classes](#why-use-classes)
 - [Declaring A Resource](#declaring-a-resource)
     - [Resource Parameters - Properties](#resource-parameters---properties)
         - [DscProperty - Key](#dscproperty---key)
@@ -27,6 +28,11 @@ If you need a refresher on the basics of a PowerShell class, please see my previ
 - [Wrapping Up](#wrapping-up)
 
 <!-- /TOC -->
+# Why Use Classes
+I always felt that creating a MOF-Based resource was clunky. 
+Writing the functions was pretty straight forward but I didn't like having to generate the schema mof. 
+This was especially true if I had to add additional parameters to the resource. 
+Classes just make working with DSC easier and you never had to touch the resource designer kit again.
 # Declaring A Resource
 The example for today will be a resource to update the drive label.
 To define our new resource, we start by creating a class.
