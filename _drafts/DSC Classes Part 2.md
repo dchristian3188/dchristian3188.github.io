@@ -1,6 +1,6 @@
 <!-- TOC -->
 
-- [A More Complex Example](#a-more-complex-example)
+- [A More Complex DSC Class Example](#a-more-complex-dsc-class-example)
     - [Overview](#overview)
     - [Properties](#properties)
     - [Helper Methods](#helper-methods)
@@ -9,7 +9,7 @@
     - [Debug The Class](#debug-the-class)
 
 <!-- /TOC -->
-# A More Complex Example
+# A More Complex DSC Class Example
 ## Overview
 I came across this use case for work.
 One of our services had a config file that we were managing through DSC.
@@ -150,7 +150,7 @@ What that means is we can debug this just like we do any other class.
 When initially designing a resource, this is my preferred approach.
 Usually at initial design I have my resource saved in a ```.ps1``` file. 
 Its not till module compilation time that all files are combined into the finished ```.psm1```.
-With our class defined, I'll set a breakpoint to the method in question.
+This is import because the below commands will not work if the file extension is ```psm1```.
 Next all we have to do is create an instance of the class, and run the method. 
 I also like to set ```$VerbosePreference = 'Continue'``` to see as much information as possible.
 ```powershell
@@ -162,4 +162,5 @@ $sw.Path = 'C:\Temp\test.txt'
 $sw.Test()
 $VerbosePreference = $ogVerbosePerf
 ```
+Here's a screen shot of it in action. 
 ![debug](https://github.com/dchristian3188/dchristian3188.github.io/blob/master/images/classDebugGif.gif)

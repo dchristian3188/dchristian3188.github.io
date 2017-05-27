@@ -2,7 +2,9 @@
 layout: post
 title: Adding Sudo to PowerShell
 ---
-Lets be honest, before PowerShell the windows command line was a joke and the Linux guys were running circles around us. One of the best functions from Linux is sudo. Sudo is used when you need to run a command with elevated privileges, similar to running a program as administrator in windows. Here's my implementation of sudo for PowerShell. **The Good Stuff**: A script that implements sudo in Powershell. [Start-ElevatedProcess.ps1](https://github.com/dchristian3188/Scripts/blob/master/Functions/Start-ElevatedProcess.ps1)
+Lets be honest, before PowerShell the windows command line was a joke and the Linux guys were running circles around us. One of the best functions from Linux is sudo. Sudo is used when you need to run a command with elevated privileges, similar to running a program as administrator in windows. Here's my implementation of sudo for PowerShell. 
+#### **The Good Stuff**: A script that implements sudo in Powershell. [Start-ElevatedProcess.ps1](https://github.com/dchristian3188/Scripts/blob/master/Functions/Start-ElevatedProcess.ps1)
+<!-- more -->
 
 First we start with defining our parameters. Notice the ParameterSetName  in the parameter field. Parameter sets allow us to use totally different collections of parameters for the same command. If a parameter needs to be available to multiple sets, we simply add all the sets in the parameter declaration.
 
