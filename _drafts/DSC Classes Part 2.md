@@ -14,7 +14,7 @@
 I came across this use case for work.
 One of our services had a config file that we were managing through DSC.
 Unfortunately the service was not smart enough to reload the configuration if this file change.
-THe only way for the new config to be applied was to restart the service. 
+The only way for the new config to be applied was to restart the service. 
 It seemed heavy handed to restart every DSC run, so this resource was created.
 It takes a Service name, a file path and optionally a filter. 
 If the file has a newer write time than the service start time, the service will be restarted.

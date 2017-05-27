@@ -5,7 +5,11 @@ title: SysAdmin Basics -  Getting Installed Software
 I spent a few years consulting in the field and one question would always come up. 
 How do I tell whats installed on my servers?
 There's tons of advice on how to do this, some good and some bad, lets go thru it.
-**The Good Stuff**: A function to get installed programs from the registry. [Get-InstalledProgram](https://github.com/dchristian3188/Main/blob/master/Functions/Get-InstalledProgram.ps1)
+
+**The Good Stuff:** 
+A function to get installed programs from the registry. [Get-InstalledProgram](https://github.com/dchristian3188/Main/blob/master/Functions/Get-InstalledProgram.ps1)
+<!-- more -->
+
 # The Bad - Win32_Product
 ```powershell
 Get-WmiObject -Class Win32_Product

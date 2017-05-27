@@ -2,7 +2,11 @@
 layout: post
 title: A Real World Pester Example From the PowerShell Github
 ---
-A hobby of my mine is to peruse the PowerShell Github page for open issues and pull requests. Its a direct way to interact with the team, see what features are being worked on and actually make a difference. I understand that putting yourself out there can be scary but everyone is incredibly friendly and its a great place to get constructive feedback. Aren't that good at C#? Add some documentation or a Pester test. Anything helps and there's a ton to do. **The Good Stuff**: Go to the [PowerShell Github Page](https://github.com/PowerShell/Powershell) and start contributing!
+A hobby of my mine is to peruse the PowerShell Github page for open issues and pull requests. Its a direct way to interact with the team, see what features are being worked on and actually make a difference. I understand that putting yourself out there can be scary but everyone is incredibly friendly and its a great place to get constructive feedback. Aren't that good at C#? Add some documentation or a Pester test. Anything helps and there's a ton to do. 
+
+**The Good Stuff:**
+Go to the [PowerShell Github Page](https://github.com/PowerShell/Powershell) and start contributing!
+<!-- more -->
 
 # A Real World Pester Example 
 Like I said, there's still a ton of work to be done in PowerShell. One of the most important and often most overlooked areas is test coverage. The PowerShell Team has done a good job of utilizing Pester and forcing all new commits to come with corresponding test but there's still gaps. The example used in this article is from my most recent commit, basic Pester tests for the ```Test-Connection``` cmdlet. Most of the tests are straight forward but there's some neat tricks and best practices the PowerShell team requires of its test. Before we go into those, lets take a look at the completed describe block.  

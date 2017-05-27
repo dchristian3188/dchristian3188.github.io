@@ -2,7 +2,11 @@
 layout: post
 title: Getting Some Random Help?
 --- 
-I think one of the biggest hurdles learning PowerShell is trying to find what command to run. What i use to do is read a different help file every morning. Now i don't expect anyone to be able to look at a help file once and instantly know the ins and outs of a command. But forcing yourself to read a random help file can get the mental juices flowing. The goal of this script is to just start learning what PowerShell CAN do. **The Good Stuff**: A script to get a random help file. [Open-PSCommandHelp.ps1](https://github.com/dchristian3188/Scripts/blob/master/Functions/Open-PSCommandHelp.ps1).
+I think one of the biggest hurdles learning PowerShell is trying to find what command to run. What i use to do is read a different help file every morning. Now i don't expect anyone to be able to look at a help file once and instantly know the ins and outs of a command. But forcing yourself to read a random help file can get the mental juices flowing. The goal of this script is to just start learning what PowerShell CAN do.
+
+**The Good Stuff:** 
+A script to get a random help file. [Open-PSCommandHelp.ps1](https://github.com/dchristian3188/Scripts/blob/master/Functions/Open-PSCommandHelp.ps1).
+<!-- more -->
 
 Open-PSCommandHelp takes a couple of parameters: module, verb and noun. Depending on what variables are used, this script opens a random text file with the full help of a command that meets the criteria. The variables are passed directly into Get-Command. I use two very neat tricks to perform this cleanly. The first trick is referencing the ```PSBoundParameters``` variable. ```PSBoundParameters``` is a special hash table that gets created inside a script (or function). The key value pairs in the hash table are your parameters and their values.
 

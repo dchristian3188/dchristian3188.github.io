@@ -6,7 +6,10 @@ Now that we know what a PowerShell class is, it's time we start putting them to 
 Classes are new with version 5 and one of the best places for them is DSC. 
 While the syntax maybe different, all the DSC concepts are the same.
 If you need a refresher on the basics of a PowerShell class, please see my previous post, [Intro to PowerShell Classes.](http://overpoweredshell.com/Introduction-to-PowerShell-Classes/)
-**The Good Stuff**: How to create a DSC Class-Based Resource.
+
+**The Good Stuff:**
+How to create a DSC Class-Based Resource.
+<!-- more -->
 <!-- TOC -->
 
 - [Why Use Classes](#why-use-classes)
