@@ -24,6 +24,9 @@ DSC Class-Based Resources and troubleshooting tips.
         - [Turn On Verbosity](#turn-on-verbosity)
         - [Create An Instance And Set Parameters](#create-an-instance-and-set-parameters)
         - [Debug the Method](#debug-the-method)
+    - [Debug DSC](#debug-dsc)
+        - [Turn On Debugging In The LCM](#turn-on-debugging-in-the-lcm)
+        - [Creating A Small Configuration](#creating-a-small-configuration)
 
 <!-- /TOC -->
 
@@ -243,3 +246,52 @@ $VerbosePreference = $ogVerbosePerf
 Once you get into the debugger its no different then working with any other function.
 Here's a screen shot of it in action in VSCode (any editor with a debugger will work).
 ![debug](https://github.com/dchristian3188/dchristian3188.github.io/blob/master/images/classDebugGif.gif)
+
+## Debug DSC
+
+The next approach is not exclusive to Class-Based resource.
+Version 5 of PowerShell introduced some new DSC debugging capabilities.
+I tend to use this approach when I'm having trouble with a particular configuration, I.E. this resource on this role in this environment blows up for some reason.
+
+### Turn On Debugging In The LCM
+
+The first thing you need to do is enable debugging at the LCM level.
+Thankfully, the PowerShell team provided a cmdlet to do just that.
+
+```powershell
+Enable-DscDebug -BreakAll -Verbose
+```
+
+After running the command you can verify debugging is enabled by checking the LCM using ```Get-DscLocalConfigurationManager```.
+The below example, returns the debugging configuration.
+
+```powershell
+(Get-DscLocalConfigurationManager).DebugMode
+```
+
+Output:
+
+```powershell
+ForceModuleImport
+ResourceScriptBreakAll
+```
+
+### Creating A Small Configuration
+
+To make isolating the problem easier, create a configuration with only the resource you want to debug.
+In this example, I'm going to debug the 
+
+```powershell
+configuration Service
+{
+    Import-DscResource -ModuleName FileWatcher
+    node ("localhost")
+    {
+        ServiceFileWatcher Spooler
+        {
+            ServiceName =  'Spooler'
+            Path = 'C:\temp\controller.txt'
+        }
+    }
+}
+```
