@@ -305,4 +305,8 @@ Get-DscConfiguration
 # Wrapping Up
 Thats really it for a basic DSC Class-Based resource.
 I hope this post was helpful and points you in the right direction creating your own resources.
-Coming up in a future post, we'll cover a more complex example and talk about some troubleshooting techniques. 
+Coming up in a future post, we'll cover a more complex example and talk about some troubleshooting techniques.
+
+* Part 1: [Creating A DSC Class-Based Resource](http://overpoweredshell.com/Creating-A-DSC-Class-Based-Resource/)
+* Part 2: [DSC Classes - Using Helper Methods](http://overpoweredshell.com/DSC-Classes-Using-Helper-Methods/)
+* Part 3: TroubleShooting DSC (Coming Soon)
