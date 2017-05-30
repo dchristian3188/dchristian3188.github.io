@@ -27,6 +27,9 @@ Let's start by defining our resource and parameters.
 We are going to create a couple of properties, ```$ProcessStartTime``` and ```$LastWriteTime```  to track the dates we'll be comparing.
 We are also going to add the ```NotConfigurable``` attribute to these properties.
 This will prevent the user from seeing them as parameters but still make them available to our methods.
+Plus it has an added benefit for reporting.
+When the ```Get``` method runs, it'll populate these properties.
+If we have DSC reporting in place, we can track these changes over time.
 
 ```powershell
 [DscResource()]
