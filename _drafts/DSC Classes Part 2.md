@@ -27,6 +27,7 @@ DSC Class-Based Resources and troubleshooting tips.
     - [Debug DSC](#debug-dsc)
         - [Turn On Debugging In The LCM](#turn-on-debugging-in-the-lcm)
         - [Creating A Small Configuration](#creating-a-small-configuration)
+        - [Entering The Session](#entering-the-session)
 
 <!-- /TOC -->
 
@@ -279,19 +280,34 @@ ResourceScriptBreakAll
 ### Creating A Small Configuration
 
 To make isolating the problem easier, create a configuration with only the resource you want to debug.
-In this example, I'm going to debug the 
+In this example, I'm going to debug the
 
 ```powershell
-configuration Service
+configuration RestartExample
 {
-    Import-DscResource -ModuleName FileWatcher
-    node ("localhost")
+    Import-DscResource -ModuleName SmartServiceRestart
+    node ('localhost')
     {
-        ServiceFileWatcher Spooler
+        SmartServiceRestart PrintSpooler
         {
-            ServiceName =  'Spooler'
-            Path = 'C:\temp\controller.txt'
+            ServiceName = 'Spooler'
+            Path        = 'C:\temp\controller.txt'
         }
     }
 }
 ```
+
+### Entering The Session
+
+When we run the configuration it will immediately pause
+
+![_config.yml]({{ site.baseurl }}/images/dscClassDebug.png)
+
+```powershell
+Enter-PSSession -ComputerName WIN-5D6IRQOFU97 
+Enter-PSHostProcess -Id 2980 -AppDomainName DscPsPluginWkr_AppDomain
+Debug-Runspace -Id 12
+```
+![_config.yml]({{ site.baseurl }}/images/dscClassDebug1.png)
+
+![debug](https://github.com/dchristian3188/dchristian3188.github.io/blob/master/images/classDebugDSCGif.gif)
