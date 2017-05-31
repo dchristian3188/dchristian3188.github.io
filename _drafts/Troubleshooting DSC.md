@@ -22,8 +22,9 @@ How to we debug when something goes wrong.
         - [Debug the Method](#debug-the-method)
     - [Debug DSC](#debug-dsc)
         - [Adjust The LCM](#adjust-the-lcm)
-        - [Creating A Small Configuration](#creating-a-small-configuration)
-        - [Entering The Session](#entering-the-session)
+        - [Create A Small Configuration](#create-a-small-configuration)
+        - [Enter The Session](#enter-the-session)
+- [Wrapping Up](#wrapping-up)
 
 <!-- /TOC -->
 
@@ -86,26 +87,30 @@ $VerbosePreference = $ogVerbosePerf
 ```
 
 Once you get into the debugger its no different then working with any other function.
-Here's a screen shot of it in action in VSCode (any editor with a debugger will work).
+This is ideal if you need to make quick changes and are still hammering out the details of the resource.
+Here's a screen shot of it in action in VSCode.
+VSCode is awesome, but any editor that has a PowerShell debugger works.
 ![debug](https://github.com/dchristian3188/dchristian3188.github.io/blob/master/images/classDebugGif.gif)
 
 ## Debug DSC
 
 The next approach is not exclusive to Class-Based resource.
 Version 5 of PowerShell introduced some new DSC debugging capabilities.
+One of the coolest features is the ability to stop a configuration and debug against a live server.
 I tend to use this approach when I'm having trouble with a particular configuration, I.E. this resource on this role in this environment blows up for some reason.
 
 ### Adjust The LCM
 
 The first thing you need to do is enable debugging at the LCM level.
-Thankfully, the PowerShell team provided a cmdlet fo this.
+Thankfully, the PowerShell team provided a cmdlet for this.
 
 ```powershell
 Enable-DscDebug -BreakAll -Verbose
 ```
 
-After running the command you can verify debugging is enabled by checking the LCM using ```Get-DscLocalConfigurationManager```.
-The below example, returns the debugging configuration.
+After you run the command, verify the changes by using ```Get-DscLocalConfigurationManager```.
+The below example, returns the debug mode of the LCM.
+You should see the two entries below.
 
 ```powershell
 (Get-DscLocalConfigurationManager).DebugMode
@@ -118,10 +123,12 @@ ForceModuleImport
 ResourceScriptBreakAll
 ```
 
-### Creating A Small Configuration
+### Create A Small Configuration
 
 To make isolating the problem easier, create a configuration with only the resource you want to debug.
-In this example, I'm going to debug the
+When you make the change to the LCM, it will break at every resource.
+In large configurations, this becomes tedious and makes re-entering a method harder than it should be.
+Here's what that would look like in our current example.
 
 ```powershell
 configuration RestartExample
@@ -138,17 +145,39 @@ configuration RestartExample
 }
 ```
 
-### Entering The Session
+### Enter The Session
 
-When we run the configuration it will immediately pause
+When we run the configuration it will start the first resource and hit a breakpoint.
+The most awesome part, is the PowerShell team left us a message on how to connect to this instance.
+Take a look at this screenshot.
 
 ![_config.yml]({{ site.baseurl }}/images/dscClassDebug.png)
 
+Lets examine what's going on here.
+The first command creates a PSSession to the server.
+In my example, I'm directly on the server, but I could also do this remotely.
+The next command connects to the PowerShell process that is running the resource.
+The last command, ```Debug-Runspace```, is where the magic happens.
+Running this command will open a new window in our editor and allow us to step through the method.
+Here's the commands that I copied from the verbose message.
+
 ```powershell
-Enter-PSSession -ComputerName WIN-5D6IRQOFU97 
+Enter-PSSession -ComputerName WIN-5D6IRQOFU97
 Enter-PSHostProcess -Id 2980 -AppDomainName DscPsPluginWkr_AppDomain
 Debug-Runspace -Id 12
 ```
-![_config.yml]({{ site.baseurl }}/images/dscClassDebug1.png)
 
+What I love about this approach is that its perfect for those problematic servers.
+Sometimes the only way to find a bug is to step through the affected machine.
+Even better this debugging technique works great in Windows Server, with a vanilla ISE.
+Here's the whole process from a Server 2012 VM.
 ![debug](https://github.com/dchristian3188/dchristian3188.github.io/blob/master/images/classDebugDSCGif.gif)
+
+# Wrapping Up
+
+This was a fun one for me.
+I hope you learned some new tools to make tracking down problematic resources.
+
+* Part 1: [Creating A DSC Class-Based Resource](http://overpoweredshell.com/Creating-A-DSC-Class-Based-Resource/)
+* Part 2: [DSC Classes - Using Helper Methods](http://overpoweredshell.com/DSC-Classes-Using-Helper-Methods/)
+* Part 3: TroubleShooting DSC (Coming Soon)
