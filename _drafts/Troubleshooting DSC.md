@@ -1,23 +1,42 @@
+---
+layout: post
+title: Troubleshooting DSC
+---
 
-Since there's more methods, there's more chance for something to go wrong.
 While I know everyone out there writes perfect code first try, I am not so lucky.
 I'm a little superstitious but I think if your code works first try, its bad luck.
+Even worse, sometimes you have a resource that's been working great, but chokes on a particular server.
 With that in mind, we'll define our new resource, and jump straight into some tips on troubleshooting.
 
+**The Good Stuff:**
 How to we debug when something goes wrong.
+<!-- more -->
+
+<!-- TOC -->
+
+- [Debugging A Class-Based Resource](#debugging-a-class-based-resource)
+    - [Debug The Class](#debug-the-class)
+        - [Define The Class](#define-the-class)
+        - [Turn On Verbosity](#turn-on-verbosity)
+        - [Create An Instance And Set Parameters](#create-an-instance-and-set-parameters)
+        - [Debug the Method](#debug-the-method)
+    - [Debug DSC](#debug-dsc)
+        - [Adjust The LCM](#adjust-the-lcm)
+        - [Creating A Small Configuration](#creating-a-small-configuration)
+        - [Entering The Session](#entering-the-session)
+
+<!-- /TOC -->
 
 # Debugging A Class-Based Resource
 
 ## Debug The Class
 
 It took me a while to realize this one.
-Since the resource is defined as a PowerShell Class, it's available to us like any other type is.
-What that means is we can debug this like we do any other class.
-When initially designing a resource, this is my preferred approach.
-At initial design I have my resource saved in a ```.ps1``` file.
-Its not till module compilation time that all files are combined into the finished ```.psm1```.
-This is import because the below commands will not work if the file extension is ```psm1```.
-Alright with that out of the way, lets debug our class.
+Class-Based resources add a new type to PowerShell.
+After defining the class, this type is available to us, like ```[string]``` or ```[int]``` is.
+What that means is we can create a new instance of our resource and debug directly against the class.
+When initially designing a resource, this is my preferred approach as it's quick and easy.
+For today's example, I'm going to be using the [SmartServiceRestart](https://github.com/dchristian3188/Main/tree/master/DSC/SmartServiceRestart) resource from my previous post.
 
 ### Define The Class
 
@@ -44,8 +63,9 @@ $VerbosePreference = 'Continue'
 
 With the setup out of the way, we need to create a new instance of the class.
 I'll use the dot net constructor here, but ```New-Object``` would also work.
-Once the class is created, the resource parameters can then be assigned.
-Parameters are assigned directly to object as properties.
+Next step is to assign the resource's parameters.
+The parameters are properties that get assigned directly to the object.
+Here we'll set the ```ServiceName``` and ```Path``` parameter.
 
 ```powershell
 $sw = [SmartServiceRestart]::new()
@@ -56,7 +76,7 @@ $sw.Path = 'C:\Temp\test.txt'
 ### Debug the Method
 
 I double check my breakpoint is place on the method and then run the method from my object.
-At this point its my traditional debugging experience.
+At this point its the traditional debugging experience.
 Here's what the code would look like to execute the ```Test``` method and restore my ```VerbosePreference```.
 
 
@@ -75,10 +95,10 @@ The next approach is not exclusive to Class-Based resource.
 Version 5 of PowerShell introduced some new DSC debugging capabilities.
 I tend to use this approach when I'm having trouble with a particular configuration, I.E. this resource on this role in this environment blows up for some reason.
 
-### Turn On Debugging In The LCM
+### Adjust The LCM
 
 The first thing you need to do is enable debugging at the LCM level.
-Thankfully, the PowerShell team provided a cmdlet to do just that.
+Thankfully, the PowerShell team provided a cmdlet fo this.
 
 ```powershell
 Enable-DscDebug -BreakAll -Verbose
