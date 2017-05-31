@@ -14,23 +14,21 @@ How to we debug when something goes wrong.
 
 <!-- TOC -->
 
-- [Debugging A Class-Based Resource](#debugging-a-class-based-resource)
-    - [Debug The Class](#debug-the-class)
-        - [Define The Class](#define-the-class)
-        - [Turn On Verbosity](#turn-on-verbosity)
-        - [Create An Instance And Set Parameters](#create-an-instance-and-set-parameters)
-        - [Debug the Method](#debug-the-method)
-    - [Debug DSC](#debug-dsc)
-        - [Adjust The LCM](#adjust-the-lcm)
-        - [Create A Small Configuration](#create-a-small-configuration)
-        - [Enter The Session](#enter-the-session)
+- [Debug The Class](#debug-the-class)
+    - [Define The Class](#define-the-class)
+    - [Turn On Verbosity](#turn-on-verbosity)
+    - [Create An Instance](#create-an-instance)
+    - [Debug the Method](#debug-the-method)
+- [Debug DSC](#debug-dsc)
+    - [Adjust The LCM](#adjust-the-lcm)
+    - [Create A Small Configuration](#create-a-small-configuration)
+    - [Enter The Session](#enter-the-session)
+    - [Disable Debugging](#disable-debugging)
 - [Wrapping Up](#wrapping-up)
 
 <!-- /TOC -->
 
-# Debugging A Class-Based Resource
-
-## Debug The Class
+# Debug The Class
 
 It took me a while to realize this one.
 Class-Based resources add a new type to PowerShell.
@@ -39,14 +37,14 @@ What that means is we can create a new instance of our resource and debug direct
 When initially designing a resource, this is my preferred approach as it's quick and easy.
 For today's example, I'm going to be using the [SmartServiceRestart](https://github.com/dchristian3188/Main/tree/master/DSC/SmartServiceRestart) resource from my previous post.
 
-### Define The Class
+## Define The Class
 
 First thing I do, is place a copy of the completed class in a ```.ps1``` file.
 You can also place the complete class in a separate ```.ps1``` file and then dot source / use ```Import-Module``` on it.
 Personally, I like keeping everything it one file, but both approaches work.
 With the completed class defined, place a breakpoint on the method in question.
 
-### Turn On Verbosity
+## Turn On Verbosity
 
 I try to be good about my verbose messages in DSC resources.
 One because I want the end user to know whats going on, but also for me when troubleshooting.
@@ -60,7 +58,7 @@ $ogVerbosePerf = $VerbosePreference
 $VerbosePreference = 'Continue'
 ```
 
-### Create An Instance And Set Parameters
+## Create An Instance
 
 With the setup out of the way, we need to create a new instance of the class.
 I'll use the dot net constructor here, but ```New-Object``` would also work.
@@ -74,7 +72,7 @@ $sw.ServiceName = 'Spooler'
 $sw.Path = 'C:\Temp\test.txt'
 ```
 
-### Debug the Method
+## Debug the Method
 
 I double check my breakpoint is place on the method and then run the method from my object.
 At this point its the traditional debugging experience.
@@ -92,14 +90,14 @@ Here's a screen shot of it in action in VSCode.
 VSCode is awesome, but any editor that has a PowerShell debugger works.
 ![debug](https://github.com/dchristian3188/dchristian3188.github.io/blob/master/images/classDebugGif.gif)
 
-## Debug DSC
+# Debug DSC
 
-The next approach is not exclusive to Class-Based resource.
+The next approach is not exclusive to Class-Based resources.
 Version 5 of PowerShell introduced some new DSC debugging capabilities.
 One of the coolest features is the ability to stop a configuration and debug against a live server.
 I tend to use this approach when I'm having trouble with a particular configuration, I.E. this resource on this role in this environment blows up for some reason.
 
-### Adjust The LCM
+## Adjust The LCM
 
 The first thing you need to do is enable debugging at the LCM level.
 Thankfully, the PowerShell team provided a cmdlet for this.
@@ -123,7 +121,7 @@ ForceModuleImport
 ResourceScriptBreakAll
 ```
 
-### Create A Small Configuration
+## Create A Small Configuration
 
 To make isolating the problem easier, create a configuration with only the resource you want to debug.
 When you make the change to the LCM, it will break at every resource.
@@ -145,7 +143,7 @@ configuration RestartExample
 }
 ```
 
-### Enter The Session
+## Enter The Session
 
 When we run the configuration it will start the first resource and hit a breakpoint.
 The most awesome part, is the PowerShell team left us a message on how to connect to this instance.
@@ -172,6 +170,15 @@ Sometimes the only way to find a bug is to step through the affected machine.
 Even better this debugging technique works great in Windows Server, with a vanilla ISE.
 Here's the whole process from a Server 2012 VM.
 ![debug](https://github.com/dchristian3188/dchristian3188.github.io/blob/master/images/classDebugDSCGif.gif)
+
+## Disable Debugging
+
+Please remember to disable debugging when your done.
+This is important becuase you can prevent a machine from returning to a desired state.
+
+```powershell
+Disable-DscDebug -Verbose
+```
 
 # Wrapping Up
 
