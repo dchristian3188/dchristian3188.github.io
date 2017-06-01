@@ -91,6 +91,7 @@ Once you get into the debugger its no different then working with any other func
 This is ideal if you need to make quick changes and are still hammering out the details of a resource.
 Here's a screen shot of it in action in VSCode.
 VSCode is awesome, but any editor that has a PowerShell debugger works.
+
 ![_config.yml]({{ site.baseurl }}/images//classDebugGif.gif)
 
 # Debug DSC
@@ -172,6 +173,7 @@ What I love about this approach is that its perfect for those problematic server
 Sometimes the only way to find a bug is to step through the affected machine.
 Even better this debugging technique works great in Windows Server, with a vanilla ISE.
 Here's the whole process from a Server 2012 VM.
+
 ![_config.yml]({{ site.baseurl }}/images/classDebugDSCGif.gif)
 
 ## Disable Debugging
