@@ -16,6 +16,7 @@ How to Debug a DSC Resource.
 
 <!-- TOC -->
 
+- [Resources For Debugging](#resources-for-debugging)
 - [Debug The Class](#debug-the-class)
     - [Define The Class](#define-the-class)
     - [Turn On Verbosity](#turn-on-verbosity)
@@ -30,10 +31,21 @@ How to Debug a DSC Resource.
 
 <!-- /TOC -->
 
+# Resources For Debugging
+
+If your new to the PowerShell debugging, I highly recommend you spend a few minutes reading these articles as a primer.
+There's a couple of nuances with debugging and be able to navigate your editor and debugger will make you that much more efficient.
+
+- [Quick and Efficient PowerShell Script Debugging with Breakpoints](http://www.informit.com/articles/article.aspx?p=2421573)
+- [Use the Debugger in the Windows PowerShell ISE](https://blogs.technet.microsoft.com/heyscriptingguy/2011/11/24/use-the-debugger-in-the-windows-powershell-ise/)
+- [How to Debug Scripts in Windows PowerShell ISE](https://msdn.microsoft.com/en-us/powershell/scripting/core-powershell/ise/how-to-debug-scripts-in-windows-powershell-ise)
+
+
+
 # Debug The Class
 
 This first method only applies if you are using a PowerShell Class-Based Resources (which you should be).
-It took me a while to realize this but, Class-Based Resources add a new type to PowerShell.
+It took me a while to realize this but Class-Based Resources add a new type to PowerShell.
 After defining the class, the new type is available to us, like ```[string]``` or ```[int]``` is.
 What that means is we can create a new instance of our resource and debug directly against the class.
 When initially designing a resource, this is my preferred approach as it's quick and easy.
