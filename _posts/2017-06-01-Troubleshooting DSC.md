@@ -16,7 +16,7 @@ How to Debug a DSC Resource.
 
 <!-- TOC -->
 
-- [Resources For Debugging](#resources-for-debugging)
+- [Learning Debugging](#learning-debugging)
 - [Debug The Class](#debug-the-class)
     - [Define The Class](#define-the-class)
     - [Turn On Verbosity](#turn-on-verbosity)
@@ -31,7 +31,7 @@ How to Debug a DSC Resource.
 
 <!-- /TOC -->
 
-# Resources For Debugging
+# Learning Debugging
 
 If your new to the PowerShell debugging, I highly recommend you spend a few minutes reading these articles as a primer.
 There's a couple of nuances with debugging and be able to navigate your editor and debugger will make you that much more efficient.
