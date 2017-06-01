@@ -32,7 +32,7 @@ How to Debug a DSC Resource.
 
 # Debug The Class
 
-This first method only applies if your using a PowerShell Class-Based Resources (which you should be).
+This first method only applies if you are using a PowerShell Class-Based Resources (which you should be).
 It took me a while to realize this but, Class-Based Resources add a new type to PowerShell.
 After defining the class, the new type is available to us, like ```[string]``` or ```[int]``` is.
 What that means is we can create a new instance of our resource and debug directly against the class.
@@ -77,8 +77,8 @@ $sw.Path = 'C:\Temp\test.txt'
 ## Debug The Method
 
 Double check the breakpoint is in place on the method and then call it from the object.
-Next step is to run your script and hit your breakpoint.
-At this point its the traditional debugging experience.
+Next step is to run your script and let it hit your breakpoint.
+From here, it's the traditional debugging experience.
 Here's what the code would look like to execute the ```Test``` method and restore my ```VerbosePreference``` variable.
 
 
@@ -88,10 +88,10 @@ $VerbosePreference = $ogVerbosePerf
 ```
 
 Once you get into the debugger its no different then working with any other function.
-This is ideal if you need to make quick changes and are still hammering out the details of the resource.
+This is ideal if you need to make quick changes and are still hammering out the details of a resource.
 Here's a screen shot of it in action in VSCode.
 VSCode is awesome, but any editor that has a PowerShell debugger works.
-![debug](https://github.com/dchristian3188/dchristian3188.github.io/blob/master/images/classDebugGif.gif)
+![_config.yml]({{ site.baseurl }}/images//classDebugGif.gif)
 
 # Debug DSC
 
@@ -128,7 +128,7 @@ ResourceScriptBreakAll
 To make isolating the problem easier, create a configuration with only the resource you want to debug.
 When you make the change to the LCM, it will break at every resource.
 In large configurations, this becomes tedious and makes re-entering a method harder than it should be.
-Here's what the small configuration would look like to debug are current example.
+Here's what the small configuration would look like for our current example.
 
 ```powershell
 configuration RestartExample
@@ -148,12 +148,12 @@ configuration RestartExample
 ## Enter The Session
 
 When we run the configuration it will start the first resource, hit a breakpoint and create a debugging session.
-The most awesome part, is the PowerShell team left us a message on how to connect to this new session.
+The most awesome part, the PowerShell team left us a message on how to connect to this new session.
 Take a look at this screenshot.
 
 ![_config.yml]({{ site.baseurl }}/images/dscClassDebug.png)
 
-Lets examine what's going on here.
+Let's examine what's going on here.
 The first command creates a PSSession to the server.
 In my example, I'm directly on the server, but I could also do this remotely.
 The next command connects to the PowerShell process that is running the resource.
@@ -172,11 +172,11 @@ What I love about this approach is that its perfect for those problematic server
 Sometimes the only way to find a bug is to step through the affected machine.
 Even better this debugging technique works great in Windows Server, with a vanilla ISE.
 Here's the whole process from a Server 2012 VM.
-![debug](https://github.com/dchristian3188/dchristian3188.github.io/blob/master/images/classDebugDSCGif.gif)
+![_config.yml]({{ site.baseurl }}/images/classDebugDSCGif.gif)
 
 ## Disable Debugging
 
-If you did use a real machine to debug a resource, please remember to disable debugging when your done.
+If you did use a real machine to debug a resource, please remember to disable debugging when you're done.
 After running the below command your LCM should return to normal.
 
 ```powershell
@@ -190,6 +190,6 @@ Often times that first pass of code is the easy part.
 It's the details that get you.
 
 
-* Part 1: [Creating A DSC Class-Based Resource](http://overpoweredshell.com/Creating-A-DSC-Class-Based-Resource/)
-* Part 2: [DSC Classes - Using Helper Methods](http://overpoweredshell.com/DSC-Classes-Using-Helper-Methods/)
-* Part 3: TroubleShooting DSC (Coming Soon)
+- Part 1: [Creating A DSC Class-Based Resource](http://overpoweredshell.com/Creating-A-DSC-Class-Based-Resource/)
+- Part 2: [DSC Classes - Using Helper Methods](http://overpoweredshell.com/DSC-Classes-Using-Helper-Methods/)
+- Part 3: [TroubleShooting DSC] (http://overpoweredshell.com/Troubleshooting-DSC/)

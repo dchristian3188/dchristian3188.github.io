@@ -180,6 +180,6 @@ As always, hope this post was helpful and gets you further along on your DSC jou
 
 * Part 1: [Creating A DSC Class-Based Resource](http://overpoweredshell.com/Creating-A-DSC-Class-Based-Resource/)
 * Part 2: [DSC Classes - Using Helper Methods](http://overpoweredshell.com/DSC-Classes-Using-Helper-Methods/)
-* Part 3: TroubleShooting DSC (Coming Soon)
+* Part 3: [TroubleShooting DSC] (http://overpoweredshell.com/Troubleshooting-DSC/)
 
 **Disclaimer:** all points are made and don't matter.
