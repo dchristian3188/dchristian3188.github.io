@@ -178,8 +178,9 @@ Quick for a million points, whats the command to restart a service.
 Our next post in the DSC Class series will cover troubleshooting.
 As always, hope this post was helpful and gets you further along on your DSC journey.
 
-* Part 1: [Creating A DSC Class-Based Resource](http://overpoweredshell.com/Creating-A-DSC-Class-Based-Resource/)
-* Part 2: [DSC Classes - Using Helper Methods](http://overpoweredshell.com/DSC-Classes-Using-Helper-Methods/)
-* Part 3: [TroubleShooting DSC] (http://overpoweredshell.com/Troubleshooting-DSC/)
+- Part 1: [Creating A DSC Class-Based Resource](http://overpoweredshell.com/Creating-A-DSC-Class-Based-Resource/)
+- Part 2: [DSC Classes - Using Helper Methods](http://overpoweredshell.com/DSC-Classes-Using-Helper-Methods/)
+- Part 3: [TroubleShooting DSC](http://overpoweredshell.com/Troubleshooting-DSC/)
+
 
 **Disclaimer:** all points are made and don't matter.

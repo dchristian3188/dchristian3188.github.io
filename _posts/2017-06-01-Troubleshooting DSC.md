@@ -194,4 +194,4 @@ It's the details that get you.
 
 - Part 1: [Creating A DSC Class-Based Resource](http://overpoweredshell.com/Creating-A-DSC-Class-Based-Resource/)
 - Part 2: [DSC Classes - Using Helper Methods](http://overpoweredshell.com/DSC-Classes-Using-Helper-Methods/)
-- Part 3: [TroubleShooting DSC] (http://overpoweredshell.com/Troubleshooting-DSC/)
+- Part 3: [TroubleShooting DSC](http://overpoweredshell.com/Troubleshooting-DSC/)
