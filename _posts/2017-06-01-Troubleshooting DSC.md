@@ -34,7 +34,7 @@ How to Debug a DSC Resource.
 # Learning Debugging
 
 If your new to the PowerShell debugging, I highly recommend you spend a few minutes reading these articles as a primer.
-There's a couple of nuances with debugging and be able to navigate your editor and debugger will make you that much more efficient.
+There's a couple of nuances with debugging and being able to navigate your editor and debugger will make you that much more efficient.
 
 - [Quick and Efficient PowerShell Script Debugging with Breakpoints](http://www.informit.com/articles/article.aspx?p=2421573)
 - [Use the Debugger in the Windows PowerShell ISE](https://blogs.technet.microsoft.com/heyscriptingguy/2011/11/24/use-the-debugger-in-the-windows-powershell-ise/)
