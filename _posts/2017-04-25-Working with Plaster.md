@@ -123,6 +123,14 @@ Lets start looking at the parameter section. One parameters I'm going to need fo
 <parameter name="ModuleName" type="text" prompt="Name of your module" />
 <parameter name="ModuleDesc" type="text" prompt="Brief description on this module" />
 ```
+
+We can also create default values for our ```text``` parameters.
+Here's an example for the new modules' version number.
+I also try to leave the end user a clue in the message of what the default is.
+
+```xml
+<parameter name="ModuleVersion" type="text" prompt="Version number (0.0.0.1)"  default='0.0.0.1' />
+```
 The next thing I wanted to do is create my folder structure for modules. When working with modules locally I like to keep all functions and classes in their own PS1 files. I also create a folder for binaries and data if needed. To get these options in Plaster, you can use the multichoice switch.
 ```xml
 <parameter name="FunctionFolders" type="multichoice" prompt="Please select folders to include" default='0,1,2'>
@@ -146,7 +154,7 @@ The final section is the content section. Content tells Plaster what actions to 
 First thing we needed to do was create our PSM1 and PSD1. For the PSD1, I'm using the built in Plaster command of newModuleManifest. For the PSM1, I have a generic template that i use to load up my functions and classes.
 ```xml
 <newModuleManifest destination='${PLASTER_PARAM_ModuleName}.psd1' 
-        moduleVersion='$PLASTER_PARAM_Version' 
+        moduleVersion='$PLASTER_PARAM_ModuleVersion' 
         rootModule='${PLASTER_PARAM_ModuleName}.psm1' 
         author='$PLASTER_PARAM_FullName' 
         description='$PLASTER_PARAM_ModuleDesc'/>
