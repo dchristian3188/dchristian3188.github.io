@@ -126,10 +126,10 @@ Lets start looking at the parameter section. One parameters I'm going to need fo
 
 We can also create default values for our ```text``` parameters.
 Here's an example for the new modules' version number.
-I also try to leave the end user a clue in the message of what the default is.
+Don't worry about having to leave information about the default value, Plaster will automatically place it in parenthesis after your message.
 
 ```xml
-<parameter name="ModuleVersion" type="text" prompt="Version number (0.0.0.1)"  default='0.0.0.1' />
+<parameter name="ModuleVersion" type="text" prompt="Version number"  default='0.0.0.1' />
 ```
 The next thing I wanted to do is create my folder structure for modules. When working with modules locally I like to keep all functions and classes in their own PS1 files. I also create a folder for binaries and data if needed. To get these options in Plaster, you can use the multichoice switch.
 ```xml
