@@ -34,8 +34,11 @@ ForEach($verb in $verbs)
         PipeLineSupport = 'Yes'
         CmdletBinding = 'Advanced'
         ComputerName = 'Yes'
+        TemplatePath =  'C:\github\Main\Plaster\Function'
+        DestinationPath = 'C:\temp'
+        Verbose = $true
     }
-    Invoke-Plaster -TemplatePath C:\github\Main\Plaster\Function -DestinationPath C:\temp -Verbose @functionDetails
+    Invoke-Plaster @functionDetails
 }
 ```
 
@@ -43,10 +46,10 @@ Here's a screenshot of it action. Since we provided all of the parameters the wi
 
 ![_config.yml]({{ site.baseurl }}/images/plasterNonInteractive.png)
 
-If we check our output directory all of the functions are there!
+If we check our output directory, all the functions are there!
 
 ```powershell
-PS C:\github\dchristian3188.github.io> ls C:\temp
+PS C:\github\dchristian3188.github.io> Get-ChildItem -Path C:\temp
 
 
 
@@ -65,9 +68,9 @@ Mode                LastWriteTime         Length Name
 -a----         6/8/2017  10:53 PM            108 Set-DCWebServer.tests.ps1
 ```
 
-Plus my new Pester tests are even working (we'll sort of).
+Plus my new Pester tests are even working (well sort of).
 
 ![_config.yml]({{ site.baseurl }}/images/plasterNonInteractiveTests.png)
 
 Remember you can use Plaster to create ANY kind of file and folder structure.
-What could you make pulling information from somewhere, like AD or a database, and a really cool Plaster Manifest?
+What could you make pulling information from somewhere, like AD or a database, and a cool Plaster Manifest?
