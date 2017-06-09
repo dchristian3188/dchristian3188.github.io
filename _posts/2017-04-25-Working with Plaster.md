@@ -340,13 +340,13 @@ Here's another example of where we're we can change behavior depending on what t
     }
     else 
     {
-        @"
+        @'
     [CmdletBinding(DefaultParameterSetName='Parameter Set 1', 
-                SupportsShouldProcess=`$true, 
-                PositionalBinding=`$false,
+                SupportsShouldProcess=$true, 
+                PositionalBinding=$false,
                 HelpUri = 'http://www.microsoft.com/',
                 ConfirmImpact='Medium')]
-"@
+'@
     }
 %>
 ```
