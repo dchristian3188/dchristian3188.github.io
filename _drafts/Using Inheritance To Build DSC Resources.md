@@ -33,84 +33,21 @@ The original resource contained the following methods:
 Looking over the list of methods, the only ones that are specific to a service are the ```GetProcessStartTime``` and the ```Set```.
 What that means is we can move the rest of the methods to a base class.
 This new base class will have the ```Get```, ```Test``` and ```GetLastWriteTime```.
-Here's what that would look like.
 
-```powershell
-class BaseFileWatcher
-{
-    [DscProperty(Mandatory)]
-    [String[]]
-    $Path
+Now that I have my base defined, I know I only need to create the ```Set``` and ```GetProcessStartTime``` methods for each resource.
+The idea is final class will come together like this
+[](https://github.com/dchristian3188/dchristian3188.github.io/blob/master/images/DSCInheritance/FileWatcherInheritance.png)
+![_config.yml]({{ site.baseurl }}/images/DSCInheritance/FileWatcherInheritance.png)
 
-    [DscProperty()]
-    [String]
-    $Filter
+We also have to perform this same inventory the properties / parameters.
+All of the resources will be sharing the below properties.
 
-    [DscProperty(NotConfigurable)]
-    [Nullable[datetime]]
-    $ProcessStartTime
+- **Path** - Path to the folder or files to check
+- **Filter** - A filter to apply to the files
+- **LastWriteTime** - Date time property to store last write time of the file
+- **ProcessStartTime** - Date time property to store the process start time
 
-    [DscProperty(NotConfigurable)]
-    [Nullable[datetime]]
-    $LastWriteTime
-
-    [BaseFileWatcher]Get()
-    {
-        $this.ProcessStartTime = $this.GetProcessStartTime()
-        $this.LastWriteTime = $this.GetLastWriteTime()
-        Return $this
-    }
-
-    [Bool]Test()
-    {
-        If (-not($this.ProcessStartTime))
-        {
-            $this.ProcessStartTime = $this.GetProcessStartTime()
-        }
-
-        If (-not($this.LastWriteTime))
-        {
-            $this.LastWriteTime = $this.GetLastWriteTime()
-        }
-
-        If ($this.ProcessStartTime -ge $this.LastWriteTime)
-        {
-            Write-Verbose -Message "Process has a later start time. No action will be taken"
-            Return $true
-        }
-        Else
-        {
-            Write-Verbose -Message "One or more files has a later start time. The process will be restarted."
-            Return $false
-        }
-    }
-
-    [DateTime]GetLastWriteTime()
-    {
-        $getSplat = @{
-            Path = $this.Path
-            Recurse = $true
-        }
-
-        Write-Verbose -Message "Checking Path: $($this.Path -join ", ")"
-        If ($this.Filter)
-        {
-            Write-Verbose -Message "Using Filter: $($this.Filter)"
-            $getSplat["Filter"] = $this.Filter
-        }
-
-        $lastWrite = Get-ChildItem @getSplat |
-            Sort-Object -Property LastWriteTime |
-            Select-Object -ExpandProperty LastWriteTime -First 1
-
-        if (-not($lastWrite))
-        {
-            Write-Verbose -Message "No lastwrite time found. Setting to min date"
-            $lastWrite = [datetime]::MinValue
-        }
-
-        Write-Verbose -Message "Last write time: $lastWrite"
-        return $lastWrite
-    }
-}
-```
+However, the specifcs parameters for each resource will be quite different.
+Here's a breakdown of the final structure.
+[](https://github.com/dchristian3188/dchristian3188.github.io/blob/master/images/DSCInheritance/FileWatcherInheritanceProperties.png)
+![_config.yml]({{ site.baseurl }}/images/DSCInheritance/FIleWatcherInheritanceProperties.png)
