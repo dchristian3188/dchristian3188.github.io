@@ -36,7 +36,9 @@ This new base class will have the ```Get```, ```Test``` and ```GetLastWriteTime`
 
 Now that I have my base defined, I know I only need to create the ```Set``` and ```GetProcessStartTime``` methods for each resource.
 The idea is final class will come together like this
+
 ![stuff](https://github.com/dchristian3188/dchristian3188.github.io/blob/master/images/DSCInheritance/FileWatcherInheritance.png)
+
 ![_config.yml]({{ site.baseurl }}/images/DSCInheritance/FileWatcherInheritance.png)
 
 We also have to perform this same inventory the properties / parameters.
@@ -49,5 +51,7 @@ All of the resources will be sharing the below properties.
 
 However, the specifcs parameters for each resource will be quite different.
 Here's a breakdown of the final structure.
-![stuff](https://github.com/dchristian3188/dchristian3188.github.io/blob/master/images/DSCInheritance/FileWatcherInheritanceProperties.png)
+
+s![stuff](https://github.com/dchristian3188/dchristian3188.github.io/blob/master/images/DSCInheritance/FIleWatcherInheritanceProperties.png)
+
 ![_config.yml]({{ site.baseurl }}/images/DSCInheritance/FIleWatcherInheritanceProperties.png)
