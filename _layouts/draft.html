@@ -1,0 +1,25 @@
+---
+layout: post
+meta_robots: noindex
+---
+{% if page.meta_robots %}    
+  <meta name="robots" content="{{ page.meta_robots }}">
+{% elsif layout.meta_robots %}
+  <meta name="robots" content="{{ layout.meta_robots }}">
+{% else %}
+  <meta name="robots" content="all">
+{% endif %}
+
+<article class="post">
+  <h1>{{ page.title }}</h1>
+
+  <div class="entry">
+    {{ content }}
+  </div>
+
+  <div class="date">
+    Written on {{ page.date | date: "%B %e, %Y" }}
+  </div>
+
+  {% include disqus.html %}
+</article>

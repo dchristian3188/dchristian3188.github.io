@@ -11,6 +11,18 @@ description: By David Christian
 # URL of your avatar or profile pic (you could use your GitHub profile pic)
 avatar: https://avatars3.githubusercontent.com/u/13060023?v=3&s=460
 
+collections:
+  drafts:
+    output: true
+
+defaults:
+  -
+    scope:
+      paths: ""
+      type: drafts
+    values:
+      layout: draft
+
 #
 # Flags below are optional
 #
