@@ -53,37 +53,12 @@ Here's a breakdown of the final structure.
 
 ![_config.yml]({{ site.baseurl }}/images/DSCInheritance/FIleWatcherInheritanceProperties.png)
 
-During development I like to create a separate PS1 for every class and resource.
-I feel that this structure is the cleanest and easiest to manage in source.
-Here is a snippet of what that module structure looks like.
-
-```powershell
-C:.
-│   .gitignore
-│   FileWatcher.build.ps1
-│   FileWatcher.psd1
-│   FileWatcher.psm1
-│
-├───.vscode
-│       settings.json
-│
-├───Classes
-│       BaseFileWatcher.ps1
-│
-├───DSCResources
-│       ProcessFileWatcher.ps1
-│       ServiceFileWatcher.ps1
-│       WebsiteFileWatcher.ps1
-
-...
-```
-
 With my base class defined, its time to create the new resources.
-Since all of the comparison logic is in the base class, each new resource just needs to identify its specific information.
+Since the comparison logic is in the base class, each new resource really only needs to be able to determine when ***Its*** type process started up.
 
 We've already covered the ServiceFileWatcher, so let's take a look at the new ProcessFileWatcher.
 This resource is going to have a couple of new parameters.
-We are going to need to have the process name, a path to the processes executable and any startup parameters.
+We will add a parameter for process name, process path (path to the executable), and any startup parameters.
 
 ```powershell
 [DscResource()]
@@ -105,7 +80,7 @@ class ProcessFileWatcher : BaseFileWatcher
 ```
 
 This is what the ProcessFileWatcher's ```GetProcessStart``` method ended up looking like.
-if more than one process matches the name, the resource returns the start time of the oldest.
+If more than one process matches the name, the resource returns the start time of the oldest.
 
 ```powershell
 [DateTime]GetProcessStartTime()
@@ -161,7 +136,7 @@ We also need to use the Process path to essentially restart the process.
 
 And that's it!
 The whole resource is the properties and the two methods.
-Lets make another one.
+Should we make another one?
 Next up is the website file watcher.
 Here's the single resource specific parameter.
 
@@ -179,7 +154,7 @@ class WebSiteFileWatcher : BaseFileWatcher
 
 Next we need to define the WebsiteFileWatcher's ```GetProcessStartTime```.
 To get this, we first need to find what application pool is running the website.
-Once we know this, we can check when the app pool started.
+Once we know this, we can check when the application pool started.
 
 ```powershell
 [DateTime]GetProcessStartTime()
@@ -193,7 +168,7 @@ Once we know this, we can check when the app pool started.
         throw "Unable to find website $($this.WebsiteName)"
     }
 
-    Write-Verbose -Message "Checking for process running applicaiton pool: $($websiteInfo.applicationPool)"
+    Write-Verbose -Message "Checking for process running applicaiton pool [$($websiteInfo.applicationPool)]"
 
     $AppPoolName = @{
         Name       = 'AppPoolName'
@@ -217,9 +192,23 @@ Once we know this, we can check when the app pool started.
 }
 ```
 
+Next up is the WebsiteFileWatchers ```Set``` method.
+First step is to find the application pool running the site.
+Once we have this, we can restart the app pool.
+Now, this could cause trouble if you have websites or web applications sharing the same application pool.
+Good thing nobody does that.
 
-This does create some challenges.
-The biggest is that PowerShell throws a parse error when a class is defined in a script that references an external type.
-The PowerShell team is tracking the issue [here.](https://github.com/PowerShell/PowerShell/issues/3641)
+```powershell
+[Void]Set()
+{
+    $webInfo = Get-Website -Name $this.WebsiteName
+    Write-Verbose -Message "Restarting Application pool [$($webInfo.applicationPool)]"
+    Restart-WebAppPool -Name $webInfo.applicationPool
+}
+```
 
-To work around this, I have an Invoke-Build script that compiles the files into a completed PS1 and then runs the Pester tests. 
+And we're done with the Website watcher.
+I hope this helped highlight some of the power of inheritance.
+With a little bit of planning we were able to turn one resource into three!
+The completed resource is [here.](https://github.com/dchristian3188/FileWatcher)
+Once I finish up the remaining Pester tests, I plan to submit the module to the gallery.
