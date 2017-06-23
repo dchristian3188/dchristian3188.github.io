@@ -1,6 +1,7 @@
 ---
 layout: post
 title: DSC Classes - Using Helper Methods
+tags: [Classes, DSC]
 ---
 This is going to be part two on DSC Classes.
 Today we are going to cover a resource with more than the standard ```Get```,```Set``` and ```Test``` methods.

@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Creating A DSC Class-Based Resource
+tags: [Classes, DSC]
 ---
 
 Now that we know what a PowerShell class is, it's time we start putting them to use.

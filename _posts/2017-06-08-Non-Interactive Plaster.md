@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Non-Interactive Plaster
+tags: [Plaster]
 ---
 
 I have a talk coming up on Plaster.

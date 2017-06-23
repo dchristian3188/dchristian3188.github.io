@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Troubleshooting DSC
+tags: [DSC]
 ---
 
 While I know everyone out there writes perfect code first try, I am not so lucky.

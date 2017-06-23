@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Working With Plaster
+tags: [Plaster]
 ---
 If you haven't yet, I would definitely check out Plaster. Plaster is a PowerShell scaffolding module. What that means for you is that its an easy way to keep your modules and functions consistent and following best practices. Its fully customizable and you can get started in just a few minutes. 
 

@@ -1,6 +1,7 @@
 ---
 layout: post
 title: A Real World Pester Example From the PowerShell Github
+tags: [Pester]
 ---
 A hobby of my mine is to peruse the PowerShell Github page for open issues and pull requests. Its a direct way to interact with the team, see what features are being worked on and actually make a difference. I understand that putting yourself out there can be scary but everyone is incredibly friendly and its a great place to get constructive feedback. Aren't that good at C#? Add some documentation or a Pester test. Anything helps and there's a ton to do. 
 
