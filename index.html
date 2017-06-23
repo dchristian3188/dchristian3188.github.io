@@ -13,9 +13,12 @@ layout: default
       </div>
 
       <a href="{{ site.baseurl }}{{ post.url }}" class="read-more">Read More</a>
+      <div class="tags">Tags:>
+        {% for tag in post.tags %}
+			    <a class="tag" href="/blog/tags/#{{ tag | slugify }}">{{ tag }  }</a>
+		    {% endfor %}
+      </div>
     </article>
-    {% for tag in post.tags %}
-			 <a class="tag" href="/blog/tag/#{{ tags | slugify }}">{{ tag }}</a>
-		 {% endfor %}
+   
   {% endfor %}
 </div>
