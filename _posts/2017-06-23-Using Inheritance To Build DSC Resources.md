@@ -3,7 +3,7 @@ layout: post
 title: Using Inheritance To Build DSC Resources
 ---
 
-Today we are going to use inheritance to create multiple resource from a base class.
+Today we are going to use inheritance to create multiple DSC resource from a base class.
 I'm the first to admit I'm lazy and always trying to get the most bang for my lines of code.
 Inheritance is a great way to reduce code duplication and pretty easy once you wrap your head around it.
 
@@ -16,22 +16,22 @@ I'm going to be building off my SmartServiceRestart resource from [this](http://
 This resource watches a file path and a service.
 It then compares the start time of the service against the last write time of the file.
 If the file has an older last write time, the service gets restarted.
-Its a great tool for services that are not smart enough to automatically reload their configurations.
+This resource is a great tool for services that are not smart enough to automatically reload their configurations.
 
 I liked the idea of having a file watcher that would reload the service and wanted to see if I could apply this logic anywhere else.
 I thought it would be cool to have similar resources to manage processes and websites.
-Before we look at the new resources, lets examine the original class.
+Before we look at the new resources, let's examine the original class.
 
 The original resource contained the following methods:
 
 - **GetLastWriteTime** - A helper method to get the last write time of the file(s)
-- **GetProcessStartTime** - A helper method to get the start time of the process
+- **GetProcessStartTime** - A helper method to get the start time of the service (PID)
 - **Get** - Runs both helper methods and returns an instance of the class
 - **Test** - Compares the two dates returned by the helper methods and determines who's older
 - **Set** - Restarts the service
 
 Looking over the list of methods, the only ones that are specific to a service are the ```GetProcessStartTime``` and the ```Set```.
-What that means is we can move the rest of the methods to a base class.
+What that means is we can move the remaining of the methods to a base class.
 This new base class will have the ```Get```, ```Test``` and ```GetLastWriteTime``` methods.
 
 Now that I have my base defined, I know I only need to create the ```Set``` and ```GetProcessStartTime``` methods for each resource.
@@ -53,12 +53,14 @@ Here's a breakdown of the final structure.
 
 ![_config.yml]({{ site.baseurl }}/images/DSCInheritance/FIleWatcherInheritanceProperties.png)
 
-With my base class defined, its time to create the new resources.
-Since the comparison logic is in the base class, each new resource really only needs to be able to determine when ***Its*** type process started up.
+With my base class defined, it's time to create the new resources.
+Since the comparison logic is in the base class, each new resource really only needs to be able to determine when ***Its*** type of process started and how to create or restart the instance.
 
-We've already covered the ServiceFileWatcher, so let's take a look at the new ProcessFileWatcher.
+We've already covered the ServiceFileWatcher methods in [this](http://overpoweredshell.com/DSC-Classes-Using-Helper-Methods/) post, so let's take a look at the new ProcessFileWatcher resource.
 This resource is going to have a couple of new parameters.
-We will add a parameter for process name, process path (path to the executable), and any startup parameters.
+We will add a parameter for process name, process path (path to the executable), and any startup parameters to pass to the process.
+Here is the class and property declaration.
+Notice that it inherits from the BaseFileWatcher Class.
 
 ```powershell
 [DscResource()]
@@ -135,10 +137,13 @@ We also need to use the Process path to essentially restart the process.
 ```
 
 And that's it!
-The whole resource is the properties and the two methods.
+The whole resource is the couple of properties and the two methods.
+Since these methods are still returning the same type, we are able to leverage the same comparison logic from the parent.
+
 Should we make another one?
-Next up is the website file watcher.
-Here's the single resource specific parameter.
+Next up is the WebSiteFileWatcher.
+Here's the resource declaration and the new parameter of ```WebsiteName```.
+Again this class inherits from BaseFileWatcher.
 
 ```powershell
 [DscResource()]
@@ -152,7 +157,7 @@ class WebSiteFileWatcher : BaseFileWatcher
 ...
 ```
 
-Next we need to define the WebsiteFileWatcher's ```GetProcessStartTime```.
+Next we need to define the WebsiteFileWatcher's ```GetProcessStartTime``` helper method.
 To get this, we first need to find what application pool is running the website.
 Once we know this, we can check when the application pool started.
 
@@ -168,7 +173,7 @@ Once we know this, we can check when the application pool started.
         throw "Unable to find website $($this.WebsiteName)"
     }
 
-    Write-Verbose -Message "Checking for process running applicaiton pool [$($websiteInfo.applicationPool)]"
+    Write-Verbose -Message "Checking for process running application pool [$($websiteInfo.applicationPool)]"
 
     $AppPoolName = @{
         Name       = 'AppPoolName'
@@ -207,8 +212,9 @@ Good thing nobody does that.
 }
 ```
 
-And we're done with the Website watcher.
+And we're done with the Website watcher!
+The only logic in the class is specific to websites and we get all the parent logic for free.
 I hope this helped highlight some of the power of inheritance.
 With a little bit of planning we were able to turn one resource into three!
-The completed resource is [here.](https://github.com/dchristian3188/FileWatcher)
+The completed resource and all source is [here.](https://github.com/dchristian3188/FileWatcher)
 Once I finish up the remaining Pester tests, I plan to submit the module to the gallery.
