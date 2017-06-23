@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Using Inheritance To Build DSC Resources
+tags: [Classes, DSC]
 ---
 
 Today we are going to use inheritance to create multiple DSC resource from a base class.
