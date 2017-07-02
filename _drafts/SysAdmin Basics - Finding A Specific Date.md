@@ -17,3 +17,32 @@ Don't worry with a bit of math and my helper function, I'll make sure you never 
 
 Here's the gist.
 <script src="https://gist.github.com/dchristian3188/dabfa9d1f2dd1b4ae0ab8b55bcd6af4f.js"></script>
+
+My Code block
+
+```powershell
+if ($Instance -eq 'Last')
+{
+    $longMonth = $tempDate.AddDays(28).Month -eq $Month
+    if ($longMonth)
+    {
+        $finalDate = $tempDate.AddDays(28)
+    }
+    else 
+    {
+        $finalDate = $tempDate.AddDays(21)    
+    }
+}
+else
+{
+    $increment = switch ($Instance)
+    {
+        'First' {0}
+        'Second' {7}
+        'Third' {14}
+        'Fourth' {21}
+        'Fifth' {28}
+    }
+    $finalDate = $tempDate.AddDays($increment)    
+}
+```
