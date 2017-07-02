@@ -15,3 +15,5 @@ Don't worry with a bit of math and my helper function, I'll make sure you never 
 
 <!-- more -->
 
+Here's the gist.
+<script src="https://gist.github.com/dchristian3188/dabfa9d1f2dd1b4ae0ab8b55bcd6af4f.js"></script>
