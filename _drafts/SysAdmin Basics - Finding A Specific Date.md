@@ -29,29 +29,39 @@ The ```Month``` parameter is an integer.
 If you don't specify a value, it will default to using the current month.
 Same for the ```Year``` parameter.
 
+## How Does This Work
+
+We start by finding the first instance of that day of week.
+To do this, We'll walk the month till we find the day we're looking for.
+
 ```powershell
-if ($Instance -eq 'Last')
+[datetime]$tempDate = "{0}/{1}/{2}" -f $Year, $Month, 1
+while ($tempDate.DayOfWeek -ne $Day)
 {
-    $longMonth = $tempDate.AddDays(28).Month -eq $Month
-    if ($longMonth)
-    {
-        $finalDate = $tempDate.AddDays(28)
-    }
-    else 
-    {
-        $finalDate = $tempDate.AddDays(21)    
-    }
+    $tempDate = $tempDate.AddDays(1)
 }
-else
+```
+
+Once we know when the first instance is of that day.
+We can add a multiple of 7 to get the instance.
+The breakdown is as follows:
+
+```powershell
+$increment = switch ($Instance)
 {
-    $increment = switch ($Instance)
-    {
-        'First' {0}
-        'Second' {7}
-        'Third' {14}
-        'Fourth' {21}
-        'Fifth' {28}
-    }
-    $finalDate = $tempDate.AddDays($increment)    
+    'First' {0}
+    'Second' {7}
+    'Third' {14}
+    'Fourth' {21}
+    'Fifth' {28}
 }
+$finalDate = $tempDate.AddDays($increment)
+```
+
+# Uses
+
+## Checking The Whole Year
+
+```powershell
+1..12 | Get-SpecificDate Second Tuesday
 ```
