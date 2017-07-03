@@ -42,8 +42,9 @@ while ($tempDate.DayOfWeek -ne $Day)
 }
 ```
 
-Once we know when the first instance is of that day.
-We can add a multiple of 7 to get the instance.
+Finding the first instance of the day in the month is the hardest part.
+Once we have that, we can add a multiple of 7 to get the instance the user requested.
+How do we know what to add?
 The breakdown is as follows:
 
 ```powershell
@@ -62,6 +63,36 @@ $finalDate = $tempDate.AddDays($increment)
 
 ## Checking The Whole Year
 
+Here's a trick I use when I want check something that recurs every month.
+Path Tuesday is a great example of this.
+We'll call the ```ToLongDateString``` method to cleanup the output.
+
 ```powershell
-1..12 | Get-SpecificDate Second Tuesday
+(1..12 | Get-SpecificDate -Instance Second -Day Tuesday).ToLongDateString()
 ```
+
+## Checking Only Today
+
+Here's a trick I use to use, combined with task scheduler.
+Pretend you have a script that needs to run the third Sunday of every month.
+What you could do is create a scheduled task to execute your PowerShell script every day.
+The trick is, you add this snippet to the top of your script.
+
+```powershell
+$targetDate = (Get-SpecificDate -Instance Third -Day Sunday).ToShortDateString()
+$today = (Get-Date).ToShortDateString()
+
+if($targetDate -eq $today)
+{
+    #Your code here
+}
+else
+{
+    #Write a log message then exit
+}
+```
+
+# Wrapping Up
+
+The completed function is [here.](https://github.com/dchristian3188/Main/blob/master/Functions/Get-SpecificDate.ps1)
+Leave a comment and let me know what dates you're keeping track of.
