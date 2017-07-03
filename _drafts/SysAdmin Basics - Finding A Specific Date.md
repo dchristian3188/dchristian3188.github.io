@@ -68,7 +68,24 @@ Path Tuesday is a great example of this.
 We'll call the ```ToLongDateString``` method to cleanup the output.
 
 ```powershell
-(1..12 | Get-SpecificDate -Instance Second -Day Tuesday).ToLongDateString()
+(1..12 | Get-SpecificDate Second Tuesday).ToLongDateString()
+```
+
+Output:
+
+```powershell
+Tuesday, January 10, 2017
+Tuesday, February 14, 2017
+Tuesday, March 14, 2017
+Tuesday, April 11, 2017
+Tuesday, May 9, 2017
+Tuesday, June 13, 2017
+Tuesday, July 11, 2017
+Tuesday, August 8, 2017
+Tuesday, September 12, 2017
+Tuesday, October 10, 2017
+Tuesday, November 14, 2017
+Tuesday, December 12, 2017
 ```
 
 ## Checking Only Today
