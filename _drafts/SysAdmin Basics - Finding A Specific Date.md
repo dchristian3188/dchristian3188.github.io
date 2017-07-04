@@ -5,7 +5,7 @@ title: SysAdmin Basics - Finding A Specific Date
 
 Dates are hard, that makes scheduling hard.
 Ever had someone tell you to be ready on the first Monday of the month?
-Don't forget Microsoft is pushing patches on the second Tuesday.
+Don't forget patches come out on the second Tuesday.
 My personal favorite is the fourth Thursday in November (Thanksgiving here in the states).
 While these types of dates are easy to remember, they can be hard to build automation around.
 Don't worry with a couple of tricks and my helper function, I'll make sure you never miss Mother's Day again (second Sunday in May).
@@ -22,17 +22,17 @@ Don't worry with a couple of tricks and my helper function, I'll make sure you n
 Get-SpecificDate takes a couple of parameters.
 The ```Instance``` parameter expects one of the following strings: first, second, third, fourth, fifth or last.
 Next is the day parameter, which expects a value from the ```DayOfWeek``` enum.
-What's neat about using this enum is you can use ```0``` or ```Sunday``` to specify the day.
-(Actually, you just need to pass enough of the string to make it unique.
-Which means we can use the short name of ```Sun```.)
-The ```Month``` parameter is an integer.
+What's neat about using this enum is you can use either a integer or string to specify the day.
+For example ```0``` or ```Sunday```.
+Better still, you only really need to specify enough of the string to make it unique (Sun or F would work fine).
+Next is the ```Month``` parameter, specified as an integer.
 If you don't specify a value, it will default to using the current month.
 Same for the ```Year``` parameter.
 
 ## How Does This Work
 
 We start by finding the first instance of that day of week.
-To do this, We'll walk the month till we find the day we're looking for.
+To do this, we'll start on the first and walk the month till we find the day we're looking for.
 
 ```powershell
 [datetime]$tempDate = "{0}/{1}/{2}" -f $Year, $Month, 1
@@ -65,7 +65,8 @@ $finalDate = $tempDate.AddDays($increment)
 
 Here's a trick I use when I want check something that recurs every month.
 Path Tuesday is a great example of this.
-We'll call the ```ToLongDateString``` method to cleanup the output.
+Since ```Get-SpecificDate``` accepts pipeline input, one thing we can do is pipe our months into the function.
+Also since we're working with dates, we can use the ```ToLongDateString``` method to cleanup the output.
 
 ```powershell
 (1..12 | Get-SpecificDate Second Tuesday).ToLongDateString()
@@ -90,16 +91,17 @@ Tuesday, December 12, 2017
 
 ## Checking Only Today
 
-Here's a trick I use to use, combined with task scheduler.
+Here's a cool one to use combined with task scheduler.
 Pretend you have a script that needs to run the third Sunday of every month.
 What you could do is create a scheduled task to execute your PowerShell script every day.
 The trick is, you add this snippet to the top of your script.
 
 ```powershell
-$targetDate = (Get-SpecificDate -Instance Third -Day Sunday).ToShortDateString()
+# We use short date string since we don't about the time
 $today = (Get-Date).ToShortDateString()
+$targetDate = (Get-SpecificDate -Instance Third -Day Sunday).ToShortDateString()
 
-if($targetDate -eq $today)
+if($today -eq $targetDate)
 {
     #Your code here
 }
