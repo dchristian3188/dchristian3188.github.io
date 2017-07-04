@@ -103,7 +103,7 @@ $targetDate = (Get-SpecificDate -Instance Third -Day Sunday).ToShortDateString()
 
 if($today -eq $targetDate)
 {
-    #Your code here
+    #Your code goes here
 }
 else
 {
