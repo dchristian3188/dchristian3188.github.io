@@ -64,7 +64,7 @@ $finalDate = $tempDate.AddDays($increment)
 ## Checking The Whole Year
 
 Here's a trick I use when I want check something that recurs every month.
-Path Tuesday is a great example of this.
+Patch Tuesday is a great example of this.
 Since ```Get-SpecificDate``` accepts pipeline input, one thing we can do is pipe our months into the function.
 Also since we're working with dates, we can use the ```ToLongDateString``` method to cleanup the output.
 
@@ -97,7 +97,7 @@ What you could do is create a scheduled task to execute your PowerShell script e
 The trick is, you add this snippet to the top of your script.
 
 ```powershell
-# We use short date string since we don't about the time
+# We use short date string since we don't care about the time
 $today = (Get-Date).ToShortDateString()
 $targetDate = (Get-SpecificDate -Instance Third -Day Sunday).ToShortDateString()
 
