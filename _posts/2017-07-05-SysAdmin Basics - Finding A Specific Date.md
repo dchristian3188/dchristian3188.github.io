@@ -19,19 +19,19 @@ Don't worry with a couple of tricks and my helper function, I'll make sure you n
 
 ## Parameters
 
-Get-SpecificDate takes a couple of parameters.
-The ```Instance``` parameter expects one of the following strings: first, second, third, fourth, fifth or last.
-Next is the day parameter, which expects a value from the ```DayOfWeek``` enum.
+The ```Get-SpecificDate``` function takes a couple of parameters.
+The ```Instance``` parameter expects one of the following strings: ```First```, ```Second```, ```Third```, ```Fourth```, ```Fifth``` or ```Last```.
+Next is the ```Day``` parameter, which expects a value from the ```DayOfWeek``` enum.
 What's neat about using this enum is you can use either a integer or string to specify the day.
 For example ```0``` or ```Sunday```.
-Better still, you only really need to specify enough of the string to make it unique (Sun or F would work fine).
+Better still, you only really need to specify enough of the string to make it unique (```Sun``` or ```F``` would work fine).
 Next is the ```Month``` parameter, specified as an integer.
 If you don't specify a value, it will default to using the current month.
 Same for the ```Year``` parameter.
 
 ## How Does This Work
 
-We start by finding the first instance of that day of week.
+We start by finding the first instance of that day in the month.
 To do this, we'll start on the first and walk the month till we find the day we're looking for.
 
 ```powershell
@@ -64,9 +64,9 @@ $finalDate = $tempDate.AddDays($increment)
 ## Checking The Whole Year
 
 Here's a trick I use when I want check something that recurs every month.
-Patch Tuesday is a great example of this.
+Patch Tuesday is a great example a recurring event most administrators plan for.
 Since ```Get-SpecificDate``` accepts pipeline input, one thing we can do is pipe our months into the function.
-Also since we're working with dates, we can use the ```ToLongDateString``` method to cleanup the output.
+Also since the output is a ```DateTime``` object, we can use the ```ToLongDateString``` method to cleanup the output.
 
 ```powershell
 (1..12 | Get-SpecificDate Second Tuesday).ToLongDateString()

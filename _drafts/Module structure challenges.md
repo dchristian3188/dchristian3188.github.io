@@ -1,3 +1,8 @@
+---
+layout: post
+title: Module Structure Challenges
+---
+
 A brief note on module structure.
 During development I like to create a separate PS1 for every class and resource.
 I feel that this structure is the cleanest and easiest to manage in source.
