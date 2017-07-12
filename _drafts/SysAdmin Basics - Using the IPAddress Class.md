@@ -3,22 +3,38 @@ layout: post
 title: SysAdmin Basics - Using the IPAddress Class
 ---
 
-Whether you like it or not, even if your not a Network jockey, at some point in your career you will be working with IP Addresses.
+Whether you like it or not, at some point in your career you will be working with IP Addresses.
+I recently ran into a challenge for work with variable length subnet masks and IPs that inspired this post.
+So lets get into it.
+Today we're going to talk about some of the common tasks admins have to do that involve IPs.
 
 **The Good Stuff:**
 Making sure you're taking full advantage of the IPAddress class.
 
 <!-- more -->
 
+# Approach
+
+There's two common approaches I see most people take when working with IPs.
+By far the most popular is to use Regex.
+I was never a big Regex guy, but I've been trying to get better.
+I'm fortunate enough to work with some incredibly talented people.
+One of whom, is an absolute monster when it comes to Regex.
+It's damn impressive when you see the language levered to it's full potential.
+My personal gripe with Regex is that its hard to read...
+That being said, it's still a perfectly valid approach and a matter of style.
+The next not so often talked about method is to leverage the ```[ipaddress]``` class.
+This class gives us a lot of freebies and combined with a little bit of bit math does some cool stuff.
+
 # Validating An IP Address
+
+Ok let's start with the most important one.
+Is this a valid IP address?!?!
 
 ## Regex
 
-I was never a big RegEx guy.
-What the heck does the emoji face mean again?
-That being said, I have been trying to get better at it.
-I'm lucky enough to work with some really talented people, one of which who uses Regex as his go to.
-While Regex is an incredibly powerfull tool, its a little hard to read.
+I did a quick search on Google, for IP regex.
+The below pattern is the most commonly accepted answer.
 Take a look at this Regex pattern to verify IPs.
 
 ```powershell
@@ -42,9 +58,6 @@ else
     #Some error handling here
 }
 ```
-
-While this approach works, I can never remember that pattern and always have to look it up.
-Plus for anyone else reading the code, it can be hard to decipher without a good variable name.
 
 ## IPAddress Type
 
@@ -94,18 +107,43 @@ else
 
 # Finding The Default Gateway
 
-## Regex
-
+The default gateway is the door from your network to the next.
 Sometimes, you only have an IP address and need to guess at the default gateway.
-Usually the gateway has an address like your, IP except with the last octet of 1.
+Usually the gateway has an address like your IP except with the last octet of 1.
 This is especially true if you have a /24 or 255.255.255.0 subnet mask.
-Check this out.
+
+Regex just crushes excels at this.
+If you known you need to replace the last octet you can use this snippet.
 
 ```powershell
 $address = '192.168.0.153'
 $defaultGW = $address -replace '\d{1,3}$','1'
 
 $defaultGW
+```
+
+Here's where it starts getting good.
+We can combine Regex and the ```IPAddress``` class to work with subnets other than ```/24```.
+Let's pretend you have a ```/18``` or ```255.255.192.0```.
+I know this is an extreme example but hey it could happen.
+What we could do is leverage some bitwise math to find the network ID.
+Don't worry it's not as bad as it sounds.
+
+```powershell
+[ipaddress]$address = '10.153.67.25'
+[ipaddress]$subnetMask = '255.192.0.0'
+
+[ipaddress]$network = $address.Address -band $subnetMask.Address 
+$network.IPAddressToString
+```
+
+
+The ```IPAddress``` class takes a little more setup to get started.
+There's also the requirement that you need a subnet mask if you're trying to find the gateway.
+Here's what the previous example would look like.
+
+```powershell
+
 ```
 
 # Converting To Binary String
