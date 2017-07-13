@@ -6,10 +6,9 @@ title: SysAdmin Basics - Using the IPAddress Class
 Whether you like it or not, at some point in your career you will be working with IP Addresses.
 I recently ran into a challenge for work with variable length subnet masks and IPs that inspired this post.
 So lets get into it.
-Today we're going to talk about some of the common tasks admins have to do that involve IPs.
 
 **The Good Stuff:**
-Making sure you're taking full advantage of the IPAddress class.
+A couple of tricks to make working with IPs a little less painful.
 
 <!-- more -->
 
@@ -22,14 +21,15 @@ I'm fortunate enough to work with some incredibly talented people.
 One of whom, is an absolute monster when it comes to Regex.
 It's damn impressive when you see the language levered to it's full potential.
 My personal gripe with Regex is that its hard to read...
-That being said, it's still a perfectly valid approach and a matter of style.
+That said, it's capabilities are undeniable.
 The next not so often talked about method is to leverage the ```[ipaddress]``` class.
-This class gives us a lot of freebies and combined with a little bit of bit math does some cool stuff.
+This class gives us a lot of freebies since the .Net team the hard stuff for us.
+Plus if you combine that with a little bit of bit math, you can essentially recreate subnetting in PowerShell.
 
 # Validating An IP Address
 
 Ok let's start with the most important one.
-Is this a valid IP address?!?!
+Is this a valid IP?
 
 ## Regex
 
@@ -61,8 +61,8 @@ else
 
 ## IPAddress Type
 
-One cool use for the ```IPAddress``` type is to combine it with ```-As```.
-If the value to test is a valid IP, ```-As``` return us a ```IPaddress``` object.
+One cool use for the ```IPAddress``` type is to combine it with ```-As``` operator.
+If the value to test is a valid IP, ```-As``` returns a ```IPaddress``` object.
 Take a look at this example to see it in action.
 
 ```powershell
@@ -82,7 +82,7 @@ IsIPv4MappedToIPv6 : False
 IPAddressToString  : 192.168.0.1
 ```
 
-The best part is that if we use an invalid IP address, the ```-As``` will not throw an error.
+The best part is that if we use an invalid IP address, ```-As``` will not throw an error.
 Instead it returns null.
 For example, consider this:
 
@@ -109,11 +109,11 @@ else
 
 The default gateway is the door from your network to the next.
 Sometimes, you only have an IP address and need to guess at the default gateway.
-Usually the gateway has an address like your IP except with the last octet of 1.
-This is especially true if you have a /24 or 255.255.255.0 subnet mask.
+Usually the gateway has an address like your IP except with the last octet of ```.1```.
+This is especially true if you have a ```/24``` or ```255.255.255.0``` subnet mask.
 
-Regex just crushes excels at this.
-If you known you need to replace the last octet you can use this snippet.
+Regex is the perfect tool for this.
+If you known you need to replace the last octet with a ```1``` you can use this snippet.
 
 ```powershell
 $address = '192.168.0.153'
@@ -125,32 +125,24 @@ $defaultGW
 Here's where it starts getting good.
 We can combine Regex and the ```IPAddress``` class to work with subnets other than ```/24```.
 Let's pretend you have a ```/18``` or ```255.255.192.0```.
-I know this is an extreme example but hey it could happen.
 What we could do is leverage some bitwise math to find the network ID.
 Don't worry it's not as bad as it sounds.
 
 ```powershell
 [ipaddress]$address = '10.153.67.25'
-[ipaddress]$subnetMask = '255.192.0.0'
+[ipaddress]$subnetMask = '255.255.192.0'
 
 [ipaddress]$network = $address.Address -band $subnetMask.Address 
 $network.IPAddressToString
 ```
 
-
-The ```IPAddress``` class takes a little more setup to get started.
-There's also the requirement that you need a subnet mask if you're trying to find the gateway.
-Here's what the previous example would look like.
+Output:
 
 ```powershell
-
+10.153.64.0
 ```
+
+From here we can replace the last octet and be done!
 
 # Converting To Binary String
 
-```powershell
-
-$address = [ipaddress]'192.168.0.153'
-
-($address.GetAddressBytes().ForEach{[Convert]::ToString($PSItem,2)}) -Join '.'
-```
