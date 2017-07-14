@@ -25,7 +25,7 @@ That said, it's capabilities are undeniable.
 
 The next not so often talked about method is to leverage the ```[ipaddress]``` class.
 This class gives us a lot of freebies since the .Net team did the hard stuff for us.
-Plus if you combine that with a little bit math, you can recreate subnetting in PowerShell.
+Plus if you combine that with a little bitwise math, you can recreate subnetting in PowerShell.
 
 # Validating An IP Address
 
@@ -136,10 +136,10 @@ What we could do is leverage some bitwise math to find the network ID.
 Don't worry it's not as bad as it sounds.
 
 ```powershell
-[ipaddress]$address = '10.153.67.25'
-[ipaddress]$subnetMask = '255.255.192.0'
+$address = [ipaddress]'10.153.67.25'
+$subnetMask = [ipaddress]'255.255.192.0'
 
-[ipaddress]$network = $address.Address -band $subnetMask.Address 
+[ipaddress]$network = $address.Address -band $subnetMask.Address
 $network.IPAddressToString
 ```
 
@@ -155,7 +155,7 @@ Once we know this, we can use regex to set the default gateway to the first usab
 # Finding The Broadcast Address
 
 On a network, the broadcast address is a reserved IP that sends a message to the entire subnet.
-We find the broadcast address again using bit math.
+We find the broadcast address again using bitwise math.
 This time we are going to use the IP address and the wildcard mask.
 If your unfamiliar with a wildcard mask, it's the exact inverse of a subnet mask.
 Like a subnet mask identifies the network, the wildcard mask identifies the host.
