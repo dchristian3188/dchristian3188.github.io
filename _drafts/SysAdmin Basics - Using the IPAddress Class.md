@@ -1,11 +1,12 @@
 ---
 layout: post
-title: SysAdmin Basics - Using the IPAddress Class
+title: SysAdmin Basics - Working With IP Addresses
 ---
 
 Whether you like it or not, at some point in your career you will be working with IPs.
 I recently ran into a challenge at work with variable length subnet masks that inspired this post.
 I needed to brush off some old networking skills and got to play with a little PowerShell along the way.
+With that in mind, let's get into it.
 
 **The Good Stuff:**
 A couple of tricks to make working with IPs a little less painful.
@@ -113,7 +114,7 @@ Sometimes, you only have an IP address and need to guess at the default gateway.
 Usually the gateway has an address like your IP except with the last octet of ```.1```.
 This is especially true if you have a ```/24``` or ```255.255.255.0``` subnet mask.
 
-If you known you need to replace the last octet with a ```1```, Regex is the perfect tool.
+If you know you need to replace the last octet with a ```1```, Regex is the perfect tool.
 Take a look at the below snippet to set a default gateway using Regex.
 
 ```powershell
