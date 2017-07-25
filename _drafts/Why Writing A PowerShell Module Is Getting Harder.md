@@ -55,16 +55,27 @@ Unfortunately since its cross platform and been around forever, it feels nothing
 # Invoke-Build
 
 [Invoke-Build](https://github.com/nightroman/Invoke-Build) is a powerful, build automation system written in PowerShell created by [Roman Kuzmin.](https://github.com/nightroman)
-Replacement to psake.
-Own DSL, for builds
+As of late it has been generally accepted by the community as the go to tool, replacing psake.
+Using ```Invoke-Build``` gives us a lot of neat features including: task groups,  incremental and parallel builds and a easy way to define conditions or dependencies.
+Using ```Invoke-Build``` is straight forward, with its custom DSL.
+Every task is essentially a script block and looks very close to vanilla PowerShell.
 
 # Plaster
 
-[Plaster](https://github.com/powershell/plaster) 
+[Plaster](https://github.com/powershell/plaster) is a PowerShell scaffolding module and a most for module creators.
+Think of the new project wizard from Visual Studio, but only written in PowerShell where you control all the options.
+Plaster's wizard process is all driven by an XML manifest, with a little bit of PowerShell sprinkled throughout.
+It also provides a custom syntax to template files, based on PowerShell.
+While this does present a learning curve, the investment is well worth it to avoid the duplication of work.
 
 # PSGraph
 
-[PSGraph](https://github.com/KevinMarquette/PSGraph) is an amazing wrapper for Graphiz created by [Kevin Marquette.](https://twitter.com/KevinMarquette)
+[PSGraph](https://github.com/KevinMarquette/PSGraph) is a wrapper for Graphiz created by [Kevin Marquette.](https://kevinmarquette.github.io/)
+If you haven't seen Graphiz before, it's an open source graph library.
+Thanks to [Kevin's](https://twitter.com/kevinmarquette) module, creating graphs in PowerShell is a breeze.
+For example, a new addition to all my modules, is a Graphiz diagram that'll detail how the functions in the module call each other. 
+
+
 
 # PlayPS
 
