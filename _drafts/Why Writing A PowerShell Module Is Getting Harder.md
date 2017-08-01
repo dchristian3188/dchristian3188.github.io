@@ -37,8 +37,8 @@ Which is good because your going to need to leverage those skills to get the mos
 [Pester](https://github.com/pester/Pester) is the testing framework chosen not only by the community but the PowerShell team.
 In fact, Pester's adoption has been so wide spread, it was the first open source project to actually ship with Windows.
 Pester allows you to define scriptblocks that ensure your code is working as expected.
-The idea is every time you make a change, your run the Pester tests.
-As new bugs are found, you create tests to ensure your code fixes worked.
+The idea is every time you make a change, you run the Pester tests.
+When you find new bugs, you create tests to ensure your code fixes worked.
 Pester does have its own DSL, but still feels and reads very much like PowerShell.
 # Git
 
@@ -46,9 +46,8 @@ Git is an open source version control system.
 Some of the biggest names in the industry use Git, such as Google, Facebook, Microsoft and Netflix.
 If you're not using source control, you should be.
 Its an absolute must if you're working on large projects, coding on multiple machines, or developing in a group.
-A good version control system provides change tracking and the ability to work features or branches in parallel.
-Git provides all that and more.
-Git introduces a whole suite of utilities and new commands to learn.
+Git provides all the features you expect from source control and has a healthy ecosystem of apps.
+This comes with the cost of introducing a whole suite of utilities and new commands to learn.
 Unfortunately since its cross platform and been around forever, it feels nothing like PowerShell syntax.
 
 
@@ -71,14 +70,25 @@ While this does present a learning curve, the investment is well worth it to avo
 # PSGraph
 
 [PSGraph](https://github.com/KevinMarquette/PSGraph) is a wrapper for Graphiz created by [Kevin Marquette.](https://kevinmarquette.github.io/)
-If you haven't seen Graphiz before, it's an open source graph library.
+If you haven't seen Graphiz before, it's an open source library for creating diagrams and flow charts.
 Thanks to [Kevin's](https://twitter.com/kevinmarquette) module, creating graphs in PowerShell is a breeze.
-For example, a new addition to all my modules, is a Graphiz diagram that'll detail how the functions in the module call each other. 
-
-
+For example, a new addition to all my modules, is a Graphiz diagram that'll detail how the functions in the module call each other.
+Most of the time, these visualizations can provide powerful insights (the rest are just cool spaghetti monsters).
+PSGraph does have it's own DSL but follows PowerShell very closely.
 
 # PlayPS
 
 Sorry but you need to document your code.
-I know, it sucks.
+I know it sucks, but until we all learn to read minds it's a necessity.
+The goal of PlatyPS is to make this process a little less painful.
+PlatyPS does this by letting you define your cmdlet based help in Markdown.
+To get you started, PlatyPS will inspect your module and create the help for what it can.
+This includes the skeleton of the entire help document for each function, information about the parameters and a place to put the examples.
+You still have to do the hard part and write them, but now you have a easier way to do it.
+Once done with the Markdown, PlatyPS will package all the files up into an xml document to distribute with the module.
 
+# Wrapping UP
+
+So what did I miss?
+Is there any new projects that an absolute must for the module author?
+Drop a comment and let me know what's making your writing a little bit easier.
