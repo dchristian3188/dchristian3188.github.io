@@ -4,7 +4,7 @@ layout: default
 
 <div class="posts">
   {% for post in site.posts %}
-    {% assign currentlink = site.baseurl | append:  "/"  | append:  post.url %}
+    {% assign currentlink =  append:  "/"  | append:  post.url %}
     <article class="post">
 
       <h1><a href="{{ site.baseurl }}{{ currentlink }}">{{ post.title }}</a></h1>
