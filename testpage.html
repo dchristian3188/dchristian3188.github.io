@@ -8,7 +8,7 @@ permalink: /testpage/
   {% for post in site.posts %}
     <article class="post">
       {% assign currentlink = site.baseurl %}
-      
+
       <h1><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
 
       <div class="entry">
@@ -17,7 +17,7 @@ permalink: /testpage/
 
       <a href="{{ site.baseurl }}{{ post.url }}" class="read-more">Read More</a>
 
-      {{currentlink}
+      {{currentlink}}
     </article>
    
   {% endfor %}
