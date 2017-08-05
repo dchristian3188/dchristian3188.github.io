@@ -4,16 +4,15 @@ layout: default
 
 <div class="posts">
   {% for post in site.posts %}
-    {% assign currentlink =  '/'  | append:  post.url %}
     <article class="post">
 
-      <h1><a href="{{ site.baseurl }}{{ currentlink }}">{{ post.title }}</a></h1>
+      <h1><a href="{{ site.baseurl }}{{ post.title  }}">{{ post.title }}</a></h1>
 
       <div class="entry">
         {{ post.excerpt }}
       </div>
 
-      <a href="{{ site.baseurl }}{{ currentlink }}" class="read-more">Read More</a>
+      <a href="{{ site.baseurl }}{{ post.title  }}" class="read-more">Read More</a>
     </article>
    
   {% endfor %}
