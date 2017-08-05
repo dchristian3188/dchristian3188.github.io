@@ -7,7 +7,7 @@ permalink: /testpage/
 <div class="posts">
   {% for post in site.posts %}
     <article class="post">
-      {% assign currentlink = {{ site.baseurl }} %}
+      {% assign currentlink = {{ site.url }} %}
       {% assign url = 'someurlhere' %}
       <h1><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
 
