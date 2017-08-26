@@ -28,4 +28,10 @@ After every proejct I go back and see if there's anything I can add.
 First start off setting up the folders.
 ![_config.yml]({{ site.baseurl }}/images/ModuleTools/Plaster/creatingTheModule.png)
 
+Choosing our tools
+![_config.yml]({{ site.baseurl }}/images/ModuleTools/Plaster/choosingTheTools.png)
+
+Plaster Output
+![_config.yml]({{ site.baseurl }}/images/ModuleTools/Plaster/PlasterOutput.png)
+
 
