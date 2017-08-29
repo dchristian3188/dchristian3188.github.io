@@ -16,6 +16,8 @@ Setting up a new module project using my [Plater Template](https://github.com/dc
 
 <!-- more -->
 
+The first tool we will be going over is [Plaster.](https://github.com/PowerShell/Plaster)
+Plaster is a PowerShell scaffolding module that we can use to bootstrap our project.
 If you're new to Plaster, I highly recommended reading [this article first.](http://overpoweredshell.com//Working-with-Plaster/)
 
 Let's be honest, at this point Plaster Module templates are like... opinions, everyone has one.
@@ -29,7 +31,14 @@ After every project, I go back and see if there's anything I can add.
 
 
 We'll start by invoking the template.
-The first few prompts are pretty standard.
+The basic syntax for Plaster is as follows.
+
+```powershell
+Invoke-Plaster -TemplatePath PathToTemplate -DestinationPath PathToDestination
+```
+
+Once started, Plaster will prompt for any choices not supplied in the command line.
+The first couple of prompts in this template are pretty standard.
 There's a prompt for the author, module name, version, and description.
 Next, we need to chose what folders the project will include.
 It has become standard practice to place all functions in their own PS1 files.
@@ -71,14 +80,7 @@ Here's what the new project looks like when opened in VSCode.
 
 ![_config.yml]({{ site.baseurl }}/images/ModuleTools/Plaster/vscode.png)
 
-For a sneak peak of module compilation try running this in the vscode integrated terminal.
-
-```powershell
-Invoke-Build -Verbose
-```
-
-Output:
-![_config.yml]({{ site.baseurl }}/images/ModuleTools/Plaster/buildoutput.png)
-
 Alright at this point we should have our new project setup and are ready to start writing code.
-Next up, we'll write a couple of functions and some Pester test.
+Next up, we'll be focusing on the module layout for functions and Pester tests.
+
+What are you guys including in your Plaster templates?
