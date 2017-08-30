@@ -12,7 +12,7 @@ The code is beside the point.
 I want to focus more on how we can use some of these community projects to take our module to the next level.
 
 **The Good Stuff:**
-Setting up a new module project using my [Plater Template](https://github.com/dchristian3188/PlasterTemplates)
+Setting up a new module project using my [Plater Template.](https://github.com/dchristian3188/PlasterTemplates)
 
 <!-- more -->
 
@@ -23,12 +23,11 @@ If you're new to Plaster, I highly recommended reading [this article first.](htt
 Let's be honest, at this point Plaster Module templates are like... opinions, everyone has one.
 I will be covering mine today, not because I think its better than anyone elses, but because it works for me.
 That's the whole point of a Plaster.
-Customize it to fit your needs.
+Customize it to fit **your** needs.
 Over the past couple of months, I have been maintaining [this template.](https://github.com/dchristian3188/PlasterTemplates/tree/master/Module)
 Realistically,  I still don't think it's finished.
 I feel a module template is a very dynamic thing.
-After every project, I go back and see if there's anything I can add.
-
+After every project, I go back and see if there's anything I can add or if there's a new tool I want to incoorpoerate.
 
 We'll start by invoking the template.
 The basic syntax for Plaster is as follows.
@@ -80,7 +79,5 @@ Here's what the new project looks like when opened in VSCode.
 
 ![_config.yml]({{ site.baseurl }}/images/ModuleTools/Plaster/vscode.png)
 
-Alright at this point we should have our new project setup and are ready to start writing code.
-Next up, we'll be focusing on the module layout for functions and Pester tests.
-
-What are you guys including in your Plaster templates?
+Alright at this point we should have our new project setup and are ready to start writing some PowerShell.
+Next up, we'll be focusing on the module layout for the functions and Pester tests.
