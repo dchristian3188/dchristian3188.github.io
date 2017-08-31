@@ -66,12 +66,11 @@ The first items that get created are the PSM1 and PSD1.
 Next is the folder selection we chose.
 Since Pester was included, we'll verify we have Pester installed and create a basic test file.
 We also selected to include Git support.
-This means our new project will have a .gitignore file as well as a ReadMe.
-The [InvokeBuild template file](https://github.com/dchristian3188/PlasterTemplates/blob/master/Module/default.build.ps1) is probably the most complex part of the whole Plaster Template.
+This means our new project will have a ```.gitignore``` file as well as a ```README.md```.
+The [InvokeBuild script](https://github.com/dchristian3188/PlasterTemplates/blob/master/Module/default.build.ps1) is probably the most complex part of the whole Plaster Template.
 Depending on what options the user selected, we have to do a lot of different string manipulation to have a working build script.
-PSGraph will bring along the commandFlow.ps1 file.
-This file will create a graph and diagram how the different functions in your module call each other.
-Last but not least, we'll create a Help folder and check if PlatyPS is installed.
+Support for PSGraph will check if the module is present and bring along a diagram how the different functions call each other.
+Last but not least, we'll create a Help folder and check for PlaytPS.
 
 ![_config.yml]({{ site.baseurl }}/images/ModuleTools/Plaster/PlasterOutput.png)
 
