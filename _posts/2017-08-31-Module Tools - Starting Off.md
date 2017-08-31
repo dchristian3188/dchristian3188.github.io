@@ -12,7 +12,7 @@ The code is beside the point.
 I want to focus more on how we can use some of these community projects to take our module to the next level.
 
 **The Good Stuff:**
-Setting up a new module project using my [Plater Template.](https://github.com/dchristian3188/PlasterTemplates)
+Setting up a new module project using my [Plaster Template.](https://github.com/dchristian3188/PlasterTemplates)
 
 <!-- more -->
 
@@ -69,7 +69,7 @@ We also selected to include Git support.
 This means our new project will have a ```.gitignore``` file as well as a ```README.md```.
 The [InvokeBuild script](https://github.com/dchristian3188/PlasterTemplates/blob/master/Module/default.build.ps1) is probably the most complex part of the whole Plaster Template.
 Depending on what options the user selected, we have to do a lot of different string manipulation to have a working build script.
-Support for PSGraph will check if the module is present and bring along a diagram how the different functions call each other.
+Support for PSGraph will check if the module is present and bring along a diagram that shows how the different functions call each other.
 Last but not least, we'll create a Help folder and check for PlaytPS.
 
 ![_config.yml]({{ site.baseurl }}/images/ModuleTools/Plaster/PlasterOutput.png)
