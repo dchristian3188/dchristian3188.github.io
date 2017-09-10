@@ -32,3 +32,36 @@ I mean you can do a search for ```Function``` but that can potentially grab comm
 Maybe a regex like ```function \w+-\w+ \{``` but that won't grab non-standard function names.
 Plus how do you know what is a private function vs. a public function?
 
+I feel a better approach is to seperate your module into sections when working locally.
+Every piece of code should be broken up into its own file.
+Each function gets saved in its own PS1, with the function name as the file name.
+These then get broken up futher with folders for public and internal functions.
+Classes and dsc resources also follow this approach, with their own files and folders.
+I usually place my all my tests in one folder.
+I like to place all the tests for one function of class in it's own file.
+The naming convention i follow is ```Function-Name.tests.ps1```.
+
+For this approach to work, we need to have a speically crafted PSM1 file.
+Instead of defining the functions in the PSM1, it enumerates the function folders and dot source's them into our session.
+Next since we know what functions are public (thanks to our folders), we can grab the function names and run the ```Export-ModuleMember```.
+Here's what the generic PSM1 will look like.
+
+```powershell
+$functionFolders = @('Public', 'Internal', 'Classes')
+ForEach ($folder in $functionFolders)
+{
+    $folderPath = Join-Path -Path $PSScriptRoot -ChildPath $folder
+    If (Test-Path -Path $folderPath)
+    {
+        Write-Verbose -Message "Importing from $folder"
+        $functions = Get-ChildItem -Path $folderPath -Filter '*.ps1' 
+        ForEach ($function in $functions)
+        {
+            Write-Verbose -Message "  Importing $($function.BaseName)"
+            . $($function.FullName)
+        }
+    }
+}
+$publicFunctions = (Get-ChildItem -Path "$PSScriptRoot\Public" -Filter '*.ps1').BaseName
+Export-ModuleMember -Function $publicFunctions
+```
