@@ -41,30 +41,7 @@ I usually place my all my tests in one folder.
 I like to place all the tests for one function of class in it's own file.
 The naming convention i follow is ```Function-Name.tests.ps1```.
 
-For this approach to work, we need to have a speically crafted PSM1 file.
-Instead of defining the functions in the PSM1, it enumerates the function folders and dot source's them into our session.
-Next since we know what functions are public (thanks to our folders), we can grab the function names and run the ```Export-ModuleMember```.
-Here's what the generic PSM1 will look like.
-
-```powershell
-$functionFolders = @('Public', 'Internal', 'Classes')
-ForEach ($folder in $functionFolders)
-{
-    $folderPath = Join-Path -Path $PSScriptRoot -ChildPath $folder
-    If (Test-Path -Path $folderPath)
-    {
-        Write-Verbose -Message "Importing from $folder"
-        $functions = Get-ChildItem -Path $folderPath -Filter '*.ps1' 
-        ForEach ($function in $functions)
-        {
-            Write-Verbose -Message "  Importing $($function.BaseName)"
-            . $($function.FullName)
-        }
-    }
-}
-$publicFunctions = (Get-ChildItem -Path "$PSScriptRoot\Public" -Filter '*.ps1').BaseName
-Export-ModuleMember -Function $publicFunctions
-```
+Here's an example from the HideWindowsExplorerDrives module.
 
 ```powershell
 C:.
@@ -92,3 +69,34 @@ C:.
         HideWindowsExplorerDrives.tests.ps1
         Show-DriveLetter.tests.ps1
 ```
+
+What makes this approach slick is two tricks.
+The first is a dynamic PSM1 that loads the module in this format.
+The second is using ```Invoke-Build``` to combine our files and "package up" our module for deployment.
+More this to come in an upcomming post.
+
+Let's take a look at the dynamic PSM1.
+Instead of defining the functions, it enumerates the function folders and dot source's them into the module's session.
+Next since we know what functions are public (thanks to our folders), we can grab the function names and run the ```Export-ModuleMember```.
+Here's what the generic PSM1 will look like.
+
+```powershell
+$functionFolders = @('Public', 'Internal', 'Classes')
+ForEach ($folder in $functionFolders)
+{
+    $folderPath = Join-Path -Path $PSScriptRoot -ChildPath $folder
+    If (Test-Path -Path $folderPath)
+    {
+        Write-Verbose -Message "Importing from $folder"
+        $functions = Get-ChildItem -Path $folderPath -Filter '*.ps1' 
+        ForEach ($function in $functions)
+        {
+            Write-Verbose -Message "  Importing $($function.BaseName)"
+            . $($function.FullName)
+        }
+    }
+}
+$publicFunctions = (Get-ChildItem -Path "$PSScriptRoot\Public" -Filter '*.ps1').BaseName
+Export-ModuleMember -Function $publicFunctions
+```
+
