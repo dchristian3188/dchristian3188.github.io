@@ -65,3 +65,30 @@ ForEach ($folder in $functionFolders)
 $publicFunctions = (Get-ChildItem -Path "$PSScriptRoot\Public" -Filter '*.ps1').BaseName
 Export-ModuleMember -Function $publicFunctions
 ```
+
+```powershell
+C:.
+│   .gitignore
+│   HideWindowsExplorerDrives.build.ps1
+│   HideWindowsExplorerDrives.psd1
+│   HideWindowsExplorerDrives.psm1
+│
+├───Internal
+│       Get-HiddenDriveValue.ps1
+│       Get-LetterMap.ps1
+│       New-LetterMap.ps1
+│       Set-HiddenDriveValue.ps1
+│       Test-IsAdmin.ps1
+│
+├───Public
+│       Get-DriveStatus.ps1
+│       Hide-DriveLetter.ps1
+│       Show-DriveLetter.ps1
+│
+└───Tests
+        Get-DriveStatus.tests.ps1
+        Get-LetterMap.tests.ps1
+        Hide-DriveLetter.tests.ps1
+        HideWindowsExplorerDrives.tests.ps1
+        Show-DriveLetter.tests.ps1
+```
