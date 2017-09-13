@@ -18,27 +18,25 @@ The traditional approach to writing a module involves a simple layout.
 For the absolute basics, all you need is a PSM1.
 You define all the functions in the PSM1 and you are good to go.
 The challenge with this is as your module grows, so does your PSM1.
-Eventually, you can end up with a monster file with a ton of functions in them (I recently came across a project with a 32K line PSM1 with a couple hundred functions defined in it)
-While this might ok for something that is packaged and deployed, it's a nightmare to maintain.
+Eventually, you end up with a monster of a file.
+I recently came across a project that had a 32 thousand line PSM1 with a couple hundred functions defined in it.
+While its ok to package our module into a combined file, managing it in this format in source is a nightmare to maintain.
+
+One of the biggest disadvantages of the single file format is function discoverability.
+When everything is defined in its own PSM1, how do you tell what functions are in the module?
+I know I can run ```Get-Command -Module MyModuleName```, but what about the private functions in the module?
 
 This approach to module development can also come at an additional price.
 As your project grows and gains tractions, hopefully, you have multiple people contributing.
 By placing all your code in one file, you increase the chance for merge conflicts.
-While most source control is smart enough to figure it out, there is a much higher chance than isolating code to its own file.
-
-Last but not least, I feel this method does not lend it self well to discovery.
-When everything is defined in its own PSM1, how do you tell what functions are in the module?
-I mean you can do a search for ```Function``` but that can potentially grab comments as well.
-Maybe a regex like ```function \w+-\w+ \{``` but that won't grab non-standard function names.
-Plus how do you know what is a private function vs. a public function?
+While most source control is smart enough to figure it out, there is a higher.
 
 I feel a better approach is to seperate your module into sections when working locally.
 Every piece of code should be broken up into its own file.
 Each function gets saved in its own PS1, with the function name as the file name.
 These then get broken up futher with folders for public and internal functions.
-Classes and dsc resources also follow this approach, with their own files and folders.
-I usually place my all my tests in one folder.
-I like to place all the tests for one function of class in it's own file.
+Classes and dsc resources also follow this pattern, with their own files and folders.
+I place my tests in one folder.
 The naming convention i follow is ```Function-Name.tests.ps1```.
 
 Here's an example from the HideWindowsExplorerDrives module.
