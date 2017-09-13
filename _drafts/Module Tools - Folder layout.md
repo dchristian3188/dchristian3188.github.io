@@ -68,10 +68,10 @@ C:.
         Show-DriveLetter.tests.ps1
 ```
 
-What makes this approach slick is two tricks.
+There's two tricks the really make this approach work.
 The first is a dynamic PSM1 that loads the module in this format.
 The second is using ```Invoke-Build``` to combine our files and "package up" our module for deployment.
-More this to come in an upcomming post.
+More on this to come in an upcomming post.
 
 Let's take a look at the dynamic PSM1.
 Instead of defining the functions, it enumerates the function folders and dot source's them into the module's session.
