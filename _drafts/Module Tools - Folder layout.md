@@ -24,19 +24,18 @@ While its ok to package our module into a combined file, managing it in this for
 
 One of the biggest disadvantages of the single file format is function discoverability.
 When everything is defined in its own PSM1, how do you tell what functions are in the module?
-I know I can run ```Get-Command -Module MyModuleName```, but what about the private functions in the module?
-
+I know I can run ```Get-Command -Module MyModuleName```, but what about the private functions?
 This approach to module development can also come at an additional price.
 As your project grows and gains tractions, hopefully, you have multiple people contributing.
 By placing all your code in one file, you increase the chance for merge conflicts.
-While most source control is smart enough to figure it out, there is a higher.
+While most source control is smart enough to figure it out, there is a higher change when using this approach.
 
 I feel a better approach is to seperate your module into sections when working locally.
 Every piece of code should be broken up into its own file.
-Each function gets saved in its own PS1, with the function name as the file name.
+For example, each function gets saved in its own PS1, with the function name as the file name.
 These then get broken up futher with folders for public and internal functions.
 Classes and dsc resources also follow this pattern, with their own files and folders.
-I place my tests in one folder.
+Tests, also get placed in their own folder.
 The naming convention i follow is ```Function-Name.tests.ps1```.
 
 Here's an example from the HideWindowsExplorerDrives module.
@@ -98,3 +97,7 @@ $publicFunctions = (Get-ChildItem -Path "$PSScriptRoot\Public" -Filter '*.ps1').
 Export-ModuleMember -Function $publicFunctions
 ```
 
+With this generic PSM1 in place, we can now import our module when working locally.
+This is a great way to test your work during the development process.
+While I have seen some projects ship modules in this layout, I still feel it's more polished to combine them before deployment.
+Stay tuned for the next article in our module series, Adding Help with PlatyPS.
