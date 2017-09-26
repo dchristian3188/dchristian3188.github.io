@@ -20,21 +20,21 @@ You define all the functions in the PSM1 and you are good to go.
 The challenge with this is as your module grows, so does your PSM1.
 Eventually, you end up with a monster of a file.
 I recently came across a project that had a 32 thousand line PSM1 with a couple hundred functions defined in it.
-While its ok to package our module into a combined file, managing it in this format in source is a nightmare to maintain.
+While it's ok to package our module into a combined file, managing it in this format in source is a nightmare to maintain.
 
 One of the biggest disadvantages of the single file format is function discoverability.
 When everything is defined in its own PSM1, how do you tell what functions are in the module?
 I know I can run ```Get-Command -Module MyModuleName```, but what about the private functions?
 This approach to module development can also come at an additional price.
-As your project grows and gains tractions, hopefully, you have multiple people contributing.
+As your project grows and gains traction, hopefully, you have multiple people contributing.
 By placing all your code in one file, you increase the chance for merge conflicts.
 While most source control is smart enough to figure it out, there is a higher change when using this approach.
 
-I feel a better approach is to seperate your module into sections when working locally.
+I feel a better approach is to separate your module into sections when working locally.
 Every piece of code should be broken up into its own file.
 For example, each function gets saved in its own PS1, with the function name as the file name.
-These then get broken up futher with folders for public and internal functions.
-Classes and dsc resources also follow this pattern, with their own files and folders.
+These then get broken up further with folders for public and internal functions.
+Classes and DSC resources also follow this pattern, with their own files and folders.
 Tests, also get placed in their own folder.
 The naming convention i follow is ```Function-Name.tests.ps1```.
 
