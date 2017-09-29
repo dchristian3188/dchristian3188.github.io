@@ -1,0 +1,8 @@
+version: '3'
+services: 
+  blog:
+    image: starefossen/github-pages
+    ports: 
+      - 4000:4000
+    volumes: 
+      - C:\github\dchristian3188.github.io:/usr/src/app
