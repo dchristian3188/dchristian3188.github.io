@@ -24,21 +24,22 @@ While it's ok to package our module into a combined file, managing it in this fo
 
 One of the biggest disadvantages of the single file format is function discoverability.
 When everything is defined in its own PSM1, how do you tell what functions are in the module?
-I know I can run ```Get-Command -Module MyModuleName```, but what about the private functions?
+I know I can run ```Get-Command -Module MyModuleName```, but what about the private functions and classes?
 This approach to module development can also come at an additional price.
 As your project grows and gains traction, hopefully, you have multiple people contributing.
 By placing all your code in one file, you increase the chance for merge conflicts.
-While most source control is smart enough to figure it out, there is a higher change when using this approach.
+Even though most source control is smart enough to figure it out, there is a higher change when using this approach.
 
-I feel a better approach is to separate your module into sections when working locally.
+I feel a better solution is to separate your module into sections when working locally.
 Every piece of code should be broken up into its own file.
 For example, each function gets saved in its own PS1, with the function name as the file name.
-These then get broken up further with folders for public and internal functions.
+These then get broken up further into folders for public and internal functions.
 Classes and DSC resources also follow this pattern, with their own files and folders.
 Tests, also get placed in their own folder.
-The naming convention i follow is ```Function-Name.tests.ps1```.
+The naming convention I follow is ```Function-Name.tests.ps1```.
 
 Here's an example from the HideWindowsExplorerDrives module.
+Using this layout shows you at a glance what makes up the module.
 
 ```powershell
 C:.
@@ -67,14 +68,14 @@ C:.
         Show-DriveLetter.tests.ps1
 ```
 
-There's two tricks the really make this approach work.
+There are two tricks the really make this approach work.
 The first is a dynamic PSM1 that loads the module in this format.
 The second is using ```Invoke-Build``` to combine our files and "package up" our module for deployment.
-More on this to come in an upcomming post.
+More on this to come in an upcoming post.
 
 Let's take a look at the dynamic PSM1.
 Instead of defining the functions, it enumerates the function folders and dot source's them into the module's session.
-Next since we know what functions are public (thanks to our folders), we can grab the function names and run the ```Export-ModuleMember```.
+Next, since we know what functions are public (thanks to our folders), we can grab the function names and run the ```Export-ModuleMember```.
 Here's what the generic PSM1 will look like.
 
 ```powershell
