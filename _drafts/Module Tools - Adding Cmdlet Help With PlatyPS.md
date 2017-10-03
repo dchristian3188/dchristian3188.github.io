@@ -77,7 +77,7 @@ If not, you'll run into an error when running the command.
 We also need to tell PlatyPS the output folder so it knows where to save our help.
 I also like to include the ```AlphabeticParamsOrder``` switch, because why not, and the ```WithModulePage``` option.
 The module page is not needed to package up our module but does provide a nice summary page.
-This is useful if we're hosting this documentation on Github or anything help that can render Markdown.
+This is useful if we're hosting this documentation on Github or anything else that can render Markdown.
 
 ```powershell
 $mdHelp = @{
@@ -93,7 +93,7 @@ New-MarkdownHelp @mdHelp
 PlatyPS should have created the skelton of our help files.
 Lets dive into one to see what it created.
 
-![_config.yml]({{ site.baseurl }}/images/ModuleTools/PlatyPS/skelon.png)
+![_config.yml]({{ site.baseurl }}/images/ModuleTools/PlatyPS/skelton.png)
 
 Even though PlatyPS does most of the heavy lifting, we still have to write the more detailed information ourselve.
 PlatyPS uses brackets ```{{ }}``` to designate the template text.
