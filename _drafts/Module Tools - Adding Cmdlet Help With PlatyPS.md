@@ -15,11 +15,11 @@ Start using [PlatyPS](https://github.com/PowerShell/PlatyPS/) to build your help
 
 # Getting Started
 
-PlatyPS is an open source tool, to make writing help for PowerShell modules a lot easier.
+PlatyPS is an open source tool that makes writing help for PowerShell modules a lot easier.
 The biggest feature is that you can write the help in Markdown.
-This makes the overall layout and formatting much easier.
+This makes the overall layout and formatting simplier to manage the writing the help inline.
 Plus it has the ability to scaffold the initial files by inspecting your module!
-As your code changes and evolves over time, you can run a couple of commands and update the help files you already have.
+Even better, as your code changes and evolves over time, you can run a couple of commands and update the help files you already have.
 
 # Installation
 
@@ -33,7 +33,7 @@ Install-Module -Name PlatyPS -Verbose -Force
 
 # Generating Help
 
-In today's example, we'll be adding help to my [HideWindowsExplorerDrive](https://github.com/dchristian3188/HideWindowsExplorerDrives) module.
+In today's example, we'll be adding help to my [HideWindowsExplorerDrive](https://github.com/dchristian3188/HideWindowsExplorerDrives) module we've been using for this series.
 The first thing I like to do is create a new folder at the root of my module called help.
 Next, we need to import the module into our current session.
 Here are the commands from the root of the project.
@@ -43,7 +43,7 @@ New-Item -Path Help -ItemType Directory -Verbose
 Import-Module .\HideWindowsExplorerDrives.psd1
 ```
 
-Alright with the module imported and a location for our help files, it's time to start generating.
+With the module imported and a location for our help files, it's time to start generating.
 To create our help, we'll run the ```New-MarkDownHelp``` command.
 There's a couple of different parameters for this cmdlet.
 Let's see what our options are.
@@ -66,8 +66,8 @@ New-MarkdownHelp -MamlFile <string[]> -OutputFolder <string> [-ConvertNotesToLis
 FwLink <string>] [-ModuleName <string>] [-ModuleGuid <string>] [<CommonParameters>]
 ```
 
-The parameterset that we will be focusing is for modules.
-All of the important conecpts carry over to the other options.
+We will be focusing on the first parameterset that generates the help for a module.
+All of the important conecpts carry over to the other parametersets.
 The main difference being, where your source is coming from, a module, command or maml file.
 
 Alright, let's generate some help.
@@ -76,7 +76,7 @@ It's important that the module is loaded into your session.
 If not, you'll run into an error when running the command.
 We also need to tell PlatyPS the output folder so it knows where to save our help.
 I also like to include the ```AlphabeticParamsOrder``` switch, because why not, and the ```WithModulePage``` option.
-The module page is not needed to package up our module but does provide a nice summary page.
+The module page is not needed to package up our module but does provide a nice summary view.
 This is useful if we're hosting this documentation on Github or anything else that can render Markdown.
 
 ```powershell
@@ -90,13 +90,14 @@ $mdHelp = @{
 New-MarkdownHelp @mdHelp
 ```
 
-PlatyPS should have created the skelton of our help files.
+That's all there is to it.
+PlatyPS will inspect your module's commands and generate the sekelton of the help files.
 Lets dive into one to see what it created.
 
 ![_config.yml]({{ site.baseurl }}/images/ModuleTools/PlatyPS/skelton.png)
 
 Even though PlatyPS does most of the heavy lifting, we still have to write the more detailed information ourselve.
-PlatyPS uses brackets ```{{ }}``` to designate the template text.
+PlatyPS uses brackets ```{% raw %}{{ }}{% endraw %}``` to designate the template text.
 What is really neat is PlatyPS can tell when you removed this text from the Markdown.
 This is incredibly helpful if you make a change to your module and want to run the ```Update-MarkdownHelp``` cmdlet.
 It'll add any new information it needs to, but not delete any of the changes you made!
@@ -114,5 +115,7 @@ This command assumes you are at the root of the module.
 New-ExternalHelp -Path .\Help\ -OutputPath .\en-us
 ```
 
-And that's it!
-Now when a user runs Get-Help Your-Command, they'll get the cmdlet based help.
+With that final command our help is pacakged up and ready for deployment.
+If we look inside the XML, we can see our help documents and feel grateful we didn't have to write this part by hand.
+In a future post we'll see how we can include this step as part of Invoke-Build.
+That way when a user runs Get-Help Our-Command, it'll be the experience they expect.
