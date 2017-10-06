@@ -17,7 +17,7 @@ Start using [PlatyPS](https://github.com/PowerShell/PlatyPS/) to build your help
 
 PlatyPS is an open source tool that makes writing help for PowerShell modules a lot easier.
 The biggest feature is that you can write the help in Markdown.
-This makes the overall layout and formatting simplier to manage the writing the help inline.
+This makes the overall layout and formatting simpler to manage the writing than help inline.
 Plus it has the ability to scaffold the initial files by inspecting your module!
 Even better, as your code changes and evolves over time, you can run a couple of commands and update the help files you already have.
 
@@ -115,7 +115,6 @@ This command assumes you are at the root of the module.
 New-ExternalHelp -Path .\Help\ -OutputPath .\en-us
 ```
 
-With that final command our help is pacakged up and ready for deployment.
+With that final command, our help is packaged up and ready for deployment.
 If we look inside the XML, we can see our help documents and feel grateful we didn't have to write this part by hand.
-In a future post we'll see how we can include this step as part of Invoke-Build.
-That way when a user runs Get-Help Our-Command, it'll be the experience they expect.
+In a future post, we'll see how we can include this step as part of Invoke-Build.
