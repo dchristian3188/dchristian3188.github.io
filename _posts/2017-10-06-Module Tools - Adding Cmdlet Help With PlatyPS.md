@@ -17,7 +17,7 @@ Start using [PlatyPS](https://github.com/PowerShell/PlatyPS/) to build your help
 
 PlatyPS is an open source tool that makes writing help for PowerShell modules a lot easier.
 The biggest feature is that you can write the help in Markdown.
-This makes the overall layout and formatting simpler to manage the writing than help inline.
+This makes the overall layout and formatting simpler to manage than writing the help inline.
 Plus it has the ability to scaffold the initial files by inspecting your module!
 Even better, as your code changes and evolves over time, you can run a couple of commands and update the help files you already have.
 
@@ -34,7 +34,7 @@ Install-Module -Name PlatyPS -Verbose -Force
 # Generating Help
 
 In today's example, we'll be adding help to my [HideWindowsExplorerDrive](https://github.com/dchristian3188/HideWindowsExplorerDrives) module we've been using for this series.
-The first thing I like to do is create a new folder at the root of my module called help.
+To get started, the first thing I like to do is create a new folder at the root of my module called help.
 Next, we need to import the module into our current session.
 Here are the commands from the root of the project.
 
