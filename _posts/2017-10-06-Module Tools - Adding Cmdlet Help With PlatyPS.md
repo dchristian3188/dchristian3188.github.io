@@ -91,7 +91,7 @@ New-MarkdownHelp @mdHelp
 ```
 
 That's all there is to it.
-PlatyPS will inspect your module's commands and generate the sekelton of the help files.
+PlatyPS will inspect your module's commands and generate the skeleton of the help files.
 Lets dive into one to see what it created.
 
 ![_config.yml]({{ site.baseurl }}/images/ModuleTools/PlatyPS/skelton.png)
