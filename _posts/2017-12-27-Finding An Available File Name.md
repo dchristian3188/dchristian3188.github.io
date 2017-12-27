@@ -19,7 +19,7 @@ The first thing we do is test if the name already exists.
 If the file doesn't it exists it will return this name since it's safe to use.
 If it does exist, I break up the folder, filename, and extension into their own variables.
 These variables will come in handy later when we're reconstructing the name.
-We can leverage the ```IO.Path``` namesspace to retrieve some of this information.
+We can leverage the ```IO.Path``` namespace to retrieve some of this information.
 
 ```powershell
   if (Test-Path -Path $newName)
