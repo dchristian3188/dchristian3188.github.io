@@ -30,7 +30,7 @@ Now we can kick off a job using the ```&``` character at the end of our pipeline
  Get-Service &
 ```
 
-Regardless of the syntax, we use the output of the above two commands is a job object.
+Regardless of the syntax, the output of the above commands is a job object.
 What takes the new syntax to the next level for me, is how the new way handles variables.
 When you use the ```&``` syntax any variables in your session automatically get copied into the job.
 Consider the below examples.
