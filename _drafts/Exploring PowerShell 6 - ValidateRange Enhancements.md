@@ -18,7 +18,7 @@ Here's the two most common ways I would see this accomplished before PowerShell 
 
 You could use ValidateRange:
 
-```PowerShell
+```powershell
 Function Test-ParameterIsPositive
 {
     Param(
@@ -77,7 +77,7 @@ Function Test-ParameterIsPositive
 
 Now this is much better.
 Here's what our user would see.
-![_config.yml]({{ site.baseurl }}/images/ValidateRange/ValidateScript1.png)
+![_config.yml]({{ site.baseurl }}/images/ValidateRange/ValidateScript2.png)
 
 This got the job done, but was kind of a lot of work.
 Now in PowerShell 6, we have an even better way to do this.
@@ -102,12 +102,10 @@ Not too shabby.
 Even better, there is 4 new shortcuts we can use.
 Here's the breakdown:
 
-| Shortcut    | ValidateScript Equivalint |
-|-------------|---------------------------|
-| Positive    | ```$PSItem -gt 0```       |
-| NonNegative | ```$PSItem -ge 0```       |
-| Negative    | ```$PSItem -lt 0```       |
-| NonPositive | ```$PSitem -le 0```       |
+* Positive - ```$PSItem -gt 0```
+* NonNegative - ```$PSItem -ge 0```
+* Negative - ```$PSItem -lt 0```
+* NonPositive - ```$PSitem -le 0```
 
 So what do you think?
 Will you be refactoring your old scripts to take advantage of these?
