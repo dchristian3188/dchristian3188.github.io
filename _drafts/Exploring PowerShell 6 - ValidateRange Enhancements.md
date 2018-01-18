@@ -47,8 +47,8 @@ Function Test-ParameterIsPositive
 }
 ```
 
-This worked, didn't provide the best error messages.
-Here's what the user would see if they passed an incorrect value.
+This worked, but didn't provide the best error messages.
+Here's what the user would see if they passed in an incorrect value.
 
 ![_config.yml]({{ site.baseurl }}/images/ValidateRange/ValidateScript1.png)
 
@@ -83,7 +83,7 @@ Here's what our user would see.
 
 This got the job done but was kind of a lot of work.
 Now in PowerShell 6, we have an even better way to do this.
-By leveraging the built in shortcuts to ValidateRange we can simplify our code.
+By leveraging the built-in shortcuts to ValidateRange we can simplify our code.
 Here's the Positive shortcut in action.
 
 ```powershell
@@ -104,7 +104,7 @@ Plus it comes with a understandable error message right out of the box.
 ![_config.yml]({{ site.baseurl }}/images/ValidateRange/ValidateRange.png)
 
 Not too shabby.
-Even better, there is 4 new shortcuts we can use.
+Even better, there are 4 new predefined ranges we can take advantage of.
 Here's the breakdown:
 
 * Positive - ```$PSItem -gt 0```
@@ -112,5 +112,5 @@ Here's the breakdown:
 * Negative - ```$PSItem -lt 0```
 * NonPositive - ```$PSItem -le 0```
 
-So what do you think?
+What do you think?
 Will you be refactoring your old scripts to take advantage of the shortcuts?
