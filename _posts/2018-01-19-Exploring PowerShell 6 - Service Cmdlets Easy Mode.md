@@ -9,13 +9,13 @@ There have been some changes to the *-Service cmdlets.
 Let's dive in and take a look.
 
 **The Good Stuff:**
-Start playing with the new features on the *-Service cmdlets in PowerShell 6.
+Start playing with the new features on the Service cmdlets in PowerShell 6.
 
 <!-- more -->
 
 Now if you're a CIM guru like Mr. Richard Siddaway, you know all about the Win32_Service CIM class.
 But if your a mere mortal like me, interacting with CIM can be a little scary.
-The PowerShell team was kind enough to create the *-Service cmdlets for us, which hides the direct interaction making it much more user-friendly.
+The PowerShell team was kind enough to create the Service cmdlets for us, which hides the direct interaction making it much more user-friendly.
 Unfortunately, there was a couple of common scenarios that weren't cover by the cmdlets and required us to dive into the CIM methods.
 
 ## Changing A Service's Credential
