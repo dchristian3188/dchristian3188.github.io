@@ -100,12 +100,11 @@ At line:1 char:1
 
 The team is aware of this and tracking it under Github bug number [#5519.](https://github.com/PowerShell/PowerShell/issues/5519)
 I feel this is pretty unfortunate since being able to enumerate the range and then take some action on it, is kind of the whole point...
-The current work around would be to save the range to a variable, then enumerate that variable since it'll be an array.
+The current work around would be to force the range into an array, then step over it.
 Something like this:
 
 ```powershell
-$chars = "a".."z"
-$chars | ForEach-Object {Write-Output "Processing $PSItem"}
+("a".."z") | ForEach-Object {$PSItem}
 ```
 
 That's all for today.
