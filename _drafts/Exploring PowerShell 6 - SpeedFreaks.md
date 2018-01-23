@@ -19,7 +19,7 @@ In today's post, I'll be building off (shamelessly stealing) his script to measu
 We'll also be running this same script in both version 5 and 6 to get some good comparison data.
 First off, let's meet our filtering contenders.
 
-* Where-Object -Filter Script - the standard filter command that's been with us since version 1
+* Where-Object - the standard filter command that's been with us since version 1
 * Simplified Where - The friendly where syntax introduced in PowerShell 3
 * .Where - This method was first introduced in PowerShell 4 to filter collections
 * The filter keyword - Often overlooked, hardly used and with us since version 1
@@ -123,12 +123,12 @@ And here's what that same script looks like in Powershell 6.
 The numbers are undeniable.
 Regardless of version, the fastest filters remain unchanged.
 
-1) Foreach
-1) Filter Keyword
-1) Advanced functions (process block)
-1) .Where
-1) Simplified Where
-1) Where-Object
+1. Foreach
+1. Filter Keyword
+1. Advanced functions (process block)
+1. .Where
+1. Simplified Where
+1. Where-Object
 
 What is the most surprising is that on average PowerShell 6 is twice as fast as the previous version!
 That's pretty damn impressive.
