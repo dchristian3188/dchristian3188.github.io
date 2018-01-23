@@ -23,7 +23,7 @@ First off, let's meet our filtering contenders.
 * Simplified Where - The friendly where syntax introduced in PowerShell 3
 * .Where - This method was first introduced in PowerShell 4 to filter collections
 * The filter keyword - Often overlooked, hardly used and with us since version 1
-* Foreach - Stanard loop built into the language
+* Foreach - Standard loop built into the language
 * Advanced Function - This one essentially measures the performance of the process block in PowerShell
 
 Here's what our speed test will look like.
