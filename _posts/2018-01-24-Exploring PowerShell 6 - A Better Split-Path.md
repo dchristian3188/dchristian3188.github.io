@@ -24,9 +24,9 @@ Here's an example that will get the extension of our PowerShell profile (spoiler
 ```
 
 Now if you didn't have a profile, you might have noticed the first disadvantage of this method.
-For ```Get-Info``` to work, your file must exist.
-As you can imagine there's plenty of scripting scenarios where this doesn't work.
-To get around this, we can dive in and call the raw dot net method from ```System.IO.Path```.
+For ```Get-Item``` to work, your file must exist.
+As you can imagine there's plenty of scripting scenarios where this isn't possible.
+To get around this, we can call a dot net method from ```System.IO.Path``` class, ```GetExtension```.
 Here's an example trying this on a file that doesn't exist.
 
 ```powershell
@@ -47,7 +47,7 @@ Split-Path 'C:\temp\fakefile.txt' -Extension
 
 Another common scenario we run into is when you have a path, and you need the filename without the extension.
 Previously there were two ways to accomplish this.
-The first was using ```Get-Item``` but this time using ```BaseName```.
+The first was using ```Get-Item``` but this time returning ```BaseName``` property.
 
 ```powershell
 (Get-Item $PROFILE).BaseName
@@ -72,7 +72,7 @@ Split-Path 'C:\temp\fakefile.txt' -LeafBase
 Here's a neat one.
 Previous to PowerShell 6, the ```Split-Path``` command didn't work on UNC roots.
 For example, if ran ```Split-Path -Path \\server\share``` you would get a null result.
-To get this info, we would need to use the Regex.
+To get this info, we would need to use Regex.
 Here's what that would look like to get the server name for a UNC path.
 
 ```powershell
@@ -92,7 +92,7 @@ if("\\server\share" -match '(?<ServerName>^\\\\([a-z0-9_.$-]+))\\(?<ShareName>([
 }
 ```
 
-Thankfully in PowerShell 6,```Split-Path`` just works on UNC roots.
+Thankfully in PowerShell 6,```Split-Path``` just works on UNC roots.
 You can use both ```-Parent``` or ```-Leaf``` and forget all about that regex gibberish.
 Pretty cool right?
 So what's your favorite new little feature of PowerShell 6?
