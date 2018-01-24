@@ -3,7 +3,7 @@ layout: post
 title: Exploring PowerShell 6 - SpeedFreaks
 ---
 
-PowerShell Core 6 is out!
+PowerShell Core 6.0 is out!
 Along with all the new features, there has been a ton of performance improvements.
 But just really how much faster is it?
 Today I'm going to revisit an old article by Dave Wyatt and see if version 6 has the numbers to back up all the claims.
