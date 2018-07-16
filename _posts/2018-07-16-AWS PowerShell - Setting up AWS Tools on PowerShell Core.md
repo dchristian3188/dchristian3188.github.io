@@ -4,11 +4,9 @@ title: AWS PowerShell - Setting up AWS Tools on PowerShell Core
 ---
 
 It's almost impossible to talk about DevOps these days without mentioning the cloud.
-People get can be incredibly passionate about which service is the best and why.
+People are incredibly passionate about which service is the best and why.
 Whatever your opinion, it's undeniable that Amazon Web Services (AWS) is one of the most mature and feature-rich providers in this space.
-Best of all they treat PowerShell like a first-class citizen.
-Even better you can run AWS tools for Powershell in PowerShell core!
-
+They treat PowerShell like a first-class citizen and best of all, you can run AWS tools for Powershell in PowerShell core!
 
 **The Good Stuff:**
 Check out [AWS Tools for Windows PowerShell](https://docs.aws.amazon.com/powershell/latest/userguide/pstools-using.html)
@@ -27,7 +25,7 @@ Install-Module -Name AWSPowerShell.NetCore -Verbose -Force
 If you're not using PowerShell Core, but Windows PowerShell instead, you can use this command:
 
 ```powershell
-Install-Module -Name AWSPowerShell
+Install-Module -Name AWSPowerShell -Verbose -Force
 ```
 
 # Setting Up Our Session
@@ -53,11 +51,17 @@ Set-AWSCredential -AccessKey 'AKIAIK4OGJRXYXEDOKZA' -SecretKey 'rLw8vTBhoH6CZqUj
 ```
 
 It's important to note that this only sets credentials in your current session.
-If you want to store them permanently use can use the ```-StoreAs``` switch.
-You can give the credential any name, but if you use ```default```, it will get loaded automatically whenever AWS tools needs a credential.
+If you want to store them permanently use the ```-StoreAs``` switch.
+You can give the credential any name, but if you use ```default```, these will get loaded automatically whenever AWS tools needs a credential.
 
 ```powershell
-Set-AWSCredential -AccessKey 'AKIAIK4OGJRXYXEDOKZA' -SecretKey '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' -StoreAs default
+$awsCreds = @{
+    AccessKey = 'AKIAIK4OGJRXYXEDOKZA'
+    SecretKey = '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'
+    StoreAs   = 'default'
+}
+
+Set-AWSCredential @awsCreds
 ```
 
 Another option is saving the credentials to a file.
@@ -66,7 +70,14 @@ Be careful with this approach though, since the credentials and profile get stor
 Here's an example of what that looks like:
 
 ```powershell
-Set-AWSCredential -AccessKey 'AKIAIK4OGJRXYXEDOKZA' -SecretKey 'rLw8vTBhoH6CZqUjOOnb/1mg3gfY9gRB8TEZxdMP' -StoreAs dchristian -ProfileLocation C:\AWS\demoProfile
+$awsCreds = @{
+    AccessKey       = 'AKIAIK4OGJRXYXEDOKZA'
+    SecretKey       = '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'
+    StoreAs         = 'dchristian3188'
+    ProfileLocation = 'C:\AWS\demoProfile'
+}
+
+Set-AWSCredential @awsCreds
 ```
 
 ## Managing Credentials
@@ -78,19 +89,20 @@ Here's what that looked like on my machine.
 ![_config.yml]({{ site.baseurl }}/images/aws/getcred.png)
 
 To remove a credential that is no longer in use just run ```Remove-AWSCredentialProfile```.
-Here's what the command would look like if I wanted to delete the dchristian3188 profile.
+Here's what the command I used to delete the dchristian3188 profile.
 
 ```powershell
 Remove-AWSCredentialProfile -ProfileName dchristian3188 -Force -Verbose
 ```
 
-I like to point out, that you cannot pipe from ```Get-AWSCredential``` to ```Remove-AWSCredentialProfile```...
+I like to point out, that you cannot pipe from ```Get-AWSCredential``` to ```Remove-AWSCredentialProfile```.
 I think that's so you don't accidentally remove all profiles on your machine.
 This makes senses but does make removing all credentials a pain.
 Here's a one-liner to get the job done.
 
 ```powershell
-Get-AWSCredential -ListProfileDetail | ForEach-Object { Remove-AWSCredentialProfile -ProfileName $PSItem.ProfileName -Force }
+Get-AWSCredential -ListProfileDetail | 
+    ForEach-Object { Remove-AWSCredentialProfile -ProfileName $PSItem.ProfileName -Force }
 ```
 
 ## Setting a Default Region
