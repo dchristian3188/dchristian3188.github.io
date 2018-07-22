@@ -134,7 +134,7 @@ Get-EC2Image{: .nb} -Filter $filter |
     Select-Object Name, Description, ImageId
 ```
 
-It's important to point out that both the name parameter and the values are case sensitive.
+It's important{: .nb} to point out that both the name parameter and the values are case sensitive.
 For example, if you try using ```Name = 'Description'``` you would get an invalid filter error.
 Here's a neat experiment that will demonstrate what I mean.
 Try running the below two commands and see how different the output is.
