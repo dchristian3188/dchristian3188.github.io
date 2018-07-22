@@ -130,8 +130,7 @@ $filter = @{
     Name   = 'description' 
     Values = 'Red Hat *'
 }
-
-Get-EC2Image -Filter $filter | 
+<span class="nb">Get-EC2Image</span class="nb"> -Filter $filter | 
     Select-Object Name, Description, ImageId
 ```
 
