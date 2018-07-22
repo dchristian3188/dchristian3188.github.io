@@ -14,12 +14,11 @@ Learn how to find and start an EC2 Image with PowerShell.
 
 <!-- more -->
 
+{::options parse_block_html="true" /}
+
 The first command we need to learn is ```Get-EC2Image```.
 When I ran this command with no parameters in us-west-2 this returned over 84,000 images.
-That's 
-not 
-{: .highlight .nb} 
-going to work, so let's see if we can narrow down our choices a little.
+That's not going to work, so let's see if we can narrow down our choices a little.
 
 
 A helpful command to use if we're trying to find a Window's image is ```Get-EC2ImageByName```.
@@ -149,7 +148,7 @@ $filter = @{
     Values = 'Red*'
 }
 
-Get-EC2Image -Filter $filter | 
+<span class="nb">Get-EC2Image</span> -Filter $filter | 
     Select-Object ImageId, Name
 ```
 
