@@ -76,7 +76,7 @@ Get-EC2ImageByName  -Name WINDOWS_2016_CONTAINER |
 ## Passing User Data
 
 User data is a way for you to pass instance-specific information into the machine.
-In the pas as part of a toolchain, I've used this to tag a machine with the information it would need to connect to a DSC pull server.
+In the past as part of a deployment workflow, I've used this to tag a machine with the information it would need to connect to a DSC pull server.
 To use user data, pass your PowerShell script inside ```<powershell>``` tags.
 The instance also requires you to base64 encode the script.
 To get around this, make sure you pass both the ```UserData``` parameter with the ```EncodeUserData``` switch.
