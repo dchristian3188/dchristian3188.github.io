@@ -1,11 +1,11 @@
 ---
 layout: post
-title: AWS PowerShell - Managing Ec2
+title: AWS PowerShell - Creating Ec2 Instances and Basic Machine Management
 ---
 
 The AWS Tools for PowerShell let you manage all your EC2 instances with cmdlets.
 With full coverage for machine creation, deletion and updating, virtually all settings are configurable from the PowerShell console.
-Let's dive in and learn to manage EC2 from PowerShell!
+Let's dive in and learn to create and manage EC2 Instances from PowerShell!
 
 **The Good Stuff:**
 Check out the AWS Tools for Powershell and start managing EC2 from your shell today
@@ -86,7 +86,7 @@ Here's a super simple example.
 $userData = @'
 <powershell>
 $file = "C:\TestFile-$((Get-Date).ToString("MM-dd-yy-hh-mm")).txt"
-Set-Content -Path $file -Value "Hi from OverPowerShell!" -Force
+Set-Content -Path $file -Value "Hi from OverPoweredShell!" -Force
 </powershell>
 '@
 
@@ -103,7 +103,7 @@ Here's what it looks like assigning a new instance to both the "SoCalPoshDSCDemo
 
 ```powershell
 Get-EC2ImageByName  -Name WINDOWS_2016_CONTAINER | 
-    New-EC2Instance -InstanceType t2.micro -
+    New-EC2Instance -InstanceType t2.micro -SecurityGroup SoCalPoshDSCDemo,AdminAccess
 ```
 
 ## So Many More Options
