@@ -14,12 +14,126 @@ Let's dive in and learn to work with them in PowerShell!
 **The Good Stuff:**
 Start leveraging tags to organize your AWS instances!
 
+<!-- TOC -->
+
+- [Creating Tags](#creating-tags)
+    - [Amazon.EC2.Model.Tag](#amazonec2modeltag)
+    - [A Better Tag Creation Function](#a-better-tag-creation-function)
+- [Searching for Tags](#searching-for-tags)
+    - [The Built-in Filters](#the-built-in-filters)
+    - [A Better Filter Function](#a-better-filter-function)
+- [Wrapping Up](#wrapping-up)
+
+<!-- /TOC -->
+
+
 <!-- more -->
+
+# Creating Tags
 
 So it's important to remember that a tag is a label.
 You give your tag a name and a value.
 Some common examples would be a tag for an environment or for an application that instance is running.
-Here's an example of an instance I've tagged with just that.
+
+## Amazon.EC2.Model.Tag
+
+To create a tag we need to create a new instance of an ```Amazon.EC2.Model.Tag``` object.
+My first thought was to just pass a hashtable since a tag is also just a key-value pair, but this didn't work...
+Here's an example of creating a tag for the Dev environment.
+
+```powershell
+[Amazon.EC2.Model.Tag]::new("Environment","Dev")
+```
+
+Now that we know how to add tags, we can assign them to instances on creation.
+Here's what that would look like.
+
+```powershell
+$instance = Get-EC2ImageByName  -Name WINDOWS_2016_CONTAINER | 
+    New-EC2Instance -InstanceType t2.micro
+ 
+$tag = [Amazon.EC2.Model.Tag]::new("Environment","Dev")    
+New-EC2Tag -Tag $tag -Resource $instance.Instances.Instanceid
+```
+
+## A Better Tag Creation Function
+
+This works, but it seems clunky to me.
+For starters, we should be able to pipe from the output of ```New-EC2Instance``` right into the tag function.
+Plus why do I need to create their special hashtable object?
+This is PowerShell where we're all accustomed to hashtables.
+It would be nice if we could just pass a hash instead and let the tag function do the heavy lifting.
+Below is a function that'll do just that!
+
+```powershell
+Function Set-EC2Tag
+{
+    [CmdletBinding(DefaultParameterSetName = 'EC2Instance')]
+    Param(
+        [Parameter(
+            ValueFromPipeline,
+            ValueFromPipelineByPropertyName,
+            ParameterSetName = 'InstanceID')]
+        [String[]]
+        $InstanceId,
+
+        [Parameter(
+            ValueFromPipeline,
+            ValueFromPipelineByPropertyName,
+            ParameterSetName = 'EC2Instance')]
+        [PSCustomObject]
+        $InputObject,
+
+        [Parameter(
+            Mandatory,
+            ValueFromPipeline,
+            ValueFromPipelineByPropertyName)]
+        [Hashtable]
+        $Tags
+    )
+
+    Process
+    {
+        if ($null -ne $InputObject.Instances.InstanceID)
+        {
+            $InstanceId = $InputObject.Instances.InstanceID
+        }
+
+        if ($null -ne $InputObject.InstanceID)
+        {
+            $InstanceId = $InputObject.InstanceID
+        }
+        
+        $ec2Tags = foreach($key in $Tags.Keys)
+        {
+            [Amazon.EC2.Model.Tag]::new($key,$Tags[$key])
+        }
+
+        foreach($insID in $InstanceId)
+        {
+            New-EC2Tag -Resource $insID -Tag $ec2Tags
+        }
+    }
+}
+```
+
+Now with our new function in place, the pipeline feels much better.
+
+```powershell
+$tags = @{
+    'Environment' = "Dev"
+    'App' = "WebSvc1"
+}
+
+Get-EC2ImageByName  -Name WINDOWS_2016_CONTAINER |
+    New-EC2Instance -InstanceType t2.micro |
+    Set-EC2Tag -Tags $tags
+```
+
+# Searching for Tags
+
+The whole purpose of creating a tag is to be able to query for it later.
+If we inspect an instance we can see what tags it has by diving into its details.
 
 ```powershell
 $instance = (Get-EC2Instance -InstanceId i-0546a9b32ab6be6d7)
@@ -32,6 +146,9 @@ Output:
 
 If you notice, that's not terribly helpful since I already knew which instance I wanted.
 A better solution is to search all instances by a tag filter.
+
+## The Built-in Filters
+
 The ```Get-EC2instance``` Cmdlet does take a filter.
 Tags are key-value pairs, let's try to pass a hashtable to them!
 
@@ -73,6 +190,9 @@ Output:
 ![_config.yml]({{ site.baseurl }}/images/aws/tagHit.png)
 
 Now we're getting somewhere!
+
+## A Better Filter Function
+
 I still don't like that fact that I need to craft that special hashtable by hand.
 Plus, what if we wanted to filter on multiple tags?
 To make working with filters easier, I created the below function.
@@ -151,6 +271,15 @@ $ec2Filter = ConvertTo-EC2Filter -Filter $searchFor
 Get-EC2Instance -filter $ec2Filter
 ```
 
+# Wrapping Up
+
 That's all for today.
 Remember that tags are your friends.
 I hope this new function helped and makes managing all the cattle a little easier.
+
+For more articles about PowerShell and AWS please checkout:
+
+* [Setting up AWS Tools on PowerShell Core](https://overpoweredshell.com//AWS-PowerShell-Setting-up-AWS-Tools-on-PowerShell-Core/)
+* [Finding the Right EC2 Image](https://overpoweredshell.com//AWS-PowerShell-Finding-the-Right-EC2-Image/)
+* [Creating Ec2 Instances and Basic Machine Management](https://overpoweredshell.com//AWS-PowerShell-Creating-Ec2-Instances-and-Basic-Machine-Management/)
+* [EC2 Key Pairs, Credentials and Connecting](https://overpoweredshell.com//AWS-PowerShell-EC2-Key-Pairs,-Credentials-and-Connecting/)
