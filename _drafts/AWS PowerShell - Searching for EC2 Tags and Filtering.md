@@ -70,7 +70,7 @@ Get-EC2Instance -Filter $searchFor
 
 Output:
 
-![_config.yml]({{ site.baseurl }}/images/aws/hastableFail.png)
+![_config.yml]({{ site.baseurl }}/images/aws/tagHit.png)
 
 Now we're getting somewhere!
 I still don't like that fact that I need to craft that special hashtable by hand.
@@ -135,7 +135,7 @@ Get-Help Get-EC2Instance -Parameter filter
 
 Output:
 
-![_config.yml]({{ site.baseurl }}/images/aws/multitaghit.png)
+![_config.yml]({{ site.baseurl }}/images/aws/fitlerhelp.png)
 
 For example, let's say we wanted all windows machines, that were launched with the OverPoweredShell key, in the us-west-2c availability zone, running the WebSVC2 application.
 
