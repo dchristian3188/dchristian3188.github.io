@@ -1,18 +1,21 @@
 ---
 layout: post
-title: AWS PowerShell - Searching for EC2 Tags and Filtering
+title: AWS PowerShell - EC2 Tags and Filtering
 ---
 
 One of the biggest shifts in moving to the cloud is getting used to the fact that servers don't matter.
-You have a workload, you build a couple of instances and then they run it.
+You have a workload, you build a couple of instances and it runs.
 If there's an issue you're not going to troubleshoot a server.
-Tear it down and spin up some new ones!
+Tear it down and spin up a new one.
 With all these servers coming and going, it's important to be able to keep everything organized.
 One way AWS solves this is through the use of instance tags.
-Let's dive in and learn to work with them in PowerShell!
+Let's dive in and learn to work with them in PowerShell.
 
 **The Good Stuff:**
 Start leveraging tags to organize your AWS instances!
+
+
+<!-- more -->
 
 <!-- TOC -->
 
@@ -26,30 +29,26 @@ Start leveraging tags to organize your AWS instances!
 
 <!-- /TOC -->
 
-
-<!-- more -->
-
 # Creating Tags
 
 So it's important to remember that a tag is a label.
 You give your tag a name and a value.
-Some common examples would be a tag for an environment or for an application that instance is running.
+Some common examples would be a tag for an environment or for an application that an instance is running.
 
 ## Amazon.EC2.Model.Tag
 
-To create a tag we need to create a new instance of an ```Amazon.EC2.Model.Tag``` object.
-My first thought was to just pass a hashtable since a tag is also just a key-value pair, but this didn't work...
+To create a tag we need instantiate a new ```Amazon.EC2.Model.Tag``` object.
 Here's an example of creating a tag for the Dev environment.
 
 ```powershell
 [Amazon.EC2.Model.Tag]::new("Environment","Dev")
 ```
 
-Now that we know how to add tags, we can assign them to instances on creation.
-Here's what that would look like.
+Now that we know how to create tags, we can start assigning them to instances.
+Here's a sample script to create a new instance and assign it our Dev tag.
 
 ```powershell
-$instance = Get-EC2ImageByName  -Name WINDOWS_2016_CONTAINER | 
+$instance = Get-EC2ImageByName  -Name WINDOWS_2016_CONTAINER |
     New-EC2Instance -InstanceType t2.micro
  
 $tag = [Amazon.EC2.Model.Tag]::new("Environment","Dev")    
@@ -61,9 +60,8 @@ New-EC2Tag -Tag $tag -Resource $instance.Instances.Instanceid
 This works, but it seems clunky to me.
 For starters, we should be able to pipe from the output of ```New-EC2Instance``` right into the tag function.
 Plus why do I need to create their special hashtable object?
-This is PowerShell where we're all accustomed to hashtables.
-It would be nice if we could just pass a hash instead and let the tag function do the heavy lifting.
-Below is a function that'll do just that!
+It would be nice if we could pass a hashtable instead and let the tag function do the heavy lifting.
+To make creating tags a little more user friendly, I created the below function.
 
 ```powershell
 Function Set-EC2Tag
@@ -117,7 +115,8 @@ Function Set-EC2Tag
 }
 ```
 
-Now with our new function in place, the pipeline feels much better.
+With our new function in place, the pipeline feels much better.
+Here's what the new workflow looks like when we need to create a machine and assign it a couple of tags.
 
 ```powershell
 $tags = @{
@@ -150,7 +149,7 @@ A better solution is to search all instances by a tag filter.
 ## The Built-in Filters
 
 The ```Get-EC2instance``` Cmdlet does take a filter.
-Tags are key-value pairs, let's try to pass a hashtable to them!
+Tags are key-value pairs, so let's try to pass a hashtable to them.
 
 ```powershell
 $searchFor = @{
@@ -165,10 +164,9 @@ Output:
 
 Ok, so that was a bust... 
 Time to check the documentation.
-I'll save you the trouble at searching the AWS site.
+I'll save you the trouble of searching the AWS site.
 It turns out that a filter needs a specific format.
-The filter parameter takes an array of hashtables.
-Even if there is going to be one value to filter on.
+The filter parameter takes an array of hashtables, even if there is going to be one value to filter on.
 Moreover, these hashtables require specific keys.
 One named ```name``` (all lower case) for the name of the filter value.
 We also need another key named ```values``` (again case sensitive) to match against.
@@ -247,7 +245,7 @@ Output:
 ![_config.yml]({{ site.baseurl }}/images/aws/multitaghit.png)
 
 Remember there's also way more things that we can filter on.
-To see what I mean, try this.
+To see what I mean, try checking the help for ```Get-EC2Instance```.
 
 ```powershell
 Get-Help Get-EC2Instance -Parameter filter
@@ -277,7 +275,7 @@ That's all for today.
 Remember that tags are your friends.
 I hope this new function helped and makes managing all the cattle a little easier.
 
-For more articles about PowerShell and AWS please checkout:
+For more articles about PowerShell and AWS please check out:
 
 * [Setting up AWS Tools on PowerShell Core](https://overpoweredshell.com//AWS-PowerShell-Setting-up-AWS-Tools-on-PowerShell-Core/)
 * [Finding the Right EC2 Image](https://overpoweredshell.com//AWS-PowerShell-Finding-the-Right-EC2-Image/)
