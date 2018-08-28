@@ -140,9 +140,10 @@ Get-EC2Instance |
     Remove-EC2Instance -Verbose -Force
 ```
 
-For more articles about PowerShell and AWS please checkout:
+For more articles about PowerShell and AWS please check out:
 
 * [Setting up AWS Tools on PowerShell Core](https://overpoweredshell.com//AWS-PowerShell-Setting-up-AWS-Tools-on-PowerShell-Core/)
 * [Finding the Right EC2 Image](https://overpoweredshell.com//AWS-PowerShell-Finding-the-Right-EC2-Image/)
 * [Creating Ec2 Instances and Basic Machine Management](https://overpoweredshell.com//AWS-PowerShell-Creating-Ec2-Instances-and-Basic-Machine-Management/)
 * [EC2 Key Pairs, Credentials and Connecting](https://overpoweredshell.com//AWS-PowerShell-EC2-Key-Pairs,-Credentials-and-Connecting/)
+* [EC2 Tags and Filtering](https://overpoweredshell.com//AWS-PowerShell-EC2-Tags-and-Filtering/)

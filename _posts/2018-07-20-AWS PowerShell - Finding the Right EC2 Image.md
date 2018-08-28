@@ -172,9 +172,10 @@ Get-EC2ImageByName  -Name WINDOWS_2016_CONTAINER |
 And just like, in a few minutes, we'll have a new instance ready to use!
 Stay tuned for a follow-up article where we'll dive deep into some of the ```New-Ec2Instance``` parameters, learn to manage existing instances and cleanup old machines.
 
-For more articles about PowerShell and AWS please checkout:
+For more articles about PowerShell and AWS please check out:
 
 * [Setting up AWS Tools on PowerShell Core](https://overpoweredshell.com//AWS-PowerShell-Setting-up-AWS-Tools-on-PowerShell-Core/)
 * [Finding the Right EC2 Image](https://overpoweredshell.com//AWS-PowerShell-Finding-the-Right-EC2-Image/)
 * [Creating Ec2 Instances and Basic Machine Management](https://overpoweredshell.com//AWS-PowerShell-Creating-Ec2-Instances-and-Basic-Machine-Management/)
 * [EC2 Key Pairs, Credentials and Connecting](https://overpoweredshell.com//AWS-PowerShell-EC2-Key-Pairs,-Credentials-and-Connecting/)
+* [EC2 Tags and Filtering](https://overpoweredshell.com//AWS-PowerShell-EC2-Tags-and-Filtering/)
