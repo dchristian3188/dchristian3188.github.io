@@ -14,13 +14,30 @@ Start writing [AWS Lambdas](https://aws.amazon.com/lambda/) in PowerShell.
 
 <!-- more -->
 
+<!-- TOC -->
+
+- [Automatic Shutdown for EC2 Instances](#automatic-shutdown-for-ec2-instances)
+- [Installing the AWS PowerShell Lambda Module](#installing-the-aws-powershell-lambda-module)
+- [Lambda Templates](#lambda-templates)
+- [Creating A PowerShell Lambda](#creating-a-powershell-lambda)
+    - [PowerShell Lambda Inputs](#powershell-lambda-inputs)
+    - [EC2 Shutdown Code](#ec2-shutdown-code)
+- [Publishing PowerShell Lambda](#publishing-powershell-lambda)
+- [Testing the Lambda](#testing-the-lambda)
+- [Granting The Lambda Permission To EC2](#granting-the-lambda-permission-to-ec2)
+    - [Testing with the right permissions](#testing-with-the-right-permissions)
+- [Scheduling a Lambda](#scheduling-a-lambda)
+- [Wrapping Up](#wrapping-up)
+
+<!-- /TOC -->
+
 # Automatic Shutdown for EC2 Instances
 
 One cool thing about Azure is their machine auto-shutdown policy.
 More than once I've been bitten by accidentally leaving my test machines on in AWS.
 In fact, my bill for August was a *little* higher than I was expecting.
 Once I saw that AWS is supporting PowerShell lambdas, I knew that the auto-shutdown policy was something I wanted to implement.
-Let's go step by step and set one up
+Let's go step by step and set one up.
 
 
 # Installing the AWS PowerShell Lambda Module
@@ -69,7 +86,7 @@ Below is the command that I ran to create a new script called ```ShutDownEC2``` 
 New-AWSPowerShellLambda -Template Basic -ScriptName ShutDownEC2 -Directory C:\aws\
 ```
 
-This create a file that looked like below.
+This created the below file.
 Notice that it comes with a ton of boiler plate, and a little bit of instructions.
 
 ![_config.yml]({{ site.baseurl }}/images/aws/newlambda.png)
@@ -91,7 +108,6 @@ Here's what my final PowerShell lambda ended up looking like.
 
 ```powershell
 #Requires -Modules @{ModuleName='AWSPowerShell.NetCore';ModuleVersion='3.3.313.0'}
-
 
 if ($null -ne $LambdaInput.InstanceID)
 {
@@ -139,7 +155,7 @@ Notice that lambdas are region specific.
 Publish-AWSPowerShellLambda -Name ShutDownEC2 -ScriptPath C:\aws\ShutDownEC2.ps1 -Region us-west-2
 ```
 
-Here's part of the output where we can see the actual complication happening.
+Here's part of the output where we can see the actual compilation happening.
 This runs every time we publish.
 
 ![_config.yml]({{ site.baseurl }}/images/aws/compileLambda.png)
@@ -170,7 +186,7 @@ For the body, I'm just going to use ```{}```.
 ![_config.yml]({{ site.baseurl }}/images/aws/testempty.png)
 
 The next test event is to handle use cases where we pass a specific instance.
-Below is an example I created using one of my existing instances.
+Below is an example I created using one of my existing EC2 machines.
 If you want to follow along, make sure you update your body to match something in your environment.
 
 ```powershell
@@ -201,7 +217,7 @@ Once your there select the role that you created.
 
 ![_config.yml]({{ site.baseurl }}/images/aws/lambdaroledefault.png)
 
-From here click on attach the policy.
+From here click on attach policies.
 From the filter, we can select which additional policy I want to attach to my role.
 To make things easy, I'm going to grant my lambda full control to EC2 (please don't do this in production)
 When we're done the ```overpoweredshelllambda``` role looks like this.
