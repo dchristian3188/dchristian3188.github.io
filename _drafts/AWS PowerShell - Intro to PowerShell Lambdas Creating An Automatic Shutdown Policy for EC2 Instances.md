@@ -149,8 +149,56 @@ I also granted him full lambda access.
 ![_config.yml]({{ site.baseurl }}/images/aws/iamlambda.png)
 
 After a few seconds that will complete and if we head to our console we'll see our new lambda.
+Again notice, how the project is technailly a dot net core 2.1 app.
 
 ![_config.yml]({{ site.baseurl }}/images/aws/lambdaConsole.png)
 
 # Testing the Lambda
 
+Now that we have our lambda created, we will want to start testing.
+Before we can do that we need to create tests events.
+Click the drop down in the upper right hand corner to open the pop up.
+
+![_config.yml]({{ site.baseurl }}/images/aws/testevents.png)
+
+The first test event I want to create is an empty one to simulate our scheduled run.
+For the body I'm just going to use ```{}```.
+
+![_config.yml]({{ site.baseurl }}/images/aws/testempty.png)
+
+The next test event is to handle use cases where we pass a specific instance.
+Below is an example I created using one of my existing instances.
+If you want to follow along, make sure you update your body to match something in your environemnt.
+
+```powershell
+{
+  "InstanceID": "i-03a5ed219d178f53c"
+}
+```
+
+![_config.yml]({{ site.baseurl }}/images/aws/testID.png)
+
+With all of that in place, there's nothing left to do but click the test button.
+
+![_config.yml]({{ site.baseurl }}/images/aws/permissionError.png)
+
+Wait an error?!?!
+What happened?
+Well it says that we don't have permission to perform this action.
+After scratching my head for a little while it hit me.
+The default lambda role doesn't grant any write permissions to EC2!
+
+# Granting The Lambda Permission To EC2
+
+What we need to do is update the role we created as part of the wizard to grant it permission to take actions on EC2.
+To do this head over to IAM -> Roles.
+Once your there select the role that you created.
+
+![_config.yml]({{ site.baseurl }}/images/aws/lambdaroledefault.png)
+
+From here click on attach policy.
+From the filter we can select which addtional policy I want to attach to my role.
+To make things easy, I'm going to grant my lambda full control to EC2 (please don't do this in production)
+When we're done the ```overpoweredshelllambda``` role looks like this.
+
+![_config.yml]({{ site.baseurl }}/images/aws/lambdafull.png)
