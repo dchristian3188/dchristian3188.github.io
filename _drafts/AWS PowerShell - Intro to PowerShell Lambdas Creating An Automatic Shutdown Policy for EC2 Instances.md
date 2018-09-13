@@ -119,6 +119,9 @@ foreach ($instance in $instances)
 }
 ```
 
+One little thing, that I like to point out is that the ```Write-Output``` command does not seem to work inside the context of a lambda.
+However, ```Write-Host``` and ```Write-Verbose``` (or any ```-Verbose``` switch) will properly display output.
+
 # Publishing PowerShell Lambda
 
 Now that we have our lambda written it's time to publish it to AWS.
@@ -202,3 +205,47 @@ To make things easy, I'm going to grant my lambda full control to EC2 (please do
 When we're done the ```overpoweredshelllambda``` role looks like this.
 
 ![_config.yml]({{ site.baseurl }}/images/aws/lambdafull.png)
+
+## Testing with the right permissions
+
+Now that we have all the right access in place, let's re-run our test.
+First I want to see if I can stop a specifc instance. 
+To do this, I'll run my instance specific test.
+
+![_config.yml]({{ site.baseurl }}/images/aws/lambdainstancetestresults.png)
+
+Great that worked!
+Now let's see what happens when I run the empty test.
+If all goes well, we should see it stop all my instances.
+
+![_config.yml]({{ site.baseurl }}/images/aws/lambdatestresultsall.png)
+
+That one works too.
+With our lambda working, the last thing to do is setup a schdule to have this run every night.
+
+# Scheduling a Lambda
+
+To schedule the lambda, we need to add a cloudwatch trigger.
+From the designer on the right select cloudwatch event.
+Once that is added, click on configure.
+For our example, I want this to run every day.
+To do this I'll use the below cron pattern.
+
+```powershell
+cron(0 4 * * ? *)
+```
+
+What's a little weird, is that the schedule is in UTC.
+Also if your a little rusty on cron syntax, be sure to check out [this page](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html) for a great reference.
+Here's what my final Cloudwatch event rule looked like:
+
+![_config.yml]({{ site.baseurl }}/images/aws/cloudwatchTrigger.png)
+
+# Wrapping Up
+
+That's all for today.
+I can't stress how huge being able to leverage PowerShell from a lambda is.
+This is a game changer for sure.
+Got some cool lambda use cases? 
+Please be sure to share them below.
+I'm excited to see what our amazing comunity comes up with.
