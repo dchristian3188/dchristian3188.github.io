@@ -267,3 +267,12 @@ This is a game changer for sure.
 Got some cool lambda use cases? 
 Please be sure to share them below.
 I'm excited to see what our amazing community comes up with.
+
+For more articles about PowerShell and AWS please check out:
+
+* [Setting up AWS Tools on PowerShell Core](https://overpoweredshell.com//AWS-PowerShell-Setting-up-AWS-Tools-on-PowerShell-Core/)
+* [Finding the Right EC2 Image](https://overpoweredshell.com//AWS-PowerShell-Finding-the-Right-EC2-Image/)
+* [Creating Ec2 Instances and Basic Machine Management](https://overpoweredshell.com//AWS-PowerShell-Creating-Ec2-Instances-and-Basic-Machine-Management/)
+* [EC2 Key Pairs, Credentials and Connecting](https://overpoweredshell.com//AWS-PowerShell-EC2-Key-Pairs,-Credentials-and-Connecting/)
+* [EC2 Tags and Filtering](https://overpoweredshell.com//AWS-PowerShell-EC2-Tags-and-Filtering/)
+* [Intro to PowerShell Lambdas, Creating An Automatic Shutdown Policy for EC2 Instances](https://overpoweredshell.com//AWS-PowerShell-Intro-to-PowerShell-Lambdas-Creating-An-Automatic-Shutdown-Policy-for-EC2-Instances/)
